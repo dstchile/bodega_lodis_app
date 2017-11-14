@@ -9,7 +9,7 @@
     </author>
     <content src="index.html"/>
     <access origin="*"/>
-	<plugin name="phonegap-plugin-barcodescanner" version="6.1.2">
+	<plugin name="phonegap-plugin-barcodescanner" version="0.7.3">
 	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes."  />
 	</plugin>
     
