@@ -3,25 +3,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Documento sin título</title>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript">
+ function scan(){
+ console.log("clicked");
+ cordova.plugins.barcodeScanner.scan(function(result){
+ //success callback
+ alert(JSON.stringify(result));
+
+ },function(error){
+ //error callback
+ alert(JSON.stringify(error));
+
+ });
+ }
+ </script>
 </head>
 
 <body>
-<script>
-		document.addEventListener("deviceready", scanner, false);
-		function scanner()
-			{
-				cordova.plugins.barcodeScanner.scan(
-				  function (result) {
-					  alert("We got a barcode\n" +
-							"Result: " + result.text + "\n" +
-							"Format: " + result.format + "\n" +
-							"Cancelled: " + result.cancelled);
-				  }, 
-				  function (error) {
-					  alert("Scanning failed: " + error);
-				  }
-			   );
-			}
-</script>
+<h3>BAR CODE SCANNER</h3>
+ <button onclick="scan()">SCAN</button>
 </body>
 </html>
