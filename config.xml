@@ -9,5 +9,8 @@
     </author>
     <content src="index.html"/>
     <access origin="*"/>
-	<plugin name="com.phonegap.plugins.barcodescanner" spec="2.0.0" source="pgb" />
+	<plugin name="phonegap-plugin-barcodescanner">
+	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes." />
+	</plugin>
+    
 </widget>
