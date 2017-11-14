@@ -12,5 +12,7 @@
 	<plugin name="phonegap-plugin-barcodescanner">
 	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes."  />
 	</plugin>
-    
+   	<platform name="android" ver="6.3.0">
+	</platform>
+
 </widget>
