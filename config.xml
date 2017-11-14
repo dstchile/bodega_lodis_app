@@ -10,13 +10,4 @@
     <content src="index.html" />
     <access origin="*" />
 	
-	<!-- PhoneGap plugins for PhoneGap Build to attach to build -->
-  <gap:plugin name="cordova-plugin-device" source="npm" />
-  <gap:plugin name="cordova-plugin-inappbrowser" source="npm" />
-  
-  <!-- Use the newest version of PhoneGap -->
-  <!--<preference name="phonegap-version" value="6.5.0" />-->
-
-  <!-- Device permission is needed -->
-  <feature name="http://api.phonegap.com/1.0/device"/>
 </widget>
