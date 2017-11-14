@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="cl.dstchile.lodisapp" version="1.5.1" android-versionCode="14">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="cl.dstchile.lodisapp" version="1.5.1" >
     <name>Lodis App</name>
     <description>
         Checklist-Campañas-Dummies-Inventarios
@@ -9,6 +9,7 @@
     </author>
     <content src="index.html"/>
     <access origin="*"/>
+	<preference name="phonegap-version" value="cli-7.0.1" />
 	<plugin name="phonegap-plugin-barcodescanner">
 	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes."  />
 	</plugin>
