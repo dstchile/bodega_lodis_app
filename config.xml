@@ -11,10 +11,9 @@
     <access origin="*" />
 	
 	<!-- PhoneGap plugins for PhoneGap Build to attach to build -->
-  <gap:plugin name="org.apache.cordova.device" source="pgb" />
-  <gap:plugin name="org.apache.cordova.inappbrowser" source="pgb" />
-  <gap:plugin name="org.apache.cordova.splashscreen" source="pgb" />
-
+  <gap:plugin name="cordova-plugin-device" source="pgb" />
+  <gap:plugin name="cordova-plugin-inappbrowser" source="pgb" />
+  
   <!-- Use the newest version of PhoneGap -->
   <!--<preference name="phonegap-version" value="6.5.0" />-->
 
