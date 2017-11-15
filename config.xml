@@ -12,5 +12,5 @@
 	<plugin name="phonegap-plugin-barcodescanner" spec="3.0.0">
 	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes."  />
 	</plugin>
-	<plugin name="cordova-plugin-camera" spec="3.0.0" source="pgb" />
+	<plugin name="cordova-plugin-camera" spec="3.0.0" source="npm" />
 </widget>
