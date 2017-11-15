@@ -8,15 +8,51 @@
     <link href="jquery-mobile/jquery.mobile.structure-1.0.min.css" rel="stylesheet" type="text/css">
     <script src="jquery-mobile/jquery-1.6.4.min.js" type="text/javascript"></script>
     <script src="jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+    <script>
+	
+	function validar()
+		{
+		var usuario=document.getElementById('usuario').value;
+		var password=document.getElementById('clave').value;
+		console.log("user:"+usuario+"----pass:"+password+"---");
+		$.post("http://192.168.1.41/bodega_lodis/entrada_app.php", {usuario:usuario,password:password},function(resultado){/*$("#registros_total").html(retorno_query)*/})
+		.done(function(resultado)
+			{
+			console.log("resultado:"+resultado+"-----");
+			var obj = JSON.parse(resultado);
+			nombre_usuario=obj.nombre_usuario;
+			if(obj.respuesta=='index.php')
+				{
+				alert(obj.comentario);
+				}
+			else
+				{
+				location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario;
+				}
+			//$('#comuna').append('<option value="'+obj.comuna+'">'+obj.comuna+'</option>');
+			})
+			////////notificacion en patanlla////////////
+			//var reporte=document.getElementById('reporte').innerHTML;
+			//document.getElementById('reporte').innerHTML=""+reporte+"<br />Ejecutando Envio de SMS";
+			//document.getElementById("reporte").scrollTop=document.getElementById("reporte").scrollHeight;
+			
+		}
+	
+	</script>
     </head>
     <body>
         <script type="text/javascript" src="cordova.js"></script>
     <div data-role="page" id="principal">
           <div data-role="header">
-            <h1>Encabezado</h1>
+            <h1>Lodis App</h1>
           </div>
           <div data-role="content">Contenido
-            <div data-role="controlgroup"><a href="scanner.html" rel="external" data-role="button">Scanner</a><a href="#" data-role="button">Botón</a><a href="#" data-role="button">Botón</a></div>
+            <div data-role="fieldcontain">
+              <label for="usuario">Usuario:</label>
+              <input type="text" name="usuario" id="usuario" value=""  />
+              <label for="clave">Contraseña:</label>
+              <input type="password" name="clave" id="clave" value=""  />
+            <a href="#" data-role="button" onClick="validar()">Ingresar</a></div>
           </div>
           <div data-role="footer">
             <h4>Pie</h4>

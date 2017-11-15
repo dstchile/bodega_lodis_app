@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin título</title>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+<link href="jquery-mobile/jquery.mobile.theme-1.0.min.css" rel="stylesheet" type="text/css" />
+<link href="jquery-mobile/jquery.mobile.structure-1.0.min.css" rel="stylesheet" type="text/css" />
+<script src="jquery-mobile/jquery-1.6.4.min.js" type="text/javascript"></script>
+<script src="jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+<script>
+function getParameterByName(name) 
+	{
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+var usuario = getParameterByName('usuario');
+var password = getParameterByName('password');
+var nombre_usuario = getParameterByName('nombre_usuario');
+
+console.log("usuario:"+usuario+" --");
+console.log("password:"+password+" --");
+console.log("nombre:"+nombre_usuario+" --");
+
+$(document).ready(function() 
+	{
+		var dato="LECTURA";
+		var code="";
+		var formData = new FormData();
+		formData.append("code", code);
+		formData.append("dato", dato);
+		formData.append("usuario", nombre_usuario);
+		$.ajax({
+			type: 'POST',
+			url: 'http://192.168.1.41/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				console.log(result);
+				var obj = JSON.parse(result);
+				if (obj.venta!=null)
+					{
+					$('#venta').empty().append();
+					$('#venta').append('<option value="'+obj.venta+'">'+obj.venta+'</option>');
+					$('#venta').append('<option value="SI WOM">SI WOM</option>');
+					$('#venta').append('<option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>');
+					$('#venta').append('<option value="SOLO RECARGA">SOLO RECARGA</option>');
+					$('#venta').selectmenu('refresh')
+					}
+				document.getElementById('direccion').value=obj.direccion;
+				document.getElementById('nombre_contacto').value=obj.nombre_contacto;
+				document.getElementById('telefono_contacto').value=obj.telefono_contacto;
+				if (obj.tipo_canal!=null)
+					{
+					$('#tipo_canal').empty().append();
+					$('#tipo_canal').append('<option value="'+obj.tipo_canal+'">'+obj.tipo_canal+'</option>');
+					$('#tipo_canal').append('<option value="ESPECIALISTA">ESPECIALISTA</option>');
+					$('#tipo_canal').append('<option value="TRADICIONAL">TRADICIONAL</option>');
+					$('#tipo_canal').append('<option value="KIOSCO">KIOSCO</option>');
+					$('#tipo_canal').selectmenu('refresh')
+					}
+				document.getElementById('total_productos').innerHTML = obj.total_productos;
+				
+				if (obj.comunas!='')
+					{
+					$('#comuna').empty().append();
+					$('#comuna').append('<option value="'+obj.comuna+'">'+obj.comuna+'</option>');
+					for (i=0;i<obj.comunas.length;i++)
+						{
+						$('#comuna').append('<option value="'+obj.comunas[i]+'">'+obj.comunas[i]+'</option>');
+						}
+					
+					$('#comuna').selectmenu('refresh')
+					}
+				
+				
+				
+				}
+			});
+		
+	})
+
+function carga_scanner()
+		{
+		location.href="comercio_scanner.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		}
+function guardar_dato(dato)
+	{
+	var venta = document.getElementById("venta").value;
+	//var nombre_local = document.getElementById("nombre_local").value;
+	var direccion = document.getElementById("direccion").value;
+	var comuna = document.getElementById("comuna").value;
+	var nombre_contacto = document.getElementById("nombre_contacto").value;
+	var telefono_contacto = document.getElementById("telefono_contacto").value;
+	var tipo_canal = document.getElementById("tipo_canal").value;
+	
+	var formData = new FormData();
+	formData.append("venta", venta);
+	//formData.append("nombre_local", nombre_local);
+	formData.append("direccion", direccion);
+	formData.append("comuna", comuna);
+	formData.append("nombre_contacto", nombre_contacto);
+	formData.append("telefono_contacto", telefono_contacto);
+	formData.append("tipo_canal", tipo_canal);
+	formData.append("dato", dato);
+	formData.append("usuario", nombre_usuario);
+	$.ajax({
+		type: 'POST',
+		url: 'http://192.168.1.41/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+		data: formData,
+		processData: false,
+		contentType: false,
+		success: function (result) 
+			{
+				if (dato=='VENTA')
+					{
+					//document.form1.submit();
+					}
+			}
+		});
+	
+	}
+
+function procesar()
+	{
+	/*$imagen="$id_comercio-foto1.jpg";
+	$ruta="$carpeta7$imagen";
+	$imagen="$id_comercio-foto2.jpg";
+	$ruta2="$carpeta7$imagen";
+	*/
+	var venta=document.getElementById('venta').value;
+	var direccion=document.getElementById('direccion').value;
+	var comuna=document.getElementById('comuna').value;
+	var nombre_contacto=document.getElementById('nombre_contacto').value;
+	var telefono_contacto=document.getElementById('telefono_contacto').value;
+	var tipo_canal=document.getElementById('tipo_canal').value;
+	
+	if (venta=='')
+		{
+		alert("Debe especificar si el comerciante vende Chip")
+		}
+	else if (direccion=='')
+		{
+		alert("Debe especificar la direccion")
+		}
+	else if (comuna=='')
+		{
+		alert("Debe especificar la comuna")
+		}
+	else if((nombre_contacto==''))
+		{
+		alert("Debe especificar el nombre del contacto")
+		}
+	else if((telefono_contacto==''))
+		{
+		alert("Debe especificar el telefono de contacto")
+		}
+	else if((tipo_canal==''))
+		{
+		alert("Debe especificar el tipo de canal")
+		}
+	/*else if ((!file_exists(ruta))) 
+		{
+		alert("1.-Debe ingresar dos imágenes")
+		}
+	else if ((!file_exists(ruta2))) 
+		{
+		alert("2.-Debe ingresar dos imágenes")
+		}*/
+	else
+		{
+		var dato='GUARDAR';
+		var formData = new FormData();
+		formData.append("venta", venta);
+		//formData.append("nombre_local", nombre_local);
+		formData.append("direccion", direccion);
+		formData.append("comuna", comuna);
+		formData.append("nombre_contacto", nombre_contacto);
+		formData.append("telefono_contacto", telefono_contacto);
+		formData.append("tipo_canal", tipo_canal);
+		formData.append("dato", dato);
+		formData.append("usuario", nombre_usuario);
+		$.ajax({
+			type: 'POST',
+			url: 'http://192.168.1.41/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				document.getElementById('venta').value='';
+				document.getElementById('direccion').value='';
+				document.getElementById('nombre_contacto').value='';
+				document.getElementById('telefono_contacto').value='';
+				document.getElementById('tipo_canal').value='';
+				document.getElementById('total_productos').innerHTML = '0';
+				
+				var vacio='';
+					$('#venta').empty().append();
+					$('#venta').append('<option value="'+vacio+'">'+vacio+'</option>');
+					$('#venta').append('<option value="SI WOM">SI WOM</option>');
+					$('#venta').append('<option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>');
+					$('#venta').append('<option value="SOLO RECARGA">SOLO RECARGA</option>');
+					$('#venta').selectmenu('refresh')
+					$('#tipo_canal').empty().append();
+					$('#tipo_canal').append('<option value="'+vacio+'">'+vacio+'</option>');
+					$('#tipo_canal').append('<option value="ESPECIALISTA">ESPECIALISTA</option>');
+					$('#tipo_canal').append('<option value="TRADICIONAL">TRADICIONAL</option>');
+					$('#tipo_canal').append('<option value="KIOSCO">KIOSCO</option>');
+					$('#tipo_canal').selectmenu('refresh')
+				
+				
+				alert("Ingreso correcto")
+		
+				}
+			});
+		
+		
+		}
+	
+	}
+</script>
+
+</head>
+
+<body>
+<div data-role="page" id="comercio">
+  <div data-role="header">
+    <h1>Comercio</h1>
+  </div>
+  <div data-role="content">
+    <div data-role="fieldcontain">
+      <label for="venta" class="select">Vende Chip?</label>
+      <select name="venta" id="venta" onChange="guardar_dato('VENTA')">
+        <option value="SI WOM">SI WOM</option>
+	    <option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>
+	    <option value="SOLO RECARGA">SOLO RECARGA</option>
+      </select>
+    </div>
+    <div class="ui-grid-a" >
+    	<div class="ui-block-a">
+            <div style="line-height:60px; vertical-align:middle;">PRODUCTOS:  <span id="total_productos"></span>
+            </div>
+        </div>
+        <div class="ui-block-b"><a href="#" onclick="carga_scanner()" data-role="button">Scan</a>
+        </div>
+    </div>
+
+  <label for="direccion">Dirección:</label>
+  <input type="text" name="direccion" id="direccion" value="" onBlur="guardar_dato('DIRECCION')" />
+  
+  <div data-role="fieldcontain">
+    <label for="comuna" class="select">Comuna:</label>
+    <select name="comuna" id="comuna" onChange="guardar_dato('COMUNA')">
+      <option value="option1">Opción 1</option>
+      <option value="option2">Opción 2</option>
+      <option value="option3">Opción 3</option>
+    </select>
+  </div>
+  
+  <label for="nombre_contacto">Nombre Contacto:</label>
+  <input type="text" name="nombre_contacto" id="nombre_contacto" onBlur="guardar_dato('NOMBRE_CONTACTO')" value=""  />
+  <label for="telefono_contacto">Telefono Contacto:</label>
+  <input type="text" name="telefono_contacto" id="telefono_contacto" onBlur="guardar_dato('TELEFONO_CONTACTO')" value=""  />
+  
+  <div data-role="fieldcontain">
+    <label for="tipo_canal" class="select">Tipo Canal:</label>
+    <select name="tipo_canal" id="tipo_canal" onChange="guardar_dato('TIPO_CANAL')">
+      <option value="ESPECIALISTA">ESPECIALISTA</option>
+      <option value="TRADICIONAL">TRADICIONAL</option>
+      <option value="KIOSCO">KIOSCO</option>
+    </select>
+  </div>
+  <button id="takePhoto">TOMAR FOTO</button>
+  <img id="photo" src=""  style="display:none"/>
+  <canvas id="foto1"></canvas>
+                                        
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/camara.js"></script>
+<script type="text/javascript">app.initialize();</script>
+
+  <a href="#" data-role="button" onclick="procesar()">Procesar</a>
+ 
+  </div>
+    </div>
+    <div>
+    </div>
+  </div>
+  <div data-role="footer">
+    <h4>Pie</h4>
+  </div>
+</div>
+
+</body>
+</html>
