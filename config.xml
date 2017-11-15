@@ -13,4 +13,9 @@
 	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes."  />
 	</plugin>
 	<plugin name="cordova-plugin-camera" spec="3.0.0" source="npm" />
+	<gap:plugin name="cordova-plugin-app-version" source="npm"/>
+    <gap:plugin name="cordova-plugin-network-information" source="npm"/>
+    <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
+    <gap:plugin name="cordova-plugin-exitapp" source="npm"/>
+    
 </widget>
