@@ -67,10 +67,13 @@ $(document).ready(function()
 					}
 				document.getElementById('total_productos').innerHTML = obj.total_productos;
 				
-				if (obj.comunas!='')
+				if (obj.comunas!=null)
 					{
 					$('#comuna').empty().append();
-					$('#comuna').append('<option value="'+obj.comuna+'">'+obj.comuna+'</option>');
+					if (obj.comuna!=null){$('#comuna').append('<option value="'+obj.comuna+'">'+obj.comuna+'</option>');}
+					else{
+						$('#comuna').append('<option value=""></option>');
+						}
 					for (i=0;i<obj.comunas.length;i++)
 						{
 						$('#comuna').append('<option value="'+obj.comunas[i]+'">'+obj.comunas[i]+'</option>');
@@ -129,13 +132,6 @@ function guardar_dato(dato)
 
 function procesar()
 	{
-	////ventana espere un momento////
-	//document.getElementById('progreso').innerHTML='Nuevo SMS';
-	document.getElementById('progreso').style.visibility = 'visible';
-	document.getElementById('progreso').style.opacity = 1;
-	document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
-	///fin de la ventana/////
-	
 	var venta=document.getElementById('venta').value;
 	var direccion=document.getElementById('direccion').value;
 	var comuna=document.getElementById('comuna').value;
@@ -189,6 +185,15 @@ function procesar()
 		}
 	else
 		{
+		////ventana espere un momento////
+		//document.getElementById('progreso').innerHTML='Nuevo SMS';
+		document.getElementById('progreso').style.visibility = 'visible';
+		document.getElementById('progreso').style.opacity = 1;
+		document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+		///fin de la ventana/////
+		
+		
+	
 		//proceso de compresion imagen 1
 		var canvasx = document.createElement("canvas");
 		var tamanoh = img.naturalHeight;
@@ -379,7 +384,8 @@ width:50%;
     <div data-role="fieldcontain">
       <label for="venta" class="select">Vende Chip?</label>
       <select name="venta" id="venta" onChange="guardar_dato('VENTA')">
-        <option value="SI WOM">SI WOM</option>
+        <option value=""></option>
+      	<option value="SI WOM">SI WOM</option>
 	    <option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>
 	    <option value="SOLO RECARGA">SOLO RECARGA</option>
       </select>
@@ -400,9 +406,6 @@ width:50%;
   <div data-role="fieldcontain">
     <label for="comuna" class="select">Comuna:</label>
     <select name="comuna" id="comuna" onChange="guardar_dato('COMUNA')">
-      <option value="option1">Opción 1</option>
-      <option value="option2">Opción 2</option>
-      <option value="option3">Opción 3</option>
     </select>
   </div>
   
@@ -414,6 +417,7 @@ width:50%;
   <div data-role="fieldcontain">
     <label for="tipo_canal" class="select">Tipo Canal:</label>
     <select name="tipo_canal" id="tipo_canal" onChange="guardar_dato('TIPO_CANAL')">
+      <option value=""></option>
       <option value="ESPECIALISTA">ESPECIALISTA</option>
       <option value="TRADICIONAL">TRADICIONAL</option>
       <option value="KIOSCO">KIOSCO</option>
