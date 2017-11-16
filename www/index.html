@@ -15,7 +15,41 @@
 		var usuario=document.getElementById('usuario').value;
 		var password=document.getElementById('clave').value;
 		console.log("user:"+usuario+"----pass:"+password+"---");
-		$.post("http://192.168.1.41/bodega_lodis/entrada_app.php", {usuario:usuario,password:password},function(resultado){/*$("#registros_total").html(retorno_query)*/})
+		
+		var formData = new FormData();
+		formData.append("usuario", usuario);
+		formData.append("password", password);
+		$.ajax({
+			type: 'POST',
+			url: 'https://www.sistemalodis.cl/entrada_app.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			timeout:5000,
+			success: function (resultado) 
+				{
+				console.log("resultado:"+resultado+"-----");
+				var obj = JSON.parse(resultado);
+				nombre_usuario=obj.nombre_usuario;
+				if(obj.respuesta=='index.php')
+					{
+					alert(obj.comentario);
+					}
+				else
+					{
+					location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario;
+					}
+				}
+			})
+		.fail(function(resultado)
+			{
+			console.log("ERROR DE COMUNICACION");	
+			alert("ERROR DE COMUNICACION");
+			});
+		//////////////valida si la conexion existe/////////////////////////
+		
+		
+		/*$.post("https://www.sistemalodis.cl/entrada_app.php", {usuario:usuario,password:password},function(resultado){})
 		.done(function(resultado)
 			{
 			console.log("resultado:"+resultado+"-----");
@@ -29,8 +63,12 @@
 				{
 				location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario;
 				}
-			//$('#comuna').append('<option value="'+obj.comuna+'">'+obj.comuna+'</option>');
 			})
+		.fail(function(resultado)
+			{
+			console.log("ERROR DE COMUNICACION");	
+			});*/
+		
 			////////notificacion en patanlla////////////
 			//var reporte=document.getElementById('reporte').innerHTML;
 			//document.getElementById('reporte').innerHTML=""+reporte+"<br />Ejecutando Envio de SMS";
