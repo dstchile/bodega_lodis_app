@@ -129,6 +129,13 @@ function guardar_dato(dato)
 
 function procesar()
 	{
+	////ventana espere un momento////
+	//document.getElementById('progreso').innerHTML='Nuevo SMS';
+	document.getElementById('progreso').style.visibility = 'visible';
+	document.getElementById('progreso').style.opacity = 1;
+	document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+	///fin de la ventana/////
+	
 	var venta=document.getElementById('venta').value;
 	var direccion=document.getElementById('direccion').value;
 	var comuna=document.getElementById('comuna').value;
@@ -268,7 +275,24 @@ function procesar()
 				document.getElementById('total_productos').innerHTML = '0';
 				document.getElementById('foto1').value = '';
 				document.getElementById('foto2').value = '';
-				
+				var photo = document.getElementById('photo');
+				photo.src = "";
+				var canvas = document.getElementById("foto1");
+				var ctx = canvas.getContext("2d");
+				canvas.width = 150;
+				var alto=(tamanoh*150)/tamanow;
+				canvas.height = alto;	
+				ctx.drawImage(photo, 0, 0,canvas.width,canvas.height);
+		
+				var photo2 = document.getElementById('photo2');
+				photo2.src = "";
+				var canvas = document.getElementById("foto2");
+				var ctx = canvas.getContext("2d");
+				canvas.width = 150;
+				var alto=(tamanoh*150)/tamanow;
+				canvas.height = alto;	
+				ctx.drawImage(photo2, 0, 0,canvas.width,canvas.height);
+		
 				var vacio='';
 					$('#venta').empty().append();
 					$('#venta').append('<option value="'+vacio+'">'+vacio+'</option>');
@@ -283,7 +307,11 @@ function procesar()
 					$('#tipo_canal').append('<option value="KIOSCO">KIOSCO</option>');
 					$('#tipo_canal').selectmenu('refresh')
 				
-				
+				///se oculta mendaje de espera
+				document.getElementById('progreso').style.visibility = 'hidden';
+				document.getElementById('progreso').style.opacity = 0;
+				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+				/////////////////////////////
 				alert("Ingreso correcto")
 		
 				}
@@ -314,7 +342,31 @@ width:50%;
 
 //position: relative;
 	
+}.progreso {
+	 width: 250px; 
+     height: 100px; 
+     line-height: 100px; /* <-- this is what you must define */
+	 vertical-align:middle;
+  	 border: 3px solid #FFF;
+     background: #300668;
+	 position:fixed;
+	 text-color:white;
+	 left:50%;
+	 margin-left:-125px;
+	 top:125px;
+	 text-align:center;
+	 font-size: 16px;
+	 font-style: normal;
+	 font-weight: normal;
+	 border-radius: 10px;
+	 color: #FFFFFF;
+	 z-index:100;
+  opacity: 0;
+  transition: opacity 2s linear;
+  visibility:hidden;
+	 
 }
+
 </style>
 </head>
 
@@ -397,6 +449,6 @@ width:50%;
     <h4>Pie</h4>
   </div>
 </div>
-
+<div id="progreso" class="progreso">Espere un momento</div>
 </body>
 </html>

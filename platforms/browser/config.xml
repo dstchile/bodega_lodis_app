@@ -19,4 +19,11 @@
     <gap:plugin name="cordova-plugin-network-information" source="npm" />
     <gap:plugin name="cordova-plugin-whitelist" source="npm" />
     <gap:plugin name="cordova-plugin-exitapp" source="npm" />
+    <gap:plugin name="cordova-plugin-splashscreen" source="npm" />
+    <splash src="splash.png" />
+    <splash platform="android" qualifier="land-ldpi" src="splash-land-ldpi.png" />
+    <splash platform="android" qualifier="land-mdpi" src="splash-land-mdpi.png" />
+    <splash platform="android" qualifier="land-hdpi" src="splash-land-hdpi.png" />
+    <splash platform="android" qualifier="land-xhdpi" src="splash-land-xhdpi.png" />
+    <preference name="SplashScreenDelay" value="4000" />
 </widget>
