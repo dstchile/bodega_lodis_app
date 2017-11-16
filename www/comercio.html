@@ -53,6 +53,7 @@ $(document).ready(function()
 					$('#venta').selectmenu('refresh')
 					}
 				document.getElementById('id_comercio').value=obj.id_comercio;
+				document.getElementById('id_com').innerHTML =obj.id_comercio;
 				document.getElementById('direccion').value=obj.direccion;
 				document.getElementById('nombre_contacto').value=obj.nombre_contacto;
 				document.getElementById('telefono_contacto').value=obj.telefono_contacto;
@@ -312,13 +313,29 @@ function procesar()
 					$('#tipo_canal').append('<option value="KIOSCO">KIOSCO</option>');
 					$('#tipo_canal').selectmenu('refresh')
 				
+				var obj = JSON.parse(result);
+				document.getElementById('id_comercio').value=obj.id_com;
+				document.getElementById('id_com').innerHTML =obj.id_com;
+				
+					$('#comuna').empty().append();
+					$('#comuna').append('<option value=""></option>');
+					for (i=0;i<obj.comunas.length;i++)
+						{
+						$('#comuna').append('<option value="'+obj.comunas[i]+'">'+obj.comunas[i]+'</option>');
+						}
+					$('#comuna').selectmenu('refresh')
+					
+				
 				///se oculta mendaje de espera
 				document.getElementById('progreso').style.visibility = 'hidden';
 				document.getElementById('progreso').style.opacity = 0;
 				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
 				/////////////////////////////
 				alert("Ingreso correcto")
-		
+				
+				
+				
+				
 				}
 			});
 		
@@ -381,14 +398,17 @@ width:50%;
     <h1>Comercio</h1>
   </div>
   <div data-role="content">
+    <div style="line-height:20px; vertical-align:middle;">ID INTERNO:  <span id="id_com"></span>
+            </div>
     <div data-role="fieldcontain">
-      <label for="venta" class="select">Vende Chip?</label>
-      <select name="venta" id="venta" onChange="guardar_dato('VENTA')">
-        <option value=""></option>
-      	<option value="SI WOM">SI WOM</option>
-	    <option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>
-	    <option value="SOLO RECARGA">SOLO RECARGA</option>
-      </select>
+      <label for="venta" class="select">Vende Chip?
+        <select name="venta" id="venta" onchange="guardar_dato('VENTA')">
+          <option value=""></option>
+          <option value="SI WOM">SI WOM</option>
+          <option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>
+          <option value="SOLO RECARGA">SOLO RECARGA</option>
+        </select>
+      </label>
       <input type="hidden" name="id_comercio" id="id_comercio" />
     </div>
     <div class="ui-grid-a" >
