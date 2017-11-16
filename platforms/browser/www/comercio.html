@@ -26,6 +26,7 @@ console.log("nombre:"+nombre_usuario+" --");
 
 $(document).ready(function() 
 	{
+		
 		var dato="LECTURA";
 		var code="";
 		var formData = new FormData();
@@ -51,6 +52,7 @@ $(document).ready(function()
 					$('#venta').append('<option value="SOLO RECARGA">SOLO RECARGA</option>');
 					$('#venta').selectmenu('refresh')
 					}
+				document.getElementById('id_comercio').value=obj.id_comercio;
 				document.getElementById('direccion').value=obj.direccion;
 				document.getElementById('nombre_contacto').value=obj.nombre_contacto;
 				document.getElementById('telefono_contacto').value=obj.telefono_contacto;
@@ -127,21 +129,28 @@ function guardar_dato(dato)
 
 function procesar()
 	{
-	/*$imagen="$id_comercio-foto1.jpg";
-	$ruta="$carpeta7$imagen";
-	$imagen="$id_comercio-foto2.jpg";
-	$ruta2="$carpeta7$imagen";
-	*/
 	var venta=document.getElementById('venta').value;
 	var direccion=document.getElementById('direccion').value;
 	var comuna=document.getElementById('comuna').value;
 	var nombre_contacto=document.getElementById('nombre_contacto').value;
 	var telefono_contacto=document.getElementById('telefono_contacto').value;
 	var tipo_canal=document.getElementById('tipo_canal').value;
-	
+	var id_comercio=document.getElementById('id_comercio').value;
+	var productos=document.getElementById('total_productos').innerHTML;
+	var num = parseInt(productos)
+	var img = document.getElementById('photo');
+	var tamanoh = img.naturalHeight;
+	var tamanow = img.naturalWidth;
+	var img2 = document.getElementById('photo2');
+	var tamanoh2 = img2.height;
+	var tamanow2 = img2.width;
 	if (venta=='')
 		{
 		alert("Debe especificar si el comerciante vende Chip")
+		}
+	else if ((venta!='SI WOM')&&(num==0))
+		{
+		alert("Debe scanear los productos entregados")
 		}
 	else if (direccion=='')
 		{
@@ -163,16 +172,72 @@ function procesar()
 		{
 		alert("Debe especificar el tipo de canal")
 		}
-	/*else if ((!file_exists(ruta))) 
+	else if (tamanoh==0) 
 		{
-		alert("1.-Debe ingresar dos imágenes")
+		alert("1.-Debe ingresar Foto 1")
 		}
-	else if ((!file_exists(ruta2))) 
+	else if (tamanoh2==0) 
 		{
-		alert("2.-Debe ingresar dos imágenes")
-		}*/
+		alert("2.-Debe ingresar Foto 2")
+		}
 	else
 		{
+		//proceso de compresion imagen 1
+		var canvasx = document.createElement("canvas");
+		var tamanoh = img.naturalHeight;
+		var tamanow = img.naturalWidth;
+		if (tamanoh<tamanow)
+			{
+			canvasx.height = 800;
+			var ancho=(tamanow*800)/tamanoh;
+			canvasx.width = ancho;	
+			}
+		else
+			{
+			canvasx.height = 800;
+			var ancho=(tamanow*800)/tamanoh;
+			canvasx.width = ancho;	
+			}
+		context = canvasx.getContext('2d');
+		context.drawImage(img, 0, 0, canvasx.width, canvasx.height);
+		var dataURL = canvasx.toDataURL("image/jpeg",0.95);
+		var blobBin = atob(dataURL.split(',')[1]);
+		var array = [];
+		for(var i = 0; i < blobBin.length; i++) 
+			{
+			array.push(blobBin.charCodeAt(i));
+			}
+		var file1=new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
+		// final de compresion imagen 1
+
+		//proceso de compresion imagen 2
+		var canvas2 = document.createElement("canvas");
+		var tamanoh = img2.naturalHeight;
+		var tamanow = img2.naturalWidth;
+		if (tamanoh<tamanow)
+			{
+			canvas2.height = 800;
+			var ancho=(tamanow*800)/tamanoh;
+			canvas2.width = ancho;	
+			}
+		else
+			{
+			canvas2.height = 800;
+			var ancho=(tamanow*800)/tamanoh;
+			canvas2.width = ancho;	
+			}
+		context2 = canvas2.getContext('2d');
+		context2.drawImage(img2, 0, 0, canvas2.width, canvas2.height);
+		var dataURL = canvas2.toDataURL("image/jpeg",0.95);
+		var blobBin = atob(dataURL.split(',')[1]);
+		var array = [];
+		for(var i = 0; i < blobBin.length; i++) 
+			{
+			array.push(blobBin.charCodeAt(i));
+			}
+		var file2=new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
+		// final de compresion imagen 2
+		
 		var dato='GUARDAR';
 		var formData = new FormData();
 		formData.append("venta", venta);
@@ -184,6 +249,9 @@ function procesar()
 		formData.append("tipo_canal", tipo_canal);
 		formData.append("dato", dato);
 		formData.append("usuario", nombre_usuario);
+		formData.append("myCanvas", file1);
+		formData.append("myCanvas2", file2);
+		formData.append("id_comercio", id_comercio);
 		$.ajax({
 			type: 'POST',
 			url: 'http://192.168.1.41/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
@@ -198,6 +266,8 @@ function procesar()
 				document.getElementById('telefono_contacto').value='';
 				document.getElementById('tipo_canal').value='';
 				document.getElementById('total_productos').innerHTML = '0';
+				document.getElementById('foto1').value = '';
+				document.getElementById('foto2').value = '';
 				
 				var vacio='';
 					$('#venta').empty().append();
@@ -219,12 +289,32 @@ function procesar()
 				}
 			});
 		
-		
 		}
 	
 	}
-</script>
 
+
+</script>
+<style>
+.container2{
+	overflow:auto;
+	right: 0px;
+	position: relative;
+	background:none;
+}
+.borde_imagen {
+background-color: #F5F5F5;
+border: 5px solid #FFFFFF;
+box-shadow: 0 0 22px #111111;
+margin-top: 10px;
+margin-bottom: 10px;
+margin-right: 10px;
+margin-left: 10px;
+
+//position: relative;
+	
+}
+</style>
 </head>
 
 <body>
@@ -240,6 +330,7 @@ function procesar()
 	    <option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>
 	    <option value="SOLO RECARGA">SOLO RECARGA</option>
       </select>
+      <input type="hidden" name="id_comercio" id="id_comercio" />
     </div>
     <div class="ui-grid-a" >
     	<div class="ui-block-a">
@@ -275,15 +366,26 @@ function procesar()
       <option value="KIOSCO">KIOSCO</option>
     </select>
   </div>
-  <button id="takePhoto">TOMAR FOTO</button>
-  <img id="photo" src=""  style="display:none"/>
-  <canvas id="foto1"></canvas>
+  <!-- sección para la imagen 1-->
+  <a href="#" data-role="button" id="takePhoto">TOMAR FOTO 1</a>
+  <div class="container2" style="width:1px; height:1px">
+  <img id="photo" src=""/>
+  </div>
+  <div style="text-align:center"><canvas id="foto1" class="borde_imagen"></canvas></div>
+  <!-- sección para la imagen 1-->
+  <!-- sección para la imagen 2-->
+  <a href="#" data-role="button" id="takePhoto2">TOMAR FOTO 2</a>
+  <div class="container2" style="width:1px; height:1px">
+  <img id="photo2" src=""/>
+  </div>
+  <div style="text-align:center"><canvas id="foto2" class="borde_imagen"></canvas></div>
+  <!-- sección para la imagen 2-->
                                         
+  <a href="#" data-role="button" onclick="procesar()">Procesar</a>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/camara.js"></script>
 <script type="text/javascript">app.initialize();</script>
 
-  <a href="#" data-role="button" onclick="procesar()">Procesar</a>
  
   </div>
     </div>

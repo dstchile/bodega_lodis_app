@@ -15,4 +15,8 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <gap:plugin name="cordova-plugin-app-version" source="npm" />
+    <gap:plugin name="cordova-plugin-network-information" source="npm" />
+    <gap:plugin name="cordova-plugin-whitelist" source="npm" />
+    <gap:plugin name="cordova-plugin-exitapp" source="npm" />
 </widget>
