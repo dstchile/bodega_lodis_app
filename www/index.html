@@ -92,9 +92,23 @@
               <input type="password" name="clave" id="clave" value=""  />
             <a href="#" data-role="button" onClick="validar()">Ingresar</a></div>
           </div>
-          <div data-role="footer">
-            <h4>Pie</h4>
-          </div>
+         <div style="line-height:60px; vertical-align:middle; text-align:center">VERSION:  <span id="version_app"></span>
+         </div>
+         
     </div>
+    <script>
+document.addEventListener('deviceready', datos_equipo, false);
+function datos_equipo()
+	{
+		
+	
+	cordova.getAppVersion.getVersionNumber().then(function (versionapp) {
+	document.getElementById('version_app').innerHTML = versionapp;
+				
+	});
+	
+	
+	}
+</script>
     </body>
 </html>
