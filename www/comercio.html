@@ -192,7 +192,7 @@ function procesar()
 		document.getElementById('progreso').style.opacity = 1;
 		document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
 		///fin de la ventana/////
-		
+		document.getElementById('procesar').style.display='none';
 		
 	
 		//proceso de compresion imagen 1
@@ -332,7 +332,8 @@ function procesar()
 				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
 				/////////////////////////////
 				alert("Ingreso correcto")
-				
+				document.getElementById('procesar').style.display='';
+		
 				
 				
 				
@@ -458,7 +459,7 @@ width:50%;
   <div style="text-align:center"><canvas id="foto2" class="borde_imagen"></canvas></div>
   <!-- sección para la imagen 2-->
                                         
-  <a href="#" data-role="button" onclick="procesar()">Procesar</a>
+  <a href="#" data-role="button" id="procesar" onclick="procesar()">Procesar</a>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/camara.js"></script>
 <script type="text/javascript">app.initialize();</script>
@@ -468,9 +469,6 @@ width:50%;
     </div>
     <div>
     </div>
-  </div>
-  <div data-role="footer">
-    <h4>Pie</h4>
   </div>
 </div>
 <div id="progreso" class="progreso">Espere un momento</div>
