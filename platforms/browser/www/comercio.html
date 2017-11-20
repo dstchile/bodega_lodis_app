@@ -82,8 +82,21 @@ $(document).ready(function()
 					
 					$('#comuna').selectmenu('refresh')
 					}
-				
-				
+				console.log("datos:"+obj.venta+"   total:"+obj.total_productos+"---");
+				if ((obj.venta!='SI WOM')&&(obj.total_productos=='0'))
+					{
+						document.getElementById('takePhoto').style.display='none';
+						document.getElementById('takePhoto2').style.display='none';
+						document.getElementById('takePhoto_text').style.display='';
+						document.getElementById('takePhoto2_text').style.display='';
+					}
+				else
+					{
+						document.getElementById('takePhoto_text').style.display='none';
+						document.getElementById('takePhoto2_text').style.display='none';
+						document.getElementById('takePhoto').style.display='';
+						document.getElementById('takePhoto2').style.display='';
+					}
 				
 				}
 			});
@@ -126,6 +139,23 @@ function guardar_dato(dato)
 					{
 					//document.form1.submit();
 					}
+			var total_productos=document.getElementById('total_productos').innerHTML;
+			console.log("datos:"+venta+"   total:"+total_productos+"---");
+					
+			if ((venta!='SI WOM')&&(total_productos=='0'))
+					{
+						document.getElementById('takePhoto').style.display='none';
+						document.getElementById('takePhoto2').style.display='none';
+						document.getElementById('takePhoto_text').style.display='';
+						document.getElementById('takePhoto2_text').style.display='';
+					}
+				else
+					{
+						document.getElementById('takePhoto_text').style.display='none';
+						document.getElementById('takePhoto2_text').style.display='none';
+						document.getElementById('takePhoto').style.display='';
+						document.getElementById('takePhoto2').style.display='';
+					}	
 			}
 		});
 	
@@ -192,7 +222,7 @@ function procesar()
 		document.getElementById('progreso').style.opacity = 1;
 		document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
 		///fin de la ventana/////
-		
+		document.getElementById('procesar').style.display='none';
 		
 	
 		//proceso de compresion imagen 1
@@ -332,7 +362,8 @@ function procesar()
 				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
 				/////////////////////////////
 				alert("Ingreso correcto")
-				
+				document.getElementById('procesar').style.display='';
+		
 				
 				
 				
@@ -445,6 +476,7 @@ width:50%;
   </div>
   <!-- sección para la imagen 1-->
   <a href="#" data-role="button" id="takePhoto">TOMAR FOTO 1</a>
+  <a href="#" id="takePhoto_text">PRIMERO ESCANEE LOS PRODUCTOS</a>
   <div class="container2" style="width:1px; height:1px">
   <img id="photo" src=""/>
   </div>
@@ -452,13 +484,14 @@ width:50%;
   <!-- sección para la imagen 1-->
   <!-- sección para la imagen 2-->
   <a href="#" data-role="button" id="takePhoto2">TOMAR FOTO 2</a>
+  <a href="#" id="takePhoto2_text">PRIMERO ESCANEE LOS PRODUCTOS</a>
   <div class="container2" style="width:1px; height:1px">
   <img id="photo2" src=""/>
   </div>
   <div style="text-align:center"><canvas id="foto2" class="borde_imagen"></canvas></div>
   <!-- sección para la imagen 2-->
                                         
-  <a href="#" data-role="button" onclick="procesar()">Procesar</a>
+  <a href="#" data-role="button" id="procesar" onclick="procesar()">Procesar</a>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/camara.js"></script>
 <script type="text/javascript">app.initialize();</script>
@@ -468,9 +501,6 @@ width:50%;
     </div>
     <div>
     </div>
-  </div>
-  <div data-role="footer">
-    <h4>Pie</h4>
   </div>
 </div>
 <div id="progreso" class="progreso">Espere un momento</div>

@@ -93,6 +93,62 @@ function borrar_codigo(valor)
 	}
 </script>
 <script type="text/javascript">
+ function guardar()
+ 	{
+	
+		var code=document.getElementById('codigo_man').value;	
+		if(code.length<=18)
+			{
+			alert("el código debe contener mínimo 19 dígitos");
+			document.getElementById('codigo_man').value='';
+			}
+		else
+			{
+			var dato="CODIGO";
+			var formData = new FormData();
+			formData.append("code", code);
+			formData.append("dato", dato);
+			formData.append("usuario", nombre_usuario);
+			$.ajax({
+				type: 'POST',
+				url: 'https://www.sistemalodis.cl/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (result) 
+					{
+					console.log("respuesta:"+result+"---");
+					if (result=="CODIGO YA EXISTE")
+						{
+						alert("CODIGO YA EXISTE");
+						}
+					setTimeout(listado,500);
+					}
+				});
+			
+			function listado()
+				{
+				var dato="CODIGO";
+				var code="";
+				var formData = new FormData();
+				formData.append("code", code);
+				formData.append("dato", dato);
+				formData.append("usuario", nombre_usuario);
+				$.ajax({
+					type: 'POST',
+					url: 'https://www.sistemalodis.cl/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function (result) 
+						{
+						document.getElementById('listado_codigos').innerHTML = result;
+						}
+					});
+				}
+			}
+	
+	}
  function scan(){
  console.log("clicked");
  cordova.plugins.barcodeScanner.scan(function(result){
@@ -174,8 +230,12 @@ function borrar_codigo(valor)
   <div data-role="header">
     <h1>Scaneo de Productos</h1>
   </div>
-  <div data-role="content">Contenido<a href="#" onclick="scan()" data-role="button">Scanear</a>
-  <div id="listado_codigos"></div>
+  <div data-role="content"><a href="#" onclick="scan()" data-role="button">Scanear</a>
+    <div data-role="fieldcontain">
+      <label for="textinput">Código:</label>
+      <input type="number" name="codigo_man" id="codigo_man" value=""  />
+    <a href="#" data-role="button" onclick="guardar()">Guardar</a></div>
+    <div id="listado_codigos"></div>
   </div>
 </div>
 </body>

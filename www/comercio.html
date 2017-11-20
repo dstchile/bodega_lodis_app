@@ -82,8 +82,21 @@ $(document).ready(function()
 					
 					$('#comuna').selectmenu('refresh')
 					}
-				
-				
+				console.log("datos:"+obj.venta+"   total:"+obj.total_productos+"---");
+				if ((obj.venta!='SI WOM')&&(obj.total_productos=='0'))
+					{
+						document.getElementById('takePhoto').style.display='none';
+						document.getElementById('takePhoto2').style.display='none';
+						document.getElementById('takePhoto_text').style.display='';
+						document.getElementById('takePhoto2_text').style.display='';
+					}
+				else
+					{
+						document.getElementById('takePhoto_text').style.display='none';
+						document.getElementById('takePhoto2_text').style.display='none';
+						document.getElementById('takePhoto').style.display='';
+						document.getElementById('takePhoto2').style.display='';
+					}
 				
 				}
 			});
@@ -126,6 +139,23 @@ function guardar_dato(dato)
 					{
 					//document.form1.submit();
 					}
+			var total_productos=document.getElementById('total_productos').innerHTML;
+			console.log("datos:"+venta+"   total:"+total_productos+"---");
+					
+			if ((venta!='SI WOM')&&(total_productos=='0'))
+					{
+						document.getElementById('takePhoto').style.display='none';
+						document.getElementById('takePhoto2').style.display='none';
+						document.getElementById('takePhoto_text').style.display='';
+						document.getElementById('takePhoto2_text').style.display='';
+					}
+				else
+					{
+						document.getElementById('takePhoto_text').style.display='none';
+						document.getElementById('takePhoto2_text').style.display='none';
+						document.getElementById('takePhoto').style.display='';
+						document.getElementById('takePhoto2').style.display='';
+					}	
 			}
 		});
 	
@@ -446,6 +476,7 @@ width:50%;
   </div>
   <!-- sección para la imagen 1-->
   <a href="#" data-role="button" id="takePhoto">TOMAR FOTO 1</a>
+  <a href="#" id="takePhoto_text">PRIMERO ESCANEE LOS PRODUCTOS</a>
   <div class="container2" style="width:1px; height:1px">
   <img id="photo" src=""/>
   </div>
@@ -453,6 +484,7 @@ width:50%;
   <!-- sección para la imagen 1-->
   <!-- sección para la imagen 2-->
   <a href="#" data-role="button" id="takePhoto2">TOMAR FOTO 2</a>
+  <a href="#" id="takePhoto2_text">PRIMERO ESCANEE LOS PRODUCTOS</a>
   <div class="container2" style="width:1px; height:1px">
   <img id="photo2" src=""/>
   </div>
