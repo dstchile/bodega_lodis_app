@@ -14,11 +14,11 @@
           },
 
           takePhoto: function(){
-              navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail, { quality: 20, 
+              navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail, { quality: 80,targetWidth: 800,targetHeight: 800, 
                   allowEdit: false, destinationType: navigator.camera.DestinationType.DATA_URL,correctOrientation:true});
           },
 		  takePhoto2: function(){
-              navigator.camera.getPicture(app.onPhotoDataSuccess2, app.onFail2, { quality: 20, 
+              navigator.camera.getPicture(app.onPhotoDataSuccess2, app.onFail2, { quality: 80,targetWidth: 800,targetHeight: 800, 
                   allowEdit: false, destinationType: navigator.camera.DestinationType.DATA_URL,correctOrientation:true});
           },
 

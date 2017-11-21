@@ -8,6 +8,7 @@
 <link href="jquery-mobile/jquery.mobile.structure-1.0.min.css" rel="stylesheet" type="text/css" />
 <script src="jquery-mobile/jquery-1.6.4.min.js" type="text/javascript"></script>
 <script src="jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/conexion.js"></script>
 <script>
 function getParameterByName(name) 
 	{
@@ -35,7 +36,7 @@ $(document).ready(function()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: 'https://www.sistemalodis.cl/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+			url: servidor+'/bodega_lodis_movil/checklist_comercio_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -129,7 +130,7 @@ function guardar_dato(dato)
 	formData.append("usuario", nombre_usuario);
 	$.ajax({
 		type: 'POST',
-		url: 'https://www.sistemalodis.cl/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+		url: servidor+'/bodega_lodis_movil/checklist_comercio_guarda_dato_app2.php',
 		data: formData,
 		processData: false,
 		contentType: false,
@@ -243,7 +244,7 @@ function procesar()
 			}
 		context = canvasx.getContext('2d');
 		context.drawImage(img, 0, 0, canvasx.width, canvasx.height);
-		var dataURL = canvasx.toDataURL("image/jpeg",0.95);
+		var dataURL = canvasx.toDataURL("image/jpeg",0.7);
 		var blobBin = atob(dataURL.split(',')[1]);
 		var array = [];
 		for(var i = 0; i < blobBin.length; i++) 
@@ -271,7 +272,7 @@ function procesar()
 			}
 		context2 = canvas2.getContext('2d');
 		context2.drawImage(img2, 0, 0, canvas2.width, canvas2.height);
-		var dataURL = canvas2.toDataURL("image/jpeg",0.95);
+		var dataURL = canvas2.toDataURL("image/jpeg",0.7);
 		var blobBin = atob(dataURL.split(',')[1]);
 		var array = [];
 		for(var i = 0; i < blobBin.length; i++) 
@@ -297,7 +298,7 @@ function procesar()
 		formData.append("id_comercio", id_comercio);
 		$.ajax({
 			type: 'POST',
-			url: 'https://www.sistemalodis.cl/bodega_lodis_movil/checklist_comercio_guarda_dato_app.php',
+			url: servidor+'/bodega_lodis_movil/checklist_comercio_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -368,7 +369,20 @@ function procesar()
 				
 				
 				}
+			})
+		.fail(function(result)
+			{
+			console.log("ERROR DE COMUNICACION");	
+			alert("ERROR DE COMUNICACION");
+			///se oculta mendaje de espera
+			document.getElementById('progreso').style.visibility = 'hidden';
+			document.getElementById('progreso').style.opacity = 0;
+			document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+			/////////////////////////////
+			document.getElementById('procesar').style.display='';
+	
 			});
+		
 		
 		}
 	
