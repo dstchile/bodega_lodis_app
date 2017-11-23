@@ -84,7 +84,7 @@ $(document).ready(function()
 					$('#comuna').selectmenu('refresh')
 					}
 				console.log("datos:"+obj.venta+"   total:"+obj.total_productos+"---");
-				if ((obj.venta!='SI WOM')&&(obj.total_productos=='0'))
+				/*if ((obj.venta!='SI WOM')&&(obj.total_productos=='0'))
 					{
 						document.getElementById('takePhoto').style.display='none';
 						document.getElementById('takePhoto2').style.display='none';
@@ -97,7 +97,11 @@ $(document).ready(function()
 						document.getElementById('takePhoto2_text').style.display='none';
 						document.getElementById('takePhoto').style.display='';
 						document.getElementById('takePhoto2').style.display='';
-					}
+					}*/
+					document.getElementById('takePhoto_text').style.display='none';
+					document.getElementById('takePhoto2_text').style.display='none';
+					document.getElementById('takePhoto').style.display='';
+					document.getElementById('takePhoto2').style.display='';
 				
 				}
 			});
@@ -118,48 +122,62 @@ function guardar_dato(dato)
 	var telefono_contacto = document.getElementById("telefono_contacto").value;
 	var tipo_canal = document.getElementById("tipo_canal").value;
 	
-	var formData = new FormData();
-	formData.append("venta", venta);
-	//formData.append("nombre_local", nombre_local);
-	formData.append("direccion", direccion);
-	formData.append("comuna", comuna);
-	formData.append("nombre_contacto", nombre_contacto);
-	formData.append("telefono_contacto", telefono_contacto);
-	formData.append("tipo_canal", tipo_canal);
-	formData.append("dato", dato);
-	formData.append("usuario", nombre_usuario);
-	$.ajax({
-		type: 'POST',
-		url: servidor+'/bodega_lodis_movil/checklist_comercio_guarda_dato_app2.php',
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function (result) 
-			{
-				if (dato=='VENTA')
-					{
-					//document.form1.submit();
-					}
-			var total_productos=document.getElementById('total_productos').innerHTML;
-			console.log("datos:"+venta+"   total:"+total_productos+"---");
-					
-			if ((venta!='SI WOM')&&(total_productos=='0'))
-					{
-						document.getElementById('takePhoto').style.display='none';
-						document.getElementById('takePhoto2').style.display='none';
-						document.getElementById('takePhoto_text').style.display='';
-						document.getElementById('takePhoto2_text').style.display='';
-					}
-				else
-					{
-						document.getElementById('takePhoto_text').style.display='none';
-						document.getElementById('takePhoto2_text').style.display='none';
-						document.getElementById('takePhoto').style.display='';
-						document.getElementById('takePhoto2').style.display='';
-					}	
-			}
-		});
 	
+	largo = telefono_contacto.length; 
+	if ((largo!=11)&&(telefono_contacto!=''))
+		{
+		alert ("Teléfono de contacto:"+telefono_contacto+" debe empesar por 569 o 562 + 8 dígitos del abonado ");	
+		//document.getElementById("telefono_contacto").value='';
+		}
+	else
+		{
+		var formData = new FormData();
+		formData.append("venta", venta);
+		//formData.append("nombre_local", nombre_local);
+		formData.append("direccion", direccion);
+		formData.append("comuna", comuna);
+		formData.append("nombre_contacto", nombre_contacto);
+		formData.append("telefono_contacto", telefono_contacto);
+		formData.append("tipo_canal", tipo_canal);
+		formData.append("dato", dato);
+		formData.append("usuario", nombre_usuario);
+		$.ajax({
+			type: 'POST',
+			url: servidor+'/bodega_lodis_movil/checklist_comercio_guarda_dato_app2.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+					if (dato=='VENTA')
+						{
+						//document.form1.submit();
+						}
+				var total_productos=document.getElementById('total_productos').innerHTML;
+				console.log("datos:"+venta+"   total:"+total_productos+"---");
+						
+				/*if ((venta!='SI WOM')&&(total_productos=='0'))
+						{
+							document.getElementById('takePhoto').style.display='none';
+							document.getElementById('takePhoto2').style.display='none';
+							document.getElementById('takePhoto_text').style.display='';
+							document.getElementById('takePhoto2_text').style.display='';
+						}
+					else
+						{
+							document.getElementById('takePhoto_text').style.display='none';
+							document.getElementById('takePhoto2_text').style.display='none';
+							document.getElementById('takePhoto').style.display='';
+							document.getElementById('takePhoto2').style.display='';
+						}*/
+							document.getElementById('takePhoto_text').style.display='none';
+							document.getElementById('takePhoto2_text').style.display='none';
+							document.getElementById('takePhoto').style.display='';
+							document.getElementById('takePhoto2').style.display='';
+							
+				}
+			});
+		}
 	}
 
 function procesar()
@@ -183,10 +201,10 @@ function procesar()
 		{
 		alert("Debe especificar si el comerciante vende Chip")
 		}
-	else if ((venta!='SI WOM')&&(num==0))
+	/*else if ((venta!='SI WOM')&&(num==0))
 		{
 		alert("Debe scanear los productos entregados")
-		}
+		}*/
 	else if (direccion=='')
 		{
 		alert("Debe especificar la direccion")
@@ -477,7 +495,7 @@ width:50%;
   <label for="nombre_contacto">Nombre Contacto:</label>
   <input type="text" name="nombre_contacto" id="nombre_contacto" onBlur="guardar_dato('NOMBRE_CONTACTO')" value=""  />
   <label for="telefono_contacto">Telefono Contacto:</label>
-  <input type="text" name="telefono_contacto" id="telefono_contacto" onBlur="guardar_dato('TELEFONO_CONTACTO')" value=""  />
+  <input type="number" name="telefono_contacto" id="telefono_contacto" onBlur="guardar_dato('TELEFONO_CONTACTO')" value=""  />
   
   <div data-role="fieldcontain">
     <label for="tipo_canal" class="select">Tipo Canal:</label>
