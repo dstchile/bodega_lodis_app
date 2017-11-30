@@ -10,6 +10,17 @@
 <script src="jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="js/conexion.js"></script>
 <script>
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() 
+	{
+    		
+	document.getElementById('e_fabrica').value=device.manufacturer;
+	document.getElementById('e_modelo').value=device.model;
+	document.getElementById('e_plataforma').value=device.platform;
+	document.getElementById('e_version').value=device.version;
+	
+			
+	}	
 function getParameterByName(name) 
 	{
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -300,108 +311,122 @@ function procesar()
 		var file2=new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
 		// final de compresion imagen 2
 		
-		var dato='GUARDAR';
-		var formData = new FormData();
-		formData.append("venta", venta);
-		//formData.append("nombre_local", nombre_local);
-		formData.append("direccion", direccion);
-		formData.append("comuna", comuna);
-		formData.append("nombre_contacto", nombre_contacto);
-		formData.append("telefono_contacto", telefono_contacto);
-		formData.append("tipo_canal", tipo_canal);
-		formData.append("dato", dato);
-		formData.append("usuario", nombre_usuario);
-		formData.append("myCanvas", file1);
-		formData.append("myCanvas2", file2);
-		formData.append("id_comercio", id_comercio);
-		$.ajax({
-			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_comercio_guarda_dato_app2.php',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (result) 
-				{
-				document.getElementById('venta').value='';
-				document.getElementById('direccion').value='';
-				document.getElementById('nombre_contacto').value='';
-				document.getElementById('telefono_contacto').value='';
-				document.getElementById('tipo_canal').value='';
-				document.getElementById('total_productos').innerHTML = '0';
-				document.getElementById('foto1').value = '';
-				document.getElementById('foto2').value = '';
-				var photo = document.getElementById('photo');
-				photo.src = "";
-				var canvas = document.getElementById("foto1");
-				var ctx = canvas.getContext("2d");
-				canvas.width = 150;
-				var alto=(tamanoh*150)/tamanow;
-				canvas.height = alto;	
-				ctx.drawImage(photo, 0, 0,canvas.width,canvas.height);
-		
-				var photo2 = document.getElementById('photo2');
-				photo2.src = "";
-				var canvas = document.getElementById("foto2");
-				var ctx = canvas.getContext("2d");
-				canvas.width = 150;
-				var alto=(tamanoh*150)/tamanow;
-				canvas.height = alto;	
-				ctx.drawImage(photo2, 0, 0,canvas.width,canvas.height);
-		
-				var vacio='';
-					$('#venta').empty().append();
-					$('#venta').append('<option value="'+vacio+'">'+vacio+'</option>');
-					$('#venta').append('<option value="SI WOM">SI WOM</option>');
-					$('#venta').append('<option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>');
-					$('#venta').append('<option value="SOLO RECARGA">SOLO RECARGA</option>');
-					$('#venta').selectmenu('refresh')
-					$('#tipo_canal').empty().append();
-					$('#tipo_canal').append('<option value="'+vacio+'">'+vacio+'</option>');
-					$('#tipo_canal').append('<option value="ESPECIALISTA">ESPECIALISTA</option>');
-					$('#tipo_canal').append('<option value="TRADICIONAL">TRADICIONAL</option>');
-					$('#tipo_canal').append('<option value="KIOSCO">KIOSCO</option>');
-					$('#tipo_canal').selectmenu('refresh')
-				
-				var obj = JSON.parse(result);
-				document.getElementById('id_comercio').value=obj.id_com;
-				document.getElementById('id_com').innerHTML =obj.id_com;
-				
-					$('#comuna').empty().append();
-					$('#comuna').append('<option value=""></option>');
-					for (i=0;i<obj.comunas.length;i++)
-						{
-						$('#comuna').append('<option value="'+obj.comunas[i]+'">'+obj.comunas[i]+'</option>');
-						}
-					$('#comuna').selectmenu('refresh')
+		document.getElementById('progreso').innerHTML='Procesando Imágenes';
+		setTimeout(espera,1000)
+		function espera()
+			{
+			document.getElementById('progreso').innerHTML='Enviando, espere por favor';
+			var e_fabrica=document.getElementById('e_fabrica').value;
+			var e_modelo=document.getElementById('e_modelo').value;
+			var e_plataforma=document.getElementById('e_plataforma').value;
+			var e_version=document.getElementById('e_version').value;
+			
+			var dato='GUARDAR';
+			var formData = new FormData();
+			formData.append("venta", venta);
+			//formData.append("nombre_local", nombre_local);
+			formData.append("direccion", direccion);
+			formData.append("comuna", comuna);
+			formData.append("nombre_contacto", nombre_contacto);
+			formData.append("telefono_contacto", telefono_contacto);
+			formData.append("tipo_canal", tipo_canal);
+			formData.append("dato", dato);
+			formData.append("usuario", nombre_usuario);
+			formData.append("myCanvas", file1);
+			formData.append("myCanvas2", file2);
+			formData.append("id_comercio", id_comercio);
+			formData.append("e_fabrica", e_fabrica);
+			formData.append("e_modelo", e_modelo);
+			formData.append("e_plataforma", e_plataforma);
+			formData.append("e_version", e_version);
+			$.ajax({
+				type: 'POST',
+				url: servidor+'/bodega_lodis_movil/checklist_comercio_guarda_dato_app2.php',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (result) 
+					{
+					document.getElementById('venta').value='';
+					document.getElementById('direccion').value='';
+					document.getElementById('nombre_contacto').value='';
+					document.getElementById('telefono_contacto').value='';
+					document.getElementById('tipo_canal').value='';
+					document.getElementById('total_productos').innerHTML = '0';
+					document.getElementById('foto1').value = '';
+					document.getElementById('foto2').value = '';
+					var photo = document.getElementById('photo');
+					photo.src = "";
+					var canvas = document.getElementById("foto1");
+					var ctx = canvas.getContext("2d");
+					canvas.width = 150;
+					var alto=(tamanoh*150)/tamanow;
+					canvas.height = alto;	
+					ctx.drawImage(photo, 0, 0,canvas.width,canvas.height);
+			
+					var photo2 = document.getElementById('photo2');
+					photo2.src = "";
+					var canvas = document.getElementById("foto2");
+					var ctx = canvas.getContext("2d");
+					canvas.width = 150;
+					var alto=(tamanoh*150)/tamanow;
+					canvas.height = alto;	
+					ctx.drawImage(photo2, 0, 0,canvas.width,canvas.height);
+			
+					var vacio='';
+						$('#venta').empty().append();
+						$('#venta').append('<option value="'+vacio+'">'+vacio+'</option>');
+						$('#venta').append('<option value="SI WOM">SI WOM</option>');
+						$('#venta').append('<option value="NO WOM SI OTRAS TELCO">NO WOM SI OTRAS TELCO</option>');
+						$('#venta').append('<option value="SOLO RECARGA">SOLO RECARGA</option>');
+						$('#venta').selectmenu('refresh')
+						$('#tipo_canal').empty().append();
+						$('#tipo_canal').append('<option value="'+vacio+'">'+vacio+'</option>');
+						$('#tipo_canal').append('<option value="ESPECIALISTA">ESPECIALISTA</option>');
+						$('#tipo_canal').append('<option value="TRADICIONAL">TRADICIONAL</option>');
+						$('#tipo_canal').append('<option value="KIOSCO">KIOSCO</option>');
+						$('#tipo_canal').selectmenu('refresh')
 					
-				
+					var obj = JSON.parse(result);
+					document.getElementById('id_comercio').value=obj.id_com;
+					document.getElementById('id_com').innerHTML =obj.id_com;
+					
+						$('#comuna').empty().append();
+						$('#comuna').append('<option value=""></option>');
+						for (i=0;i<obj.comunas.length;i++)
+							{
+							$('#comuna').append('<option value="'+obj.comunas[i]+'">'+obj.comunas[i]+'</option>');
+							}
+						$('#comuna').selectmenu('refresh')
+						
+					
+					///se oculta mendaje de espera
+					document.getElementById('progreso').style.visibility = 'hidden';
+					document.getElementById('progreso').style.opacity = 0;
+					document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+					/////////////////////////////
+					alert("Ingreso correcto")
+					document.getElementById('procesar').style.display='';
+			
+					
+					
+					
+					}
+				})
+			.fail(function(result)
+				{
+				console.log("ERROR DE COMUNICACION");	
+				alert("ERROR DE COMUNICACION");
 				///se oculta mendaje de espera
 				document.getElementById('progreso').style.visibility = 'hidden';
 				document.getElementById('progreso').style.opacity = 0;
 				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
 				/////////////////////////////
-				alert("Ingreso correcto")
 				document.getElementById('procesar').style.display='';
 		
-				
-				
-				
-				}
-			})
-		.fail(function(result)
-			{
-			console.log("ERROR DE COMUNICACION");	
-			alert("ERROR DE COMUNICACION");
-			///se oculta mendaje de espera
-			document.getElementById('progreso').style.visibility = 'hidden';
-			document.getElementById('progreso').style.opacity = 0;
-			document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
-			/////////////////////////////
-			document.getElementById('procesar').style.display='';
-	
-			});
-		
-		
+				});
+			
+			}
 		}
 	
 	}
@@ -462,7 +487,11 @@ width:50%;
   </div>
   <div data-role="content">
     <div style="line-height:20px; vertical-align:middle;">ID INTERNO:  <span id="id_com"></span>
-            </div>
+            <input type="hidden" name="e_modelo" id="e_modelo" />
+            <input type="hidden" name="e_fabrica" id="e_fabrica" />
+            <input type="hidden" name="e_plataforma" id="e_plataforma" />
+            <input type="hidden" name="e_version" id="e_version" />
+    </div>
     <div data-role="fieldcontain">
       <label for="venta" class="select">Vende Chip?
         <select name="venta" id="venta" onchange="guardar_dato('VENTA')">

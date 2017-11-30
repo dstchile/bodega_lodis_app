@@ -12,6 +12,9 @@
         },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "cl.dstchile.lodisapp"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "cl.dstchile.lodisapp"
         }
     },
     "dependent_plugins": {}
