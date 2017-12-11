@@ -316,10 +316,18 @@ function procesar()
 		var e_modelo=document.getElementById('e_modelo').value;
 		var e_plataforma=document.getElementById('e_plataforma').value;
 		var e_version=document.getElementById('e_version').value;
+		n=10;
 		if (e_version=='6.0'){tiempo_espera=10000;}else{tiempo_espera=1000;}
+		var temporizador=setInterval(function()
+			{
+			document.getElementById('progreso').innerHTML='Procesando Imágenes '+n;
+			n--;
+			}, 1000);
 		setTimeout(espera,tiempo_espera)
 		function espera()
 			{
+			clearInterval(temporizador);
+
 			document.getElementById('progreso').innerHTML='Enviando, espere por favor';
 			
 			var dato='GUARDAR';

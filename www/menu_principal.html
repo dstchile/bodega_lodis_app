@@ -29,11 +29,23 @@ function carga_comercio()
 		{
 		location.href="comercio.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
 		}
+function carga_checklist()
+		{
+		location.href="checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		}
+function carga_campanas()
+		{
+		location.href="checklist_campanas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		}
+function carga_dummies()
+		{
+		location.href="checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		}
 
 	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady()
 		{
-		var db = window.openDatabase("lodis", "1.0", "lodis DB", 1000000); //will create database Dummy_DB or open it
+		var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
 		crear_tablas(db);
 		}
 	function crear_tablas(db)
@@ -41,8 +53,10 @@ function carga_comercio()
 		db.transaction(populateDB, errorCB, successCB);
 		function populateDB(tx) 
 			{
-			//tx.executeSql('DROP TABLE IF EXISTS datos_cliente ');
-			tx.executeSql('CREATE TABLE IF NOT EXISTS imagenes_comercio (id INTEGER PRIMARY KEY AUTOINCREMENT,id_comercio INT, nombre_imagen TEXT NOT NULL, imagen BLOB NOT NULL)');
+			//tx.executeSql('DROP TABLE IF EXISTS checklist_cola ');
+			//tx.executeSql('DROP TABLE IF EXISTS checklist_imagen_cola ');
+			tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_cola (id INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT NOT NULL, id_punto TEXT NOT NULL, punto TEXT NOT NULL, lugar TEXT NOT NULL, pregunta TEXT NOT NULL, respuesta TEXT NOT NULL, fecha_ingreso TEXT NOT NULL,hora_ingreso TEXT NOT NULL,ingresado_por TEXT NOT NULL, comentario TEXT NOT NULL, estado TEXT NOT NULL, pos1 TEXT NOT NULL, pos2 TEXT NOT NULL, implementacion TEXT NOT NULL,foleteria TEXT NOT NULL)');
+			tx.executeSql('CREATE TABLE IF NOT EXISTS checklist_imagen_cola (id INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT NOT NULL, id_punto TEXT NOT NULL, punto TEXT NOT NULL, lugar TEXT NOT NULL, fecha_base TEXT NOT NULL,hora_base TEXT NOT NULL,ruta TEXT NOT NULL, id_campana TEXT NOT NULL, id_producto TEXT NOT NULL, estado TEXT NOT NULL, area TEXT NOT NULL)');
 			}
 		function errorCB(err) 
 			{
@@ -51,7 +65,6 @@ function carga_comercio()
 			}
 		function successCB() 
 			{
-			db.transaction(queryDB,errorCB);
 			console.log ("base creada")
 			}
 		}
@@ -64,11 +77,12 @@ function carga_comercio()
     <h1>LODIS APP</h1>
   </div>
   <div data-role="content">
-  <div data-role="controlgroup">
-	  <a href="#" rel="external" data-role="button">En Desarrollo</a>
-      <a href="#" onclick="carga_comercio()" rel="external" data-role="button">Comercio</a>
+	  <a href="#" onclick="" rel="external" data-role="button">ENTREGA DE PRODUCTOS</a>
+      <a href="#" onclick="carga_campanas()" rel="external" data-role="button">CAMPAÑAS</a>
+      <a href="#" onclick="carga_dummies()" rel="external" data-role="button">DUMMIES</a>
+      <a href="#" onclick="carga_checklist()" rel="external" data-role="button">CHECKLIST</a>
+      <a href="#" onclick="carga_comercio()" rel="external" data-role="button">COMERCIO</a>
       <a href="#" rel="external"  onClick="navigator.app.exitApp();" data-role="button">Salir</a>
-  </div>
 	        
   </div>
  </div>
