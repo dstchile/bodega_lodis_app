@@ -15,7 +15,6 @@
 	<plugin name="cordova-plugin-camera" spec="2.4.1" source="npm"/>
 	<plugin name="cordova-plugin-device" source="npm"/>
 	<plugin name="cordova-plugin-geolocation" source="npm"/>
-	<plugin name="org.apache.cordova.geolocation" source="npm"/>
 	<gap:plugin name="cordova-plugin-app-version" source="npm"/>
     <gap:plugin name="cordova-plugin-network-information" source="npm"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
