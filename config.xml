@@ -17,7 +17,8 @@
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-	<plugin name="cordova-plugin-geolocation" source="npm"/>
+	<!--<plugin name="cordova-plugin-geolocation" source="npm"/>-->
+	<plugin name="org.apache.cordova.geolocation" source="npm"/>
 	<gap:plugin name="cordova-plugin-app-version" source="npm"/>
     <gap:plugin name="cordova-plugin-network-information" source="npm"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm"/>
