@@ -283,7 +283,9 @@ module.exports.metadata =
     "cordova-plugin-camera": "1.2.0",
     "cordova-plugin-device": "1.1.7",
     "cordova-plugin-file": "5.0.0",
-    "cordova-plugin-file-transfer": "1.7.0"
+    "cordova-plugin-file-transfer": "1.7.0",
+    "cordova-plugin-compat": "1.2.0",
+    "cordova-plugin-geolocation": "2.4.1"
 }
 // BOTTOM OF METADATA
 });

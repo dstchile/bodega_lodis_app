@@ -18,10 +18,16 @@
         },
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "cl.dstchile.lodisapp"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "cl.dstchile.lodisapp"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-file": {
+            "PACKAGE_NAME": "cl.dstchile.lodisapp"
+        },
+        "cordova-plugin-compat": {
             "PACKAGE_NAME": "cl.dstchile.lodisapp"
         }
     }
