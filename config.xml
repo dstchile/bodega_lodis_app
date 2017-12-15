@@ -10,7 +10,6 @@
     <content src="index.html"/>
     <access origin="*"/>
 	<plugin name="cordova-plugin-geolocation" spec="2.4.1" source="npm">
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 	</plugin>
 	<plugin name="phonegap-plugin-barcodescanner" spec="3.0.0">
 	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes."/>
