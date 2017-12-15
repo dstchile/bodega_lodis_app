@@ -9,6 +9,8 @@
 <script src="jquery-mobile/jquery-1.6.4.min.js" type="text/javascript"></script>
 <script src="jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/conexion.js"></script>
+<script type="text/javascript" src="js/descarga.js"></script>
 <script>
 function getParameterByName(name) 
 	{
@@ -20,31 +22,39 @@ function getParameterByName(name)
 var usuario = getParameterByName('usuario');
 var password = getParameterByName('password');
 var nombre_usuario = getParameterByName('nombre_usuario');
+var bodega = getParameterByName('bodega');
 
 console.log("usuario:"+usuario+" --");
 console.log("password:"+password+" --");
 console.log("nombre:"+nombre_usuario+" --");
+console.log("bodega:"+bodega+" --");
 
+function carga_entrega()
+		{
+		location.href="entrega_productos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
+		}
 function carga_comercio()
 		{
-		location.href="comercio.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		location.href="comercio.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
 		}
 function carga_checklist()
 		{
-		location.href="checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		location.href="checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
 		}
 function carga_campanas()
 		{
-		location.href="checklist_campanas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		location.href="checklist_campanas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
 		}
 function carga_dummies()
 		{
-		location.href="checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		location.href="checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
 		}
 
 	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady()
 		{
+		
+		
 		var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
 		crear_tablas(db);
 		}
@@ -68,6 +78,7 @@ function carga_dummies()
 			console.log ("base creada")
 			}
 		}
+	
 </script>
 </head>
 
@@ -77,7 +88,7 @@ function carga_dummies()
     <h1>LODIS APP</h1>
   </div>
   <div data-role="content">
-	  <a href="#" onclick="" rel="external" data-role="button">ENTREGA DE PRODUCTOS</a>
+	  <a href="#" onclick="carga_entrega()" rel="external" data-role="button">ENTREGA DE PRODUCTOS</a>
       <a href="#" onclick="carga_campanas()" rel="external" data-role="button">CAMPAÑAS</a>
       <a href="#" onclick="carga_dummies()" rel="external" data-role="button">DUMMIES</a>
       <a href="#" onclick="carga_checklist()" rel="external" data-role="button">CHECKLIST</a>

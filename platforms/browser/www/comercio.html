@@ -13,14 +13,47 @@
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() 
 	{
-    		
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    function onSuccess(position) 
+		{
+        
+		var element = document.getElementById('geolocation');
+        element.innerHTML= 'GPS OK';
+		//element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+                            'Longitude: '          + position.coords.longitude             + '<br />' +
+                            'Altitude: '           + position.coords.altitude              + '<br />' +
+                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
+                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+                            'Heading: '            + position.coords.heading               + '<br />' +
+                            'Speed: '              + position.coords.speed                 + '<br />' +
+                            'Timestamp: '          +                                   position.timestamp          + '<br />';
+    	document.getElementById('latitud').value=position.coords.latitude;
+		document.getElementById('longitud').value=position.coords.longitude;
+		document.getElementById('buscar_direccion').style.visibility='visible';
+		
+		
+		
+		}
+	function onError(error) 
+		{
+        var element = document.getElementById('geolocation');
+        element.innerHTML = error.message;
+		 //alert('code: '+ error.code+'\n'+'message: ' + error.message + '\n');
+    	}		
 	document.getElementById('e_fabrica').value=device.manufacturer;
 	document.getElementById('e_modelo').value=device.model;
 	document.getElementById('e_plataforma').value=device.platform;
 	document.getElementById('e_version').value=device.version;
 	
 			
-	}	
+	}
+document.addEventListener("backbutton", presskey, false);
+function presskey()
+	{
+	location.href="menu_principal.html";
+	document.removeEventListener("backbutton", presskey, false);
+	}
+	
 function getParameterByName(name) 
 	{
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -31,6 +64,7 @@ function getParameterByName(name)
 var usuario = getParameterByName('usuario');
 var password = getParameterByName('password');
 var nombre_usuario = getParameterByName('nombre_usuario');
+var bodega = getParameterByName('bodega');
 
 console.log("usuario:"+usuario+" --");
 console.log("password:"+password+" --");
@@ -69,6 +103,7 @@ $(document).ready(function()
 				document.getElementById('direccion').value=obj.direccion;
 				document.getElementById('nombre_contacto').value=obj.nombre_contacto;
 				document.getElementById('telefono_contacto').value=obj.telefono_contacto;
+				document.getElementById('produccion').innerHTML ="Hoy: "+obj.pro_hoy+" Total: "+obj.pro_total+"";
 				if (obj.tipo_canal!=null)
 					{
 					$('#tipo_canal').empty().append();
@@ -121,7 +156,7 @@ $(document).ready(function()
 
 function carga_scanner()
 		{
-		location.href="comercio_scanner.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"";
+		location.href="comercio_scanner.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
 		}
 function guardar_dato(dato)
 	{
@@ -133,6 +168,8 @@ function guardar_dato(dato)
 	var telefono_contacto = document.getElementById("telefono_contacto").value;
 	var tipo_canal = document.getElementById("tipo_canal").value;
 	
+	var direccion = direccion.replace("'", "\'");
+	var nombre_contacto = nombre_contacto.replace("'", "\'");
 	
 	largo = telefono_contacto.length; 
 	if ((largo!=11)&&(telefono_contacto!=''))
@@ -439,7 +476,17 @@ function procesar()
 		}
 	
 	}
-
+function busca_address()
+	{
+	var lat=document.getElementById('latitud').value;
+	var lon=document.getElementById('longitud').value;
+	$.getJSON("http://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&zoom=18&lat="+lat+"&lon="+lon+"&json_callback=?",
+    function (response) 
+		{
+		document.getElementById('direccion').value=response.address.road+" "+response.address.house_number;
+		});
+			
+	}
 
 </script>
 <style>
@@ -495,13 +542,18 @@ width:50%;
     <h1>Comercio</h1>
   </div>
   <div data-role="content">
-    <div style="line-height:20px; vertical-align:middle;">ID INTERNO:  <span id="id_com"></span>
+    <div data-role="fieldcontain">
+    <div style="line-height:20px; vertical-align:middle; display:inline-block; width:50%">ID INTERNO:  <span id="id_com"></span>
             <input type="hidden" name="e_modelo" id="e_modelo" />
             <input type="hidden" name="e_fabrica" id="e_fabrica" />
             <input type="hidden" name="e_plataforma" id="e_plataforma" />
             <input type="hidden" name="e_version" id="e_version" />
     </div>
-    <div data-role="fieldcontain">
+    <div style="line-height:20px; vertical-align:middle; display:inline-block;">GPS:  <span id="geolocation"></span></div>
+    <div style="line-height:20px; vertical-align:middle;">PRODUCCION:  <span id="produccion"></span></div>
+    <input type="hidden" name="latitud" id="latitud" />
+    <input type="hidden" name="longitud" id="longitud" />
+    </div>
       <label for="venta" class="select">Vende Chip?
         <select name="venta" id="venta" onchange="guardar_dato('VENTA')">
           <option value=""></option>
@@ -511,7 +563,6 @@ width:50%;
         </select>
       </label>
       <input type="hidden" name="id_comercio" id="id_comercio" />
-    </div>
     <div class="ui-grid-a" >
     	<div class="ui-block-a">
             <div style="line-height:60px; vertical-align:middle;">PRODUCTOS:  <span id="total_productos"></span>
@@ -520,7 +571,7 @@ width:50%;
         <div class="ui-block-b"><a href="#" onclick="carga_scanner()" data-role="button">Scan</a>
         </div>
     </div>
-
+	<a href="#" data-role="button" id="buscar_direccion" onclick="busca_address()" style="visibility:hidden;" >Buscar Dirección</a>
   <label for="direccion">Dirección:</label>
   <input type="text" name="direccion" id="direccion" value="" onBlur="guardar_dato('DIRECCION')" />
   

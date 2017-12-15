@@ -43,7 +43,7 @@
 				if(id_imagen!='')
 					{
 					//alert ("update");
-					tx.executeSql("UPDATE checklist_imagen_cola set ruta='"+imageData+"' , hora_base='"+horabase+"' where id='"+id_imagen+"'");
+					tx.executeSql("UPDATE checklist_imagen_cola set ruta='"+imageData+"' , hora_base='"+horabase+"',estado='PENDIENTE' where id='"+id_imagen+"'");
 					}
 				else
 					{
