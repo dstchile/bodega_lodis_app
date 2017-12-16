@@ -32,7 +32,7 @@ function onDeviceReady()
 	//document.getElementById('e_plataforma').value=device.platform;
 	//document.getElementById('e_version').value=device.version;
 	////////insertamos la imagen a la tabla
-	navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy: false,maximumAge: 0,timeout: 5000});
     function onSuccess(position) 
 		{
         
