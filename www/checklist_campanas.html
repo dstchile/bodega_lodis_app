@@ -271,6 +271,13 @@ function carga_resultado()
 				var row = result.rows.item(index);
 				var id_imagen=row['id'];
 				var ruta=row['ruta'];
+				var tipo_local=row['tipo'];
+				var id_punto=row['id_punto'];
+				var lugar=row['lugar'];
+				var fecha_img=row['fecha_base'];
+				var hora_img=row['hora_base'];
+				var id_campana=row['id_campana'];
+				var id_producto=row['id_producto'];
 				//alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---");
 				var photo = document.getElementById('photo');
 	          	photo.src = ruta;
@@ -287,7 +294,23 @@ function carga_resultado()
 		
 		////////////////////////////////////////////////////////////////////////
 				
-		
+		////////////buscamos si existe imagen en el servidor//////////////////
+		var f = new Date();
+		var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
+		var h = new Date();
+		var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
+		var ruta_url='https://www.sistemalodis.cl/fotos_campana/'+id_punto+'-'+id_campana+'-'+id_producto+'-'+fechabase+'-foto1.jpg';
+		$.ajax({
+				url:ruta_url,
+				error: function()
+				{
+				},
+				success: function()
+				{
+				photo.src = ruta_url;
+				}
+			});
+		////////////buscamos si existe imagen en el servidor//////////////////
 		
 		console.log("datos:"+id_producto+"---"+id_campana+"-----");
 		var formData = new FormData();
