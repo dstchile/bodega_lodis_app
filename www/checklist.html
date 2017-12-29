@@ -235,7 +235,7 @@ function carga_item()
 			
 			console.log("datos:"+tipo_local+"-----"+id_punto+"----"+lugar+"---");
 			///id="'+id_programa+'"'
-			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and lugar="'+lugar+'" and fecha_base="'+fechabase+'"  ',[],querySuccess,errorCB);
+			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and lugar="'+lugar+'" and fecha_base="'+fechabase+'" and area="CHECKLIST" ',[],querySuccess,errorCB);
 			console.log( "Leyendo datos guardados." );
 			}
 		function errorCB(err) 
@@ -315,7 +315,36 @@ function carga_item()
 					var test=new Array();
 					$('#listado').empty().append();
 					var tabla_html='';
-					if (lugar!='COMENTARIO')
+					if (lugar=='COMENTARIO')
+						{
+						////////////////comentario
+						var i=0;
+						tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
+						tabla_html+='<tr bgcolor="#DA291C">'; 
+						tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">COMENTARIO</font></div></td>';
+						tabla_html+='</tr>';
+						tabla_html+='<tr bgcolor="#FFFFFF">'; 
+						tabla_html+='<td><div align="center">'; 
+						tabla_html+='<input type="hidden" name="item'+i+'" id="item'+i+'" value="'+obj.items[i]+'">';
+						tabla_html+='<input type="hidden" name="id_item'+i+'" id="id_item'+i+'" value="'+obj.id_items[i]+'">';
+						if (obj.tests[obj.id_items[i]]!=undefined)
+							{
+							tabla_html+='<textarea name="test'+i+'" id="test'+i+'" cols="35" rows="3">'+obj.tests[obj.id_items[i]]+'</textarea>';
+							}
+						else
+							{
+							tabla_html+='<textarea name="test'+i+'" id="test'+i+'" cols="35" rows="3"></textarea>';
+							}
+						tabla_html+='</div></td>';
+						tabla_html+='</tr>';
+						tabla_html+='</table>';
+						$('#listado').append(tabla_html);
+						document.getElementById('takePhoto').style.visibility='hidden';
+						document.getElementById('oculto').style.visibility='hidden';
+						document.getElementById('cerrar').style.display='';
+						document.getElementById('procesar').style.display='none';
+						}
+					else if(lugar!='') 
 						{
 						var activacion3="";
 						tabla_html+='<table border="1" width="100%" cellpadding="0" cellspacing="0">';
@@ -352,34 +381,10 @@ function carga_item()
 						}
 					else
 						{
-						////////////////comentario
-						var i=0;
-						tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
-						tabla_html+='<tr bgcolor="#DA291C">'; 
-						tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">COMENTARIO</font></div></td>';
-						tabla_html+='</tr>';
-						tabla_html+='<tr bgcolor="#FFFFFF">'; 
-						tabla_html+='<td><div align="center">'; 
-						tabla_html+='<input type="hidden" name="item'+i+'" id="item'+i+'" value="'+obj.items[i]+'">';
-						tabla_html+='<input type="hidden" name="id_item'+i+'" id="id_item'+i+'" value="'+obj.id_items[i]+'">';
-						if (obj.tests[obj.id_items[i]]!=undefined)
-							{
-							tabla_html+='<textarea name="test'+i+'" id="test'+i+'" cols="35" rows="3">'+obj.tests[obj.id_items[i]]+'</textarea>';
-							}
-						else
-							{
-							tabla_html+='<textarea name="test'+i+'" id="test'+i+'" cols="35" rows="3"></textarea>';
-							}
-						tabla_html+='</div></td>';
-						tabla_html+='</tr>';
-						tabla_html+='</table>';
-						$('#listado').append(tabla_html);
-						document.getElementById('takePhoto').style.visibility='hidden';
 						document.getElementById('oculto').style.visibility='hidden';
-						document.getElementById('cerrar').style.display='';
-						document.getElementById('procesar').style.display='none';
+						document.getElementById('takePhoto').style.visibility='hidden';
+						document.getElementById('takePhoto').style.display='none';
 						}
-					
 					
 					
 					}
@@ -420,7 +425,21 @@ function check_procesos()
 					{
 					alert(obj.respuesta);
 					location.href = "checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					//carga_lugares();
+					}
+				else if (obj.condicion=='SI EDP')
+					{
+					alert(obj.respuesta);
+					location.href = "entrega_productos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				else if (obj.condicion=='SI TAR')
+					{
+					alert(obj.respuesta);
+					location.href = "checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				else if (obj.condicion=='SI EXT')
+					{
+					alert(obj.respuesta);
+					location.href = "checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
 					}
 				else
 					{
@@ -569,15 +588,21 @@ function estado_noaplica()
   <div data-role="content">
         <label for="geolocation">GPS</label>
         <input type="text" name="geolocation" id="geolocation" value="Buscando Geoposición" readonly="readonly"  />
-        <label for="region" class="select">Región:</label>
-        <select name="region" id="region" onchange="carga_punto()">
-        </select>
-        <label for="tipo_local" class="select">Tipo Local:</label>
-        <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
-        <option value=""></option>
-        <option value="KIOSCO">KIOSCO</option>
-        <option value="TIENDA">TIENDA</option>
-        </select>
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a">
+            <label for="region" class="select">Región:</label>
+            <select name="region" id="region" onchange="carga_punto()">
+            </select>
+            </div>
+            <div class="ui-block-b">
+            <label for="tipo_local" class="select">Tipo Local:</label>
+            <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
+            <option value=""></option>
+            <option value="KIOSCO">KIOSCO</option>
+            <option value="TIENDA">TIENDA</option>
+            </select>
+            </div>
+        </fieldset>
         <label for="punto" class="select">Punto:</label>
         <select name="punto" id="punto" onchange="check_procesos()">
         </select>

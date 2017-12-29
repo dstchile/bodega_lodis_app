@@ -286,6 +286,21 @@ function procesar()
 					alert (obj.respuesta);	
 					location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
 					}
+				if (obj.resultado=='SIGUE ENTREGA')
+					{
+					alert (obj.respuesta);	
+					location.href = "entrega_productos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE TAREA')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE EXTINTOR')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
 				if (obj.resultado=='SIGUE CHECKLIST')
 					{
 					alert (obj.respuesta);	
@@ -422,15 +437,21 @@ function list_modelos_cambio(valor)
     <h1>DUMMIES</h1>
   </div>
   <div data-role="content">
-        <label for="region" class="select">Región:</label>
-        <select name="region" id="region" onchange="carga_punto()">
-        </select>
-        <label for="tipo_local" class="select">Tipo Local:</label>
-        <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
-        <option value=""></option>
-        <option value="KIOSCO">KIOSCO</option>
-        <option value="TIENDA">TIENDA</option>
-        </select>
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a">
+            <label for="region" class="select">Región:</label>
+            <select name="region" id="region" onchange="carga_punto()">
+            </select>
+            </div>
+            <div class="ui-block-b">
+            <label for="tipo_local" class="select">Tipo Local:</label>
+            <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
+            <option value=""></option>
+            <option value="KIOSCO">KIOSCO</option>
+            <option value="TIENDA">TIENDA</option>
+            </select>
+            </div>
+        </fieldset>
         <label for="punto" class="select">Punto:</label>
         <select name="punto" id="punto" onchange="carga_layout()">
         </select>

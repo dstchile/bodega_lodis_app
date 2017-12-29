@@ -201,7 +201,7 @@ function carga_productos()
 				var obj = JSON.parse(result);
 				
 				var tabla_html='';
-				tabla_html+='<table width="100%">';
+				/*tabla_html+='<table width="100%">';
 				tabla_html+='<tr>';
 				tabla_html+='<td align="center">Producto</td>';
 				tabla_html+='<td align="center">Stock</td>';
@@ -226,7 +226,48 @@ function carga_productos()
 				tabla_html+='</table>';
 				
 				$('#listado').append(tabla_html);
-				$("#listado").trigger("create");
+				$("#listado").trigger("create");*/
+				
+				var tabla_html='';
+				for (i=0;i<obj.id_productos.length;i++)
+					{
+					if(obj.familias[i]!=obj.familias[i-1])
+						{
+						if (i>=1)
+							{
+							tabla_html+='</table>';
+							tabla_html+='</ul>';
+							tabla_html+='</div><!-- /collapsible -->';
+							}
+						tabla_html+='<div data-role="collapsible" data-inset="false">';
+						tabla_html+='<h3>'+obj.familias[i]+'</h3>';
+						tabla_html+='<ul data-role="listview">';
+						
+						tabla_html+='<table width="100%">';
+						tabla_html+='<tr>';
+						tabla_html+='<td align="center">Producto</td>';
+						tabla_html+='<td align="center">Stock</td>';
+						tabla_html+='<td align="center">Cantidad</td>';
+						tabla_html+='</tr>';
+						
+						}
+					//tabla_html+='<li><a href="#">Canary</a></li>';
+					tabla_html+='<tr>';
+					tabla_html+='<td align="left" width="70%">'+obj.productos[i]+'<input type="hidden" name="id_producto'+i+'" id="id_producto'+i+'" value="'+obj.id_productos[i]+'"  /><input type="hidden" name="producto'+i+'" id="producto'+i+'" value="'+obj.productos[i]+'"  /></td>';
+					tabla_html+='<td align="center" width="10%">'+obj.stocks[i]+'<input type="hidden" name="stock'+i+'" id="stock'+i+'" value="'+obj.stocks[i]+'"  /></td>';
+					tabla_html+='<td align="center" width="20%">';
+					tabla_html+='<input type="number" name="cantidad'+i+'" id="cantidad'+i+'" value="'+obj.cantidades[i]+'"  style="text-align:center" onFocus="this.select()"  />';
+					tabla_html+='</td>';
+					tabla_html+='</tr>';
+					}
+				tabla_html+='</div><!-- /collapsible -->';
+				
+				
+				
+				$('#listado2').append(tabla_html);
+				$("#listado2").trigger("create");
+				
+				
 				document.getElementById('oculto').style.visibility='visible';
 					
 				}
@@ -294,18 +335,27 @@ function procesar()
 			success: function (result) 
 				{
 				console.log(result);
-				alert ("Entrega procesada");
-				location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
-				/*var obj = JSON.parse(result);
-				if (obj.resultado=='PROCESADO')
+				var obj = JSON.parse(result);
+				if (obj.resultado=='MENU')
 					{
 					alert (obj.respuesta);	
+					location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE TAREA')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE EXTINTOR')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
 					}
 				if (obj.resultado=='SIGUE CHECKLIST')
 					{
 					alert (obj.respuesta);	
-					location.href = "checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"";
-					}*/
+					location.href = "checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
 				}
 			});
 
@@ -321,19 +371,26 @@ function procesar()
   </div>
   <div data-role="content">
         <div style="line-height:20px; vertical-align:middle;">BODEGA:  <span id="bodega"></span></div>
-    	<label for="region" class="select">Región:</label>
-        <select name="region" id="region" onchange="carga_punto()">
-        </select>
-        <label for="tipo_local" class="select">Tipo Local:</label>
-        <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
-        <option value=""></option>
-        <option value="KIOSCO">KIOSCO</option>
-        <option value="TIENDA">TIENDA</option>
-        </select>
+    	<fieldset class="ui-grid-a">
+            <div class="ui-block-a">
+            <label for="region" class="select">Región:</label>
+            <select name="region" id="region" onchange="carga_punto()">
+            </select>
+            </div>
+            <div class="ui-block-b">
+            <label for="tipo_local" class="select">Tipo Local:</label>
+            <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
+            <option value=""></option>
+            <option value="KIOSCO">KIOSCO</option>
+            <option value="TIENDA">TIENDA</option>
+            </select>
+            </div>
+        </fieldset>
         <label for="punto" class="select">Punto:</label>
         <select name="punto" id="punto" onchange="carga_productos()">
         </select>
         <div id="listado" style="width:100%; " align="center"></div>
+ 		<div id="listado2" style="width:100%; " align="center"></div>
  		<div id="oculto" style="visibility:hidden;">
         <a href="#" data-role="button" id="procesar" onclick="procesar()">PROCESAR</a>
         </div>

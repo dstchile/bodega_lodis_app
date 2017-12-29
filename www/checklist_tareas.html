@@ -96,7 +96,7 @@ $(document).ready(function()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_tareas_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -149,7 +149,7 @@ function carga_punto()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_tareas_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -171,7 +171,7 @@ function carga_punto()
 					
 					$('#punto').selectmenu('refresh')
 					
-					if(puntox!=''){carga_layout();}
+					if(puntox!=''){carga_tareas();}
 						
 					}
 				
@@ -179,19 +179,19 @@ function carga_punto()
 			});
 
 	}
-function carga_layout()
+function carga_tareas()
 	{
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
 		var formData = new FormData();
-		var dato='LAYOUTS';
+		var dato='TAREAS';
 		formData.append("dato", dato);
 		formData.append("tipo_local", tipo_local);
 		formData.append("id_punto",id_punto);
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_tareas_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -200,24 +200,24 @@ function carga_layout()
 				console.log(result);
 				var obj = JSON.parse(result);
 				
-				if (obj.layouts!=null)
+				if (obj.tareas!=null)
 					{
-					var layout_user=document.getElementById('layout').value;
-					$('#layout').empty().append();
-					if (layout_user!='')
+					var tarea_user=document.getElementById('tarea').value;
+					$('#tarea').empty().append();
+					if (tarea_user!='')
 						{
-						$('#layout').append('<option value="'+layout_user+'">'+layout_user+'</option>');
+						$('#tarea').append('<option value="'+tarea_user+'">'+tarea_user+'</option>');
 						}
 					else
 						{
-						$('#layout').append('<option value=""></option>');
+						$('#tarea').append('<option value=""></option>');
 						}
-					for (i=0;i<obj.layouts.length;i++)
+					for (i=0;i<obj.tareas.length;i++)
 						{
-						$('#layout').append('<option value="'+obj.layouts[i]+'">'+obj.layouts[i]+'</option>');
+						$('#tarea').append('<option value="'+obj.id_tareas[i]+'">'+obj.tareas[i]+'</option>');
 						}
 					
-					$('#layout').selectmenu('refresh')
+					$('#tarea').selectmenu('refresh')
 					}
 				
 				}
@@ -231,70 +231,37 @@ function procesar()
 		var id_punto=document.getElementById('punto').value;
 		var ele=document.getElementById('punto');
 		var punto=document.getElementById('punto').options[ele.selectedIndex].text;
-		var layout=document.getElementById('layout').value;
+		var id_tarea=document.getElementById('tarea').value;
+		var comentario=document.getElementById('comentario').value;
+		var estado_final=document.getElementById('estado_final').value;
 		
-		var i=0;
-		var tests={};
-		var marcas={};
-		var modelos={};
-		while (document.getElementById('test'+i)!=undefined)
-			{
-			tests[i]=document.getElementById('test'+i).checked;
-			console.log("id:"+i+"---");
-			console.log("valor:"+tests[i]+"---");
-			marcas[i]=document.getElementById('marca_cambio'+i).value;
-			modelos[i]=document.getElementById('modelo_cambio'+i).value;
-			console.log("marca:"+marcas[i]+"---modeoo:"+modelos[i]+"--");
-			if((tests[i]==false)&&(modelos[i]==''))
-				{
-				alert("debe especificar marca y modelo");
-				break;	
-				}
-			
-			
-			i++;
-			}
 		
-		console.log( JSON.stringify(tests) );
-		var tests=JSON.stringify(tests);
-		var marcas=JSON.stringify(marcas);
-		var modelos=JSON.stringify(modelos);
+		var dato='PROCESAR_TAREA';
 		var formData = new FormData();
-		var dato='PROCESAR_DUMMIES';
 		formData.append("dato", dato);
 		formData.append("region", region);
 		formData.append("tipo_local", tipo_local);
 		formData.append("id_punto", id_punto);
 		formData.append("punto", punto);
-		formData.append("layout", layout);
-		formData.append("tests", tests);
-		formData.append("marcas", marcas);
-		formData.append("modelos", modelos);
+		formData.append("id_tarea", id_tarea);
+		formData.append("comentario", comentario);
+		formData.append("estado_final", estado_final);
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_tareas_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
 			success: function (result) 
 				{
+				//alert(result);
 				console.log(result);
 				var obj = JSON.parse(result);
 				if (obj.resultado=='PROCESADO')
 					{
 					alert (obj.respuesta);	
 					location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
-					}
-				if (obj.resultado=='SIGUE ENTREGA')
-					{
-					alert (obj.respuesta);	
-					location.href = "entrega_productos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
-				if (obj.resultado=='SIGUE TAREA')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
 					}
 				if (obj.resultado=='SIGUE EXTINTOR')
 					{
@@ -311,22 +278,90 @@ function procesar()
 
 	}
 
-function carga_dummies()
+function carga_comentario()
 	{
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
-		var layout=document.getElementById('layout').value;
-		console.log("---"+layout+"---tipo:"+tipo_local+"--");
+		var id_tarea=document.getElementById('tarea').value;
+		console.log("---"+id_tarea+"---tipo:"+tipo_local+"--");
+		
+		////////////////////////////////////////////////////////////////////////
+		
+		var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
+		db.transaction(queryDB,errorCB);
+		function queryDB(tx)
+			{
+			var f = new Date();
+			var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
+			var h = new Date();
+			var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
+			
+			console.log("datos:"+tipo_local+"-----"+id_punto+"-----");
+			///id="'+id_programa+'"'
+			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and id_campana="'+id_tarea+'" and fecha_base="'+fechabase+'" and area="TAREA" ',[],querySuccess,errorCB);
+			console.log( "Leyendo datos guardados." );
+			}
+		function errorCB(err) 
+			{
+			if(err.code!=0 && err.code!=undefined)
+				{
+					alert("Error processing SQL 2: "+err.code);
+				}
+			}
+		function querySuccess(tx,result)
+			{
+			console.log( "Insert ok" );
+			$.each(result.rows,function(index)
+				{
+				var row = result.rows.item(index);
+				var id_imagen=row['id'];
+				var ruta=row['ruta'];
+				//alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---");
+				var photo = document.getElementById('photo');
+	          	photo.src = ruta;
+				document.getElementById('id_imagen').value=id_imagen;
+				//lectura_tablas(ip,nombre_bd,usuariobd,passbd);
+				});
+			if (result.rows.length==0)
+				{
+				var photo = document.getElementById('photo');
+	          	photo.src = "img/fondo.jpg";
+				document.getElementById('id_imagen').value='';
+				}
+			}
+		
+		////////////////////////////////////////////////////////////////////////
+				
+		////////////buscamos si existe imagen en el servidor//////////////////
+		var f = new Date();
+		var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
+		var h = new Date();
+		var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
+		var ruta_url='https://www.sistemalodis.cl/fotos_tareas/'+id_punto+'-'+id_tarea+'-foto1.jpg';
+		$.ajax({
+				url:ruta_url,
+				error: function()
+				{
+				},
+				success: function()
+				{
+				photo.src = ruta_url;
+				}
+			});
+		////////////buscamos si existe imagen en el servidor//////////////////
+		
+		
+		
 		var formData = new FormData();
-		var dato='DUMMIES';
+		var dato='COMENTARIO';
 		formData.append("dato", dato);
 		formData.append("tipo_local", tipo_local);
 		formData.append("id_punto",id_punto);
-		formData.append("layout",layout);
+		formData.append("id_tarea",id_tarea);
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_tareas_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -335,44 +370,48 @@ function carga_dummies()
 				console.log(result);
 				var obj = JSON.parse(result);
 				
-				if (obj.marcas!=null)
+				if (obj.comentario!=null)
 					{
-					var test=new Array();
 					$('#listado').empty().append();
 					var tabla_html='';
-					tabla_html+='<fieldset data-role="controlgroup">';
-					for (i=0;i<obj.marcas.length;i++)
+					////////////////comentario
+					tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
+					tabla_html+='<tr bgcolor="#DA291C">'; 
+					tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">COMENTARIO</font></div></td>';
+					tabla_html+='</tr>';
+					tabla_html+='<tr bgcolor="#FFFFFF">'; 
+					tabla_html+='<td><div align="center">'; 
+					if (obj.comentario!='')
 						{
-						var activacion1="";
-						var activacion2='style="display:none;"';
-						if (obj.tests[i]=='SI'){activacion1="CHECKED";}else{activacion2='style="display:;"';}
-						//if (obj.tests[obj.id_items[i]]=='NO'){activacion2="CHECKED";}
-						tabla_html+='<input type="checkbox" name="test'+i+'" id="test'+i+'" '+activacion1+' onclick="chequeo('+i+')">';
-						tabla_html+='<label for="test'+i+'">'+obj.marcas[i]+' '+obj.modelos[i]+'</label>';
-						tabla_html+='<div id="cambio'+i+'" '+activacion2+'>';
-						tabla_html+='<select name="marca_cambio'+i+'" id="marca_cambio'+i+'" onchange="list_modelos_cambio('+i+')">';  
-						if (obj.marcas_cambio[i]=='')
-							{
-							tabla_html+='<option value="">Select Marca</option>';
-							}
-						else
-							{
-							tabla_html+='<option value="'+obj.marcas_cambio[i]+'">'+obj.marcas_cambio[i]+'</option>';
-							}
-						for (x=0;x<obj.marcas_listado.length;x++)
-							{
-							tabla_html+='<option value="'+obj.marcas_listado[x]+'">'+obj.marcas_listado[x]+'</option>';
-							}
-						tabla_html+='</select>';
-						tabla_html+='<select name="modelo_cambio'+i+'" id="modelo_cambio'+i+'" >';  
-						if (obj.modelos_cambio[i]!=''){tabla_html+='<option value="'+obj.modelos_cambio[i]+'">'+obj.modelos_cambio[i]+'</option>';}
-						tabla_html+='</select>';
-						tabla_html+='</div>';
+						tabla_html+='<textarea name="comentario" id="comentario" cols="35" rows="3">'+obj.comentario+'</textarea>';
 						}
-					tabla_html+='</fieldset>';
-					
+					else
+						{
+						tabla_html+='<textarea name="comentario" id="comentario" cols="35" rows="3"></textarea>';
+						}
+					tabla_html+='</div></td>';
+					tabla_html+='</tr>';
+					tabla_html+='</table>';
 					$('#listado').append(tabla_html);
 					$("#listado").trigger("create");
+					
+					$('#estado_final').empty().append();
+					if (obj.estado_final!='')
+						{
+						$('#estado_final').append('<option value="'+obj.estado_final+'">'+obj.estado_final+'</option>');
+						}
+					else
+						{
+						$('#estado_final').append('<option value=""></option>');
+						}
+					$('#estado_final').append('<option value="REALIZADO">REALIZADO</option>');
+					$('#estado_final').append('<option value="PENDIENTE">PENDIENTE</option>');
+					//$('#estado_final').append('<option value="NO APLICA">NO APLICA</option>');
+					
+					$('#estado_final').selectmenu('refresh')
+					//document.getElementById('takePhoto').style.visibility='hidden';
+					//document.getElementById('cerrar').style.display='';
+					document.getElementById('procesar').style.display='none';
 					document.getElementById('oculto').style.visibility='visible';
 					}
 				
@@ -381,60 +420,15 @@ function carga_dummies()
 
 	}
 	
-function chequeo(valor)
-	{
-	var dato=document.getElementById('test'+valor).checked;
-		//alert("i:"+valor+"   "+dato+"---");
-	if (dato==false)
-		{				
-		document.getElementById('cambio'+valor).style.display='';
-		}
-	else
-		{
-		document.getElementById('cambio'+valor).style.display='none';
-		}
-	}
-function list_modelos_cambio(valor)
-	{
-	var marca=document.getElementById('marca_cambio'+valor).value;
-	var formData = new FormData();
-	var dato='LISTA_MODELOS_CAMBIO';
-	formData.append("dato", dato);
-	formData.append("marca", marca);
-	$.ajax({
-		type: 'POST',
-		url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
-		data: formData,
-		processData: false,
-		contentType: false,
-		success: function (result) 
-			{
-			console.log(result);
-			var obj = JSON.parse(result);
-			
-			if (obj.modelos_cambio!=null)
-				{
-				$('#modelo_cambio'+valor).empty().append();
-				$('#modelo_cambio'+valor).append('<option value=""></option>');
-				for (i=0;i<obj.modelos_cambio.length;i++)
-					{
-					$('#modelo_cambio'+valor).append('<option value="'+obj.modelos_cambio[i]+'">'+obj.modelos_cambio[i]+'</option>');
-					}
-				
-				$('#modelo_cambio'+valor).selectmenu('refresh')
-				}
-			
-			}
-		});
 
-	}
+
 </script>
 </head>
 
 <body>
 <div data-role="page" id="checklist">
   <div data-role="header">
-    <h1>DUMMIES</h1>
+    <h1>TAREAS</h1>
   </div>
   <div data-role="content">
         <fieldset class="ui-grid-a">
@@ -453,14 +447,31 @@ function list_modelos_cambio(valor)
             </div>
         </fieldset>
         <label for="punto" class="select">Punto:</label>
-        <select name="punto" id="punto" onchange="carga_layout()">
+        <select name="punto" id="punto" onchange="carga_tareas()">
         </select>
-        <label for="layout" class="select">Layout:</label>
-        <select name="layout" id="layout" onchange="carga_dummies()">
+        <label for="tarea" class="select">ID Tareas Pendientes:</label>
+        <select name="tarea" id="tarea" onchange="carga_comentario()">
         </select>
         <div id="listado" style="width:100%; " align="center"></div>
  		<div id="oculto" style="visibility:hidden;">
-        <a href="#" data-role="button" id="procesar" onclick="procesar()">PROCESAR</a>
+        <table width="100%">
+        <tr>
+          <td align="center" width="50%">Estado Final</td>
+          <td align="left" width="50%">
+          <select name="estado_final" id="estado_final" >
+          </select>
+          </td>
+        </tr>
+        </table>
+        <!-- sección para la imagen 1-->
+        <a href="#" data-role="button" id="takePhoto">TOMAR FOTO</a>
+        <a href="#" data-role="button" id="procesar" onclick="guarda_tarea()" style="display:none;">GUARDAR</a>
+        <input type="hidden" name="id_imagen" id="id_imagen" />
+        <div style="text-align:center"><img id="photo" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/></div>
+        <!-- sección para la imagen 1-->
+        <script type="text/javascript" src="js/camara_checklist_tareas.js"></script>
+        <script type="text/javascript">app.initialize();</script>
+		<!--<a href="#" data-role="button" id="procesar" onclick="procesar()">PROCESAR</a>-->
         </div>
         
   </div>

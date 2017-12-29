@@ -49,6 +49,14 @@ function carga_dummies()
 		{
 		location.href="checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
 		}
+function carga_tareas()
+		{
+		location.href="checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
+		}
+function carga_extintores()
+		{
+		location.href="checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
+		}
 
 	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady()
@@ -88,9 +96,11 @@ function carga_dummies()
     <h1>LODIS APP</h1>
   </div>
   <div data-role="content">
-	  <a href="#" onclick="carga_entrega()" rel="external" data-role="button">ENTREGA DE PRODUCTOS</a>
-      <a href="#" onclick="carga_campanas()" rel="external" data-role="button">CAMPAÑAS</a>
+	  <a href="#" onclick="carga_campanas()" rel="external" data-role="button">CAMPAÑAS</a>
       <a href="#" onclick="carga_dummies()" rel="external" data-role="button">DUMMIES</a>
+      <a href="#" onclick="carga_entrega()" rel="external" data-role="button">ENTREGA DE PRODUCTOS</a>
+      <a href="#" onclick="carga_tareas()" rel="external" data-role="button">TAREAS</a>
+      <a href="#" onclick="carga_extintores()" rel="external" data-role="button">EXTINTORES</a>
       <a href="#" onclick="carga_checklist()" rel="external" data-role="button">CHECKLIST</a>
       <a href="#" onclick="carga_comercio()" rel="external" data-role="button">COMERCIO</a>
       <a href="#" rel="external"  onClick="navigator.app.exitApp();" data-role="button">Salir</a>

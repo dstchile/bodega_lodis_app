@@ -171,14 +171,17 @@ function carga_campanas()
 				
 				if (obj.campanas!=null)
 					{
-					var campana_user=document.getElementById('campana').value;
-					$('#campana').empty().append();
-					if (campana_user!='')
+					var id_campana_user=document.getElementById('campana').value;
+					if (id_campana_user!='')
 						{
-						$('#campana').append('<option value="'+campana_user+'">'+campana_user+'</option>');
+						var ele=document.getElementById('campana');
+						var campana_user=document.getElementById('campana').options[ele.selectedIndex].text;
+						$('#campana').empty().append();
+						$('#campana').append('<option value="'+id_campana_user+'">'+campana_user+'</option>');
 						}
 					else
 						{
+						$('#campana').empty().append();
 						$('#campana').append('<option value=""></option>');
 						}
 					for (i=0;i<obj.campanas.length;i++)
@@ -253,7 +256,7 @@ function carga_resultado()
 			
 			console.log("datos:"+tipo_local+"-----"+id_punto+"-----");
 			///id="'+id_programa+'"'
-			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and id_campana="'+id_campana+'" and id_producto="'+id_producto+'" and fecha_base="'+fechabase+'" ',[],querySuccess,errorCB);
+			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and id_campana="'+id_campana+'" and id_producto="'+id_producto+'" and fecha_base="'+fechabase+'" and area="CAMPAÑA"  ',[],querySuccess,errorCB);
 			console.log( "Leyendo datos guardados." );
 			}
 		function errorCB(err) 
@@ -388,16 +391,33 @@ function guarda_tarea()
 					{
 					alert (obj.respuesta);	
 					//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario;
-					}
-				if (obj.resultado=='SIGUE CHECKLIST')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					carga_campanas();
+					carga_productos();
 					}
 				if (obj.resultado=='SIGUE DUMMIES')
 					{
 					alert (obj.respuesta);	
 					location.href = "checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE ENTREGA')
+					{
+					alert (obj.respuesta);	
+					location.href = "entrega_productos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE TAREA')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE EXTINTOR')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
+				if (obj.resultado=='SIGUE CHECKLIST')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
 					}
 				}
 			});
@@ -426,15 +446,21 @@ function estado_campana(valor)
     <h1>CAMPAÑAS</h1>
   </div>
   <div data-role="content">
-        <label for="region" class="select">Región:</label>
-        <select name="region" id="region" onchange="carga_punto()">
-        </select>
-        <label for="tipo_local" class="select">Tipo Local:</label>
-        <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
-        <option value=""></option>
-        <option value="KIOSCO">KIOSCO</option>
-        <option value="TIENDA">TIENDA</option>
-        </select>
+        <fieldset class="ui-grid-a">
+            <div class="ui-block-a">
+            <label for="region" class="select">Región:</label>
+            <select name="region" id="region" onchange="carga_punto()">
+            </select>
+            </div>
+            <div class="ui-block-b">
+            <label for="tipo_local" class="select">Tipo Local:</label>
+            <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
+            <option value=""></option>
+            <option value="KIOSCO">KIOSCO</option>
+            <option value="TIENDA">TIENDA</option>
+            </select>
+            </div>
+        </fieldset>
         <label for="punto" class="select">Punto:</label>
         <select name="punto" id="punto" onchange="carga_campanas()">
         </select>
