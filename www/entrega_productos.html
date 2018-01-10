@@ -14,6 +14,31 @@ margin-right: 10px;
 margin-left: 10px;
 //width:50%;
 }
+.progreso {
+	 width: 250px; 
+     height: 100px; 
+     line-height: 100px; /* <-- this is what you must define */
+	 vertical-align:middle;
+  	 border: 3px solid #FFF;
+     background: #300668;
+	 position:fixed;
+	 text-color:white;
+	 left:50%;
+	 margin-left:-125px;
+	 top:125px;
+	 text-align:center;
+	 font-size: 16px;
+	 font-style: normal;
+	 font-weight: normal;
+	 border-radius: 10px;
+	 color: #FFFFFF;
+	 z-index:100;
+  opacity: 0;
+  transition: opacity 2s linear;
+  visibility:hidden;
+	 
+}
+
 .Table  
 	{  
 		display: table;  
@@ -299,15 +324,20 @@ function procesar()
 			var valor=stocks[i]*1;
 			var valor2=cantidades[i]*1;
 			
-			if(valor<valor2)
+			/*if(valor<valor2)
 				{
 				alert(" "+productos[i]+" está superando el stock disponible");
 				break;	
-				}
+				}*/
 			
 			
 			i++;
 			}
+		////ventana espere un momento////
+		document.getElementById('progreso').style.visibility = 'visible';
+		document.getElementById('progreso').style.opacity = 1;
+		document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+		///fin de la ventana/////
 		
 		var id_productos=JSON.stringify(id_productos);
 		var productos=JSON.stringify(productos);
@@ -356,6 +386,12 @@ function procesar()
 					alert (obj.respuesta);	
 					location.href = "checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
 					}
+				///se oculta mendaje de espera
+				document.getElementById('progreso').style.visibility = 'hidden';
+				document.getElementById('progreso').style.opacity = 0;
+				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+				/////////////////////////////
+				
 				}
 			});
 
@@ -397,7 +433,6 @@ function procesar()
         
   </div>
 </div>
-
-	  
+<div id="progreso" class="progreso">Espere un momento</div>  
 </body>
 </html>

@@ -348,7 +348,7 @@ function carga_dummies()
 						if (obj.tests[i]=='SI'){activacion1="CHECKED";}else{activacion2='style="display:;"';}
 						//if (obj.tests[obj.id_items[i]]=='NO'){activacion2="CHECKED";}
 						tabla_html+='<input type="checkbox" name="test'+i+'" id="test'+i+'" '+activacion1+' onclick="chequeo('+i+')">';
-						tabla_html+='<label for="test'+i+'">'+obj.marcas[i]+' '+obj.modelos[i]+'</label>';
+						tabla_html+='<label for="test'+i+'">'+obj.poss[i]+' '+obj.marcas[i]+' '+obj.modelos[i]+'</label>';
 						tabla_html+='<div id="cambio'+i+'" '+activacion2+'>';
 						tabla_html+='<select name="marca_cambio'+i+'" id="marca_cambio'+i+'" onchange="list_modelos_cambio('+i+')">';  
 						if (obj.marcas_cambio[i]=='')
