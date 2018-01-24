@@ -230,6 +230,9 @@ function carga_productos()
 						}
 					
 					$('#producto').selectmenu('refresh')
+					$('#listado2').empty().append();
+					$("#listado2").trigger("create");
+					
 					}
 				
 				}
@@ -315,6 +318,24 @@ function carga_resultado()
 			});
 		////////////buscamos si existe imagen en el servidor//////////////////
 		
+		
+		////////////buscamos si existe imagen de item en el servidor//////////////////
+		var ruta_url=servidor1+'/fotos_campana_item/'+id_producto+'.jpg';
+		$.ajax({
+				url:ruta_url,
+				error: function()
+				{
+				document.getElementById('imagen_item').style.display='none';
+				},
+				success: function()
+				{
+				document.getElementById('imagen_item').style.display='';
+				var foto_item = document.getElementById('imagen_item');
+	          	foto_item.src = ruta_url;
+				}
+			});
+		
+		
 		console.log("datos:"+id_producto+"---"+id_campana+"-----");
 		var formData = new FormData();
 		var dato='TAREAS';
@@ -352,7 +373,38 @@ function carga_resultado()
 				$('#estado_tarea').append('<option value="NO APLICA">NO APLICA</option>');
 				
 				$('#estado_tarea').selectmenu('refresh')
+				////////////////////////////////////////////lista de item asociados/////////////////////
+				console.log("largo item:"+obj.items.length+"   -");
+				$('#listado2').empty().append();
+				$("#listado2").trigger("create");
 					
+				if (obj.items.length>=1)
+					{
+					var tabla_html='';
+					tabla_html+='<table width="100%">';
+					tabla_html+='<tr>';
+					tabla_html+='<td align="center">Producto</td>';
+					tabla_html+='<td align="center">Cantidad</td>';
+					tabla_html+='</tr>';
+					for (i=0;i<obj.items.length;i++)
+						{
+						tabla_html+='<tr>';
+						tabla_html+='<td align="left" width="70%">'+obj.items[i]+'<input type="hidden" name="item'+i+'" id="item'+i+'" value="'+obj.items[i]+'"  /><input type="hidden" name="id_item'+i+'" id="id_item'+i+'" value="'+obj.id_items[i]+'"  /></td>';
+						tabla_html+='<td align="center" width="20%">';
+						tabla_html+='<input type="number" name="cantidad'+i+'" id="cantidad'+i+'" value="'+obj.cantidades[i]+'"  style="text-align:center" onFocus="this.select()"  />';
+						tabla_html+='</td>';
+						tabla_html+='</tr>';
+						}
+					
+					tabla_html+='</table>';
+								
+					$('#listado2').append(tabla_html);
+					$("#listado2").trigger("create");
+					}
+				else
+					{
+					}
+				////////////////////////////////////////////////////////////////////////////////////	
 				}
 			});
 
@@ -367,60 +419,100 @@ function guarda_tarea()
 		var id_campana=document.getElementById('campana').value;
 		var id_producto=document.getElementById('producto').value;
 		var estado_tarea=document.getElementById('estado_tarea').value;
-		var formData = new FormData();
-		var dato='GUARDA_TAREA';
-		formData.append("dato", dato);
-		formData.append("region", region);
-		formData.append("tipo_local", tipo_local);
-		formData.append("id_punto", id_punto);
-		formData.append("id_campana", id_campana);
-		formData.append("id_producto", id_producto);
-		formData.append("estado_tarea", estado_tarea);
-		formData.append("usuario", nombre_usuario);
-		$.ajax({
-			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (result) 
+		
+		///////////validasmos item///////////////////////
+		var i=0;
+		var id_items={};
+		var items={};
+		var cantidades={};
+		var valor_item='';
+		while (document.getElementById('id_item'+i)!=undefined)
+			{
+			id_items[i]=document.getElementById('id_item'+i).value;
+			items[i]=document.getElementById('item'+i).value;
+			console.log("id:"+i+"---");
+			console.log("valor:"+id_items[i]+"---");
+			cantidades[i]=document.getElementById('cantidad'+i).value;
+			console.log("--cantidades:"+cantidades[i]+"--");
+			var valor2=cantidades[i]*1;
+			
+			if((valor2=='')&&(estado_tarea!='NO APLICA'))
 				{
-				console.log(result);
-				var obj = JSON.parse(result);
-				if (obj.resultado=='PROCESADO')
-					{
-					alert (obj.respuesta);	
-					//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario;
-					carga_campanas();
-					carga_productos();
-					}
-				if (obj.resultado=='SIGUE DUMMIES')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
-				if (obj.resultado=='SIGUE ENTREGA')
-					{
-					alert (obj.respuesta);	
-					location.href = "entrega_productos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
-				if (obj.resultado=='SIGUE TAREA')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
-				if (obj.resultado=='SIGUE EXTINTOR')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
-				if (obj.resultado=='SIGUE CHECKLIST')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
+				alert("Debe indicar una cantidad para  "+items[i]+" ");
+				valor_item='STOP';
+				break;	
 				}
-			});
+			
+			
+			i++;
+			}
+		var id_items=JSON.stringify(id_items);
+		var items=JSON.stringify(items);
+		var cantidades=JSON.stringify(cantidades);
+		///////////////////////////////////////////////////////////////
+		if (valor_item=='STOP')
+			{
+			}
+		else
+			{
+			var formData = new FormData();
+			var dato='GUARDA_TAREA';
+			formData.append("dato", dato);
+			formData.append("region", region);
+			formData.append("tipo_local", tipo_local);
+			formData.append("id_punto", id_punto);
+			formData.append("id_campana", id_campana);
+			formData.append("id_producto", id_producto);
+			formData.append("estado_tarea", estado_tarea);
+			formData.append("id_items", id_items);
+			formData.append("items", items);
+			formData.append("cantidades", cantidades);
+			formData.append("usuario", nombre_usuario);
+			$.ajax({
+				type: 'POST',
+				url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (result) 
+					{
+					console.log(result);
+					var obj = JSON.parse(result);
+					if (obj.resultado=='PROCESADO')
+						{
+						alert (obj.respuesta);	
+						//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario;
+						carga_campanas();
+						carga_productos();
+						}
+					if (obj.resultado=='SIGUE DUMMIES')
+						{
+						alert (obj.respuesta);	
+						location.href = "checklist_dummies.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+						}
+					if (obj.resultado=='SIGUE ENTREGA')
+						{
+						alert (obj.respuesta);	
+						location.href = "entrega_productos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+						}
+					if (obj.resultado=='SIGUE TAREA')
+						{
+						alert (obj.respuesta);	
+						location.href = "checklist_tareas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+						}
+					if (obj.resultado=='SIGUE EXTINTOR')
+						{
+						alert (obj.respuesta);	
+						location.href = "checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+						}
+					if (obj.resultado=='SIGUE CHECKLIST')
+						{
+						alert (obj.respuesta);	
+						location.href = "checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+						}
+					}
+				});
+			}
 
 	}
 function estado_campana(valor)
@@ -473,6 +565,7 @@ function estado_campana(valor)
         <div id="listado" style="width:100%; " align="center"></div>
  		<a href="#" data-role="button" id="cerrar" onclick="cerrar_checklist()" style=" display:none;">CERRAR CHECKLIST</a>  
 		<div id="oculto" style=" visibility:hidden;">
+        <div style="text-align:center"><img id="imagen_item" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/></div>
         <table width="100%">
         <tr>
           <td align="center" width="50%">Tarea</td>
@@ -489,9 +582,10 @@ function estado_campana(valor)
           </td>
         </tr>
         </table>
+  		<div id="listado2" style="width:100%; " align="center"></div>
         <!-- sección para la imagen 1-->
         <a href="#" data-role="button" id="takePhoto">TOMAR FOTO</a>
-        <a href="#" data-role="button" id="procesar" onclick="guarda_tarea()" style="display:none;">GUARDAR</a>
+        <a href="#" data-role="button" id="procesar" onclick="guarda_tarea()" style="display:'';">GUARDAR</a>
         <input type="hidden" name="id_imagen" id="id_imagen" />
         <div style="text-align:center"><img id="photo" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/></div>
         <!-- sección para la imagen 1-->

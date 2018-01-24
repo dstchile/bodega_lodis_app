@@ -12,9 +12,44 @@
           },
 
           takePhoto: function(){
-              navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail, { quality: 80,targetWidth: 800,targetHeight: 800, 
+           ///////////validasmos item///////////////////////
+			var estado_tarea=document.getElementById('estado_tarea').value;
+			var i=0;
+			var id_items={};
+			var items={};
+			var cantidades={};
+			var valor_item='';
+			while (document.getElementById('id_item'+i)!=undefined)
+				{
+				id_items[i]=document.getElementById('id_item'+i).value;
+				items[i]=document.getElementById('item'+i).value;
+				console.log("id:"+i+"---");
+				console.log("valor:"+id_items[i]+"---");
+				cantidades[i]=document.getElementById('cantidad'+i).value;
+				console.log("--cantidades:"+cantidades[i]+"--");
+				var valor2=cantidades[i]*1;
+				
+				if((valor2=='')&&(estado_tarea!='NO APLICA'))
+					{
+					alert("Debe indicar una cantidad para  "+items[i]+" ");
+					valor_item='STOP';
+					break;	
+					}
+				i++;
+				}
+			if (estado_tarea=='')
+				{
+				alert("Debe indicar el estado final");
+				}
+			else if (valor_item=='STOP')
+				{
+				}
+			else
+				{
+			      navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail, { quality: 80,targetWidth: 800,targetHeight: 800, 
                   allowEdit: false, destinationType: navigator.camera.DestinationType.FILE_URI,correctOrientation:true});
-          },
+				}
+		  },
 		  onPhotoDataSuccess: function(imageData) 
 		  	{
 			var photo = document.getElementById('photo');
