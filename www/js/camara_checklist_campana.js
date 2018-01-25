@@ -29,7 +29,7 @@
 				console.log("--cantidades:"+cantidades[i]+"--");
 				var valor2=cantidades[i]*1;
 				
-				if((valor2=='')&&(estado_tarea!='NO APLICA'))
+				if((cantidades[i]=='')&&(estado_tarea!='NO APLICA'))
 					{
 					alert("Debe indicar una cantidad para  "+items[i]+" ");
 					valor_item='STOP';
