@@ -420,7 +420,17 @@ function carga_comentario()
 
 	}
 	
-
+function mostrar_boton(est)
+{
+	if(est!='')
+	{
+		document.getElementById('takePhoto').style.display='';
+	}
+	else if(est=='')
+	{
+		document.getElementById('takePhoto').style.display='none';
+	}
+}
 
 </script>
 </head>
@@ -458,13 +468,13 @@ function carga_comentario()
         <tr>
           <td align="center" width="50%">Estado Final</td>
           <td align="left" width="50%">
-          <select name="estado_final" id="estado_final" >
+          <select name="estado_final" id="estado_final" onchange="mostrar_boton(this.value)">
           </select>
           </td>
         </tr>
         </table>
         <!-- sección para la imagen 1-->
-        <a href="#" data-role="button" id="takePhoto">TOMAR FOTO</a>
+        <a href="#" data-role="button" id="takePhoto" style="display:none;">TOMAR FOTO</a>
         <a href="#" data-role="button" id="procesar" onclick="guarda_tarea()" style="display:none;">GUARDAR</a>
         <input type="hidden" name="id_imagen" id="id_imagen" />
         <div style="text-align:center"><img id="photo" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/></div>
