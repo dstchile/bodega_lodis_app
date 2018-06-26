@@ -237,6 +237,9 @@ function procesar()
 		var tests={};
 		var marcas={};
 		var modelos={};
+		var cuotas_iniciales={};
+		var cuotas_arriendo={};
+		var precios_venta={};
 		while (document.getElementById('test'+i)!=undefined)
 			{
 			tests[i]=document.getElementById('test'+i).checked;
@@ -244,6 +247,9 @@ function procesar()
 			console.log("valor:"+tests[i]+"---");
 			marcas[i]=document.getElementById('marca_cambio'+i).value;
 			modelos[i]=document.getElementById('modelo_cambio'+i).value;
+			cuotas_iniciales[i]=document.getElementById('cuota_inicial_cambio'+i).value;
+			cuotas_arriendo[i]=document.getElementById('cuota_arriendo_cambio'+i).value;
+			precios_venta[i]=document.getElementById('precio_venta_cambio'+i).value;
 			console.log("marca:"+marcas[i]+"---modeoo:"+modelos[i]+"--");
 			if((tests[i]==false)&&(modelos[i]==''))
 				{
@@ -259,6 +265,9 @@ function procesar()
 		var tests=JSON.stringify(tests);
 		var marcas=JSON.stringify(marcas);
 		var modelos=JSON.stringify(modelos);
+		var cuotas_iniciales=JSON.stringify(cuotas_iniciales);
+		var cuotas_arriendo=JSON.stringify(cuotas_arriendo);
+		var precios_venta=JSON.stringify(precios_venta);
 		var formData = new FormData();
 		var dato='PROCESAR_DUMMIES';
 		formData.append("dato", dato);
@@ -270,6 +279,9 @@ function procesar()
 		formData.append("tests", tests);
 		formData.append("marcas", marcas);
 		formData.append("modelos", modelos);
+		formData.append("cuotas_iniciales", cuotas_iniciales);
+		formData.append("cuotas_arriendo", cuotas_arriendo);
+		formData.append("precios_venta", precios_venta);
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
@@ -348,12 +360,13 @@ function carga_dummies()
 						if (obj.tests[i]=='SI'){activacion1="CHECKED";}else{activacion2='style="display:;"';}
 						//if (obj.tests[obj.id_items[i]]=='NO'){activacion2="CHECKED";}
 						tabla_html+='<input type="checkbox" name="test'+i+'" id="test'+i+'" '+activacion1+' onclick="chequeo('+i+')">';
-						tabla_html+='<label for="test'+i+'">'+obj.poss[i]+' '+obj.marcas[i]+' '+obj.modelos[i]+'</label>';
+						tabla_html+='<label for="test'+i+'">'+obj.poss[i]+' '+obj.marcas[i]+' '+obj.modelos[i]+'<br/>CI:$'+obj.cuota_inicial[i]+' CA:$'+obj.cuota_arriendo[i]+' PV:$'+obj.precio_venta[i]+'</label>';
 						tabla_html+='<div id="cambio'+i+'" '+activacion2+'>';
 						tabla_html+='<select name="marca_cambio'+i+'" id="marca_cambio'+i+'" onchange="list_modelos_cambio('+i+')">';  
 						if (obj.marcas_cambio[i]=='')
 							{
-							tabla_html+='<option value="">Select Marca</option>';
+							//tabla_html+='<option value="">Select Marca</option>';
+							tabla_html+='<option value="'+obj.marcas[i]+'">'+obj.marcas[i]+'</option>';
 							}
 						else
 							{
@@ -365,8 +378,28 @@ function carga_dummies()
 							}
 						tabla_html+='</select>';
 						tabla_html+='<select name="modelo_cambio'+i+'" id="modelo_cambio'+i+'" >';  
-						if (obj.modelos_cambio[i]!=''){tabla_html+='<option value="'+obj.modelos_cambio[i]+'">'+obj.modelos_cambio[i]+'</option>';}
+						if (obj.modelos_cambio[i]!='')
+							{
+							tabla_html+='<option value="'+obj.modelos_cambio[i]+'">'+obj.modelos_cambio[i]+'</option>';
+							}
+						else
+							{
+							tabla_html+='<option value="'+obj.modelos[i]+'">'+obj.modelos[i]+'</option>';
+							}
 						tabla_html+='</select>';
+						if (obj.cuota_inicial_cambio[i]!='')
+							{
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Inicial:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_inicial_cambio'+i+'" id="cuota_inicial_cambio'+i+'" value="'+obj.cuota_inicial_cambio[i]+'"  onfocus="this.select()"/></div></div>'; 
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Arriendo:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_arriendo_cambio'+i+'" id="cuota_arriendo_cambio'+i+'" value="'+obj.cuota_arriendo_cambio[i]+'" onfocus="this.select()" /></div></div>';  
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Precio Venta:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="precio_venta_cambio'+i+'" id="precio_venta_cambio'+i+'" value="'+obj.precio_venta_cambio[i]+'" onfocus="this.select()" /></div></div>';  
+							}
+						else
+							{
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Inicial:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_inicial_cambio'+i+'" id="cuota_inicial_cambio'+i+'" value="'+obj.cuota_inicial[i]+'"  onfocus="this.select()"/></div></div>'; 
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Arriendo:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_arriendo_cambio'+i+'" id="cuota_arriendo_cambio'+i+'" value="'+obj.cuota_arriendo[i]+'" onfocus="this.select()" /></div></div>';  
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Precio Venta:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="precio_venta_cambio'+i+'" id="precio_venta_cambio'+i+'" value="'+obj.precio_venta[i]+'" onfocus="this.select()" /></div></div>';  
+							}
+							
 						tabla_html+='</div>';
 						}
 					tabla_html+='</fieldset>';
@@ -374,6 +407,7 @@ function carga_dummies()
 					$('#listado').append(tabla_html);
 					$("#listado").trigger("create");
 					document.getElementById('oculto').style.visibility='visible';
+					
 					}
 				
 				}
@@ -462,10 +496,12 @@ function list_modelos_cambio(valor)
  		<div id="oculto" style="visibility:hidden;">
         <a href="#" data-role="button" id="procesar" onclick="procesar()">PROCESAR</a>
         </div>
-        
+        <div style="width:100%; border:1px solid #000;"><div style=" display:inline-block; width:50%; text-align:right;">Costo Inicial:</div><div style="display:inline-block; width:50%;"><input type="number" style=" display:block; box-sizing: border-box;" name="modelo_cambio'+i+'" id="modelo_cambio'+i+'" onfocus="this.select()" />
+    	
+    </div></div>
+						
   </div>
 </div>
-
-	  
+						
 </body>
 </html>
