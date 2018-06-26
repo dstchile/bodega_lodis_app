@@ -29,4 +29,5 @@
     <splash platform="android" qualifier="land-hdpi" src="splash-land-hdpi.png" />
     <splash platform="android" qualifier="land-xhdpi" src="splash-land-xhdpi.png" />
     <preference name="SplashScreenDelay" value="4000" />
+    <preference name="phonegap-version" value="cli-6.3.0" />
 </widget>
