@@ -360,7 +360,7 @@ function carga_dummies()
 						if (obj.tests[i]=='SI'){activacion1="CHECKED";}else{activacion2='style="display:;"';}
 						//if (obj.tests[obj.id_items[i]]=='NO'){activacion2="CHECKED";}
 						tabla_html+='<input type="checkbox" name="test'+i+'" id="test'+i+'" '+activacion1+' onclick="chequeo('+i+')">';
-						tabla_html+='<label for="test'+i+'">'+obj.poss[i]+' '+obj.marcas[i]+' '+obj.modelos[i]+'<br/>CI:$'+obj.cuota_inicial[i]+' CA:$'+obj.cuota_arriendo[i]+' PV:$'+obj.precio_venta[i]+'</label>';
+						tabla_html+='<label for="test'+i+'">'+obj.poss[i]+' '+obj.marcas[i]+' '+obj.modelos[i]+'<br/><div style=" font-size:9pt; width=100%;"><div style=" display:inline-block; width:33%;">CI:$'+obj.cuota_inicial[i]+'</div><div style=" display:inline-block; width:33%">CA:$'+obj.cuota_arriendo[i]+'</div><div style=" display:inline-block; width:33%">PV:$'+obj.precio_venta[i]+'</div></div></label>';
 						tabla_html+='<div id="cambio'+i+'" '+activacion2+'>';
 						tabla_html+='<select name="marca_cambio'+i+'" id="marca_cambio'+i+'" onchange="list_modelos_cambio('+i+')">';  
 						if (obj.marcas_cambio[i]=='')
