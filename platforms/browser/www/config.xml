@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="cl.dstchile.lodisapp" version="1.7.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="cl.dstchile.lodisapp" version="1.7.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
     <feature name="BarcodeScanner">
         <param name="browser-package" value="BarcodeScanner" />
     </feature>
@@ -29,5 +29,5 @@
     <splash platform="android" qualifier="land-hdpi" src="splash-land-hdpi.png" />
     <splash platform="android" qualifier="land-xhdpi" src="splash-land-xhdpi.png" />
     <preference name="SplashScreenDelay" value="4000" />
-    <preference name="phonegap-version" value="cli-6.3.0" />
+    <preference name="phonegap-version" value="cli-7.1.0" />
 </widget>

@@ -232,7 +232,8 @@ function procesar()
 		var ele=document.getElementById('punto');
 		var punto=document.getElementById('punto').options[ele.selectedIndex].text;
 		var layout=document.getElementById('layout').value;
-		
+		var nofactible=document.getElementById('nofactible').checked;
+		var comentario=document.getElementById('comentario').value;
 		var i=0;
 		var tests={};
 		var marcas={};
@@ -240,7 +241,7 @@ function procesar()
 		var cuotas_iniciales={};
 		var cuotas_arriendo={};
 		var precios_venta={};
-		while (document.getElementById('test'+i)!=undefined)
+		while (document.getElementById('test'+i)!=undefined && nofactible==false)
 			{
 			tests[i]=document.getElementById('test'+i).checked;
 			console.log("id:"+i+"---");
@@ -260,7 +261,11 @@ function procesar()
 			
 			i++;
 			}
-		
+		if ((nofactible==true)&&(comentario==''))
+			{
+			alert("Debe indicar un comentario");
+			return;
+			}
 		console.log( JSON.stringify(tests) );
 		var tests=JSON.stringify(tests);
 		var marcas=JSON.stringify(marcas);
@@ -282,6 +287,8 @@ function procesar()
 		formData.append("cuotas_iniciales", cuotas_iniciales);
 		formData.append("cuotas_arriendo", cuotas_arriendo);
 		formData.append("precios_venta", precios_venta);
+		formData.append("nofactible", nofactible);
+		formData.append("comentario", comentario);
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
@@ -462,6 +469,19 @@ function list_modelos_cambio(valor)
 		});
 
 	}
+	
+function muestra_comentario()
+	{
+	var nofactible=document.getElementById('nofactible').checked;
+	if (nofactible==true)
+		{
+			document.getElementById('oculto_comentario').style.display='';
+		}
+	else
+		{
+			document.getElementById('oculto_comentario').style.display='none';
+		}
+	}
 </script>
 </head>
 
@@ -494,7 +514,17 @@ function list_modelos_cambio(valor)
         </select>
         <div id="listado" style="width:100%; " align="center"></div>
  		<div id="oculto" style="visibility:hidden;">
-        <a href="#" data-role="button" id="procesar" onclick="procesar()">PROCESAR</a>
+        <div data-role="fieldcontain">
+          <fieldset data-role="controlgroup">
+            <input type="checkbox" name="nofactible" id="nofactible" class="custom" value="" onclick="muestra_comentario()" />
+            <label for="nofactible">Check NO es factible</label>
+          </fieldset>
+            <div id="oculto_comentario" style="display:none">
+        	<label for="comentario">Indique el motivo de NO factibilidad:</label>
+            <textarea cols="40" rows="8" name="comentario" id="comentario"></textarea>
+        	</div>
+        </div>
+<a href="#" data-role="button" id="procesar" onclick="procesar()">PROCESAR</a>
         </div>
   </div>
 </div>
