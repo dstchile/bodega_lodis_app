@@ -261,7 +261,7 @@ function procesar()
 			
 			i++;
 			}
-		if ((nofactible==true)&&(comentario==''))
+		if (comentario=='')
 			{
 			alert("Debe indicar un comentario");
 			return;
@@ -515,12 +515,14 @@ function muestra_comentario()
         <div id="listado" style="width:100%; " align="center"></div>
  		<div id="oculto" style="visibility:hidden;">
         <div data-role="fieldcontain">
+        <!--
           <fieldset data-role="controlgroup">
             <input type="checkbox" name="nofactible" id="nofactible" class="custom" value="" onclick="muestra_comentario()" />
             <label for="nofactible">Check NO es factible</label>
           </fieldset>
-            <div id="oculto_comentario" style="display:none">
-        	<label for="comentario">Indique el motivo de NO factibilidad:</label>
+         -->
+            <div id="oculto_comentario">
+        	<label for="comentario">Comentario:</label>
             <textarea cols="40" rows="8" name="comentario" id="comentario"></textarea>
         	</div>
         </div>
