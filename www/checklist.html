@@ -388,6 +388,31 @@ function carga_item()
 					
 					
 					}
+				if (obj.marcas!=null)
+					{
+					var test=new Array();
+					$('#equipos').empty().append();
+					var tabla_html='';
+					if (lugar=='ESQUINA 1' ||lugar=='ESQUINA 2' ||lugar=='ESQUINA 3' || lugar=='ESQUINA 4')
+						{
+						var activacion3="";
+						tabla_html+='<table border="1" width="100%" cellpadding="0" cellspacing="0">';
+						tabla_html+='<tr bgcolor="#DA291C" width="5%">';
+						tabla_html+='<td><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">MARCA</font></div></td>';
+						tabla_html+='<td><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">MODELO</font></div></td>';
+						tabla_html+='</tr>';
+						for (i=0;i<obj.marcas.length;i++)
+							{
+							tabla_html+='<tr  width="90%">';
+							tabla_html+='<td align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A">'+obj.marcas[i]+'</font></td>';
+							tabla_html+='<td align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A">'+obj.modelos[i]+'</font></td>';
+							tabla_html+='</tr>';
+							}
+						tabla_html+='</table>';
+						$('#equipos').append(tabla_html);
+						}
+					}
+				
 				}
 			});
 
@@ -611,7 +636,8 @@ function estado_noaplica()
         </select>
         <input type="hidden" name="latitud" id="latitud" />
         <input type="hidden" name="longitud" id="longitud" />
-        <div id="listado" style="width:100%; " align="center"></div>
+        <div id="equipos" style="width:100%; " align="center"></div>
+ 		<div id="listado" style="width:100%; " align="center"></div>
  		<a href="#" data-role="button" id="cerrar" onclick="cerrar_checklist()" style=" display:none;">CERRAR CHECKLIST</a>  
 		<a href="#" data-role="button" id="procesar" onclick="siguiente()" style=" display:none;">GUARDAR</a>
         <div id="oculto" style=" visibility:hidden;">
