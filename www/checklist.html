@@ -5,14 +5,26 @@
 <title>Documento sin título</title>
 <style>
 .borde_imagen {
-background-color: #F5F5F5;
-border: 5px solid #FFFFFF;
-box-shadow: 0 0 22px #111111;
-margin-top: 10px;
-margin-bottom: 10px;
-margin-right: 10px;
-margin-left: 10px;
-//width:50%;
+	background-color: #F5F5F5;
+	border: 5px solid #FFFFFF;
+	box-shadow: 0 0 22px #111111;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	margin-left: 10px;
+	//width:50%;
+}
+#comentario_flotantex{
+	position: absolute;
+	margin:0;
+	width:100%;
+	height:150px;
+	background-color: #666;
+	border:2px solid #DA291C;
+	border-radius:5px;
+	top:30%;
+	box-sizing:border-box;
+	z-index:999;
 }
 </style>
 <link href="jquery-mobile/jquery.mobile.theme-1.0.min.css" rel="stylesheet" type="text/css" />
@@ -212,7 +224,6 @@ function carga_lugares()
 					
 					$('#lugar').selectmenu('refresh')
 					}
-				
 				}
 			});
 
@@ -312,6 +323,19 @@ function carga_item()
 				var obj = JSON.parse(result);
 				if (obj.items!=null)
 					{
+					///////////aparece comentario flotante //////////////
+						var memolug= document.getElementById('memolugar').value;
+						console.log("Luugar: "+lugar+" MemoLugar: "+memolug)
+						if(obj.comentario_flotante!=null && lugar!=memolug){
+								try {document.getElementById('comentario_flotantex').style.display="";} catch(e){}
+								try {document.getElementById('com_flo').innerHTML=obj.comentario_flotante; } catch(e){}
+							}
+						else
+							{
+								try {document.getElementById('comentario_flotantex').style.display="none";} catch(e){}
+							}
+							document.getElementById('memolugar').value=lugar;
+					///////////aparece comentario flotante //////////////
 					var test=new Array();
 					$('#listado').empty().append();
 					var tabla_html='';
@@ -378,6 +402,7 @@ function carga_item()
 						document.getElementById('takePhoto').style.visibility='visible';
 						document.getElementById('takePhoto').style.display='';
 						document.getElementById('procesar').style.display='none';
+						
 						}
 					else
 						{
@@ -631,6 +656,7 @@ function estado_noaplica()
         <label for="punto" class="select">Punto:</label>
         <select name="punto" id="punto" onchange="check_procesos()">
         </select>
+        <input type="hidden" name="memolugar" id="memolugar" />
         <label for="lugar" class="select">Sección:</label>
         <select name="lugar" id="lugar" onchange="carga_item()">
         </select>
@@ -650,6 +676,10 @@ function estado_noaplica()
         <script type="text/javascript">app.initialize();</script>
 		</div>
   </div>
+</div>
+<div id="comentario_flotantex" style="display:none" align="center" onClick="this.style.display='none'">
+    <font color="white"><div style="position:absolute; top:25%; width:100%" id="com_flo"></div></font>
+    <div style="position:absolute; bottom:10px; left:45%" align="center"><input type="button" style="background-color:#CCC; border:1px outset #999; border-radius:5px; font-weight:bold; padding:5px; margin:5px" onClick="comentario_flotantex.style.display='none'" value="Cerrar"></div>
 </div>
 </body>
 </html>
