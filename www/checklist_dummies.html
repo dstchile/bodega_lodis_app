@@ -255,7 +255,7 @@ function procesar()
 			if((tests[i]==false)&&(modelos[i]==''))
 				{
 				alert("debe especificar marca y modelo");
-				break;	
+				return 0;	
 				}
 			
 			
@@ -264,7 +264,7 @@ function procesar()
 		if (comentario=='')
 			{
 			alert("Debe indicar un comentario");
-			return;
+			return 0;
 			}
 		console.log( JSON.stringify(tests) );
 		var tests=JSON.stringify(tests);
@@ -303,6 +303,8 @@ function procesar()
 				if (obj.resultado=='PROCESADO')
 					{
 					alert (obj.respuesta);	
+					document.getElementById('comentario').value='';
+		
 					//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
 					}
 				if (obj.resultado=='SIGUE ENTREGA')

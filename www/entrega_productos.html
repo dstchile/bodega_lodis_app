@@ -77,6 +77,7 @@ margin-left: 10px;
 <script type="text/javascript" src="js/descarga.js"></script>
 <script type="text/javascript" src="js/conexion.js"></script>
 <script>
+
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() 
 	{
@@ -106,6 +107,8 @@ var usuario = getParameterByName('usuario');
 var password = getParameterByName('password');
 var nombre_usuario = getParameterByName('nombre_usuario');
 var bodega = getParameterByName('bodega');
+var familiasx=new Array;
+var autorizacion="";
 console.log("usuario:"+usuario+" --");
 console.log("password:"+password+" --");
 console.log("nombre:"+nombre_usuario+" --");
@@ -224,7 +227,15 @@ function carga_productos()
 				{
 				console.log("pasando:"+result+".---");
 				var obj = JSON.parse(result);
-				
+				if (obj.autorizacion=='SI')
+					{
+					autorizacion="SI";
+						alert("Está autorizado para NO entregar folleteria")
+					}
+				else
+					{
+					autorizacion="NO";
+					}
 				var tabla_html='';
 				/*tabla_html+='<table width="100%">';
 				tabla_html+='<tr>';
@@ -252,7 +263,7 @@ function carga_productos()
 				
 				$('#listado').append(tabla_html);
 				$("#listado").trigger("create");*/
-				
+				$('#listado2').empty().append();
 				var tabla_html='';
 				for (i=0;i<obj.id_productos.length;i++)
 					{
@@ -274,9 +285,11 @@ function carga_productos()
 						tabla_html+='<td align="center">Stock</td>';
 						tabla_html+='<td align="center">Cantidad</td>';
 						tabla_html+='</tr>';
-						
 						}
 					//tabla_html+='<li><a href="#">Canary</a></li>';
+						familiasx[i]= obj.familias[i];
+						console.log("familia"+obj.familias[i]+"-----");
+					
 					tabla_html+='<tr>';
 					tabla_html+='<td align="left" width="70%">'+obj.productos[i]+'<input type="hidden" name="id_producto'+i+'" id="id_producto'+i+'" value="'+obj.id_productos[i]+'"  /><input type="hidden" name="producto'+i+'" id="producto'+i+'" value="'+obj.productos[i]+'"  /></td>';
 					tabla_html+='<td align="center" width="10%">'+obj.stocks[i]+'<input type="hidden" name="stock'+i+'" id="stock'+i+'" value="'+obj.stocks[i]+'"  /></td>';
@@ -306,24 +319,30 @@ function procesar()
 		var id_punto=document.getElementById('punto').value;
 		var ele=document.getElementById('punto');
 		var punto=document.getElementById('punto').options[ele.selectedIndex].text;
-		
+		console.log("Punto: "+punto)
 		var i=0;
 		var id_productos={};
 		var productos={};
 		var stocks={};
 		var cantidades={};
+		var tot_foll=0;
 		while (document.getElementById('id_producto'+i)!=undefined)
 			{
 			id_productos[i]=document.getElementById('id_producto'+i).value;
 			productos[i]=document.getElementById('producto'+i).value;
-			console.log("id:"+i+"---");
-			console.log("valor:"+id_productos[i]+"---");
 			stocks[i]=document.getElementById('stock'+i).value;
 			cantidades[i]=document.getElementById('cantidad'+i).value;
 			console.log("stock:"+stocks[i]+"---cantidades:"+cantidades[i]+"--");
 			var valor=stocks[i]*1;
 			var valor2=cantidades[i]*1;
-			
+			if (familiasx[i]=="FOLLETERIA")
+				{
+				console.log(" Familias: "+familiasx[i])
+				//console.log("id:"+i+"---");
+				//console.log("valor:"+id_productos[i]+"---");
+				console.log("monto "+valor2+"---");
+				tot_foll=tot_foll+valor2;
+				}
 			/*if(valor<valor2)
 				{
 				alert(" "+productos[i]+" está superando el stock disponible");
@@ -333,6 +352,18 @@ function procesar()
 			
 			i++;
 			}
+		//console.log("Total:"+tot_foll+" ---auto:"+autorizacion+"---")
+		if (tot_foll>=1)
+			{
+				autorizacion="NO";
+			}
+		else if(autorizacion!="SI")
+			{
+			alert("Debe solicitar autorizacion para no entregar folletaria")
+				console.log("Debe solicitar autorizacion para no entregar folletaria")
+			return 0;	
+			}
+				
 		////ventana espere un momento////
 		document.getElementById('progreso').style.visibility = 'visible';
 		document.getElementById('progreso').style.opacity = 1;
