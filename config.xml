@@ -14,6 +14,7 @@
 	<plugin name="phonegap-plugin-barcodescanner" spec="3.0.0">
 	  <param name="CAMERA_USAGE_DESCRIPTION" value="To scan barcodes."/>
 	</plugin>
+	<plugin name="cordova-plugin-android-permissions" source="npm"/>
 	<plugin name="cordova-plugin-background-mode" source="npm"/>
 	<plugin name="cordova-plugin-wezka-nativecamera" source="npm"/>
 	<plugin name="cordova-plugin-device" source="npm"/>

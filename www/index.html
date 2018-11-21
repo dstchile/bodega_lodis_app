@@ -134,6 +134,39 @@ function datos_equipo()
 				
 	});
 	
+/////////////comporbación de permisos////////////////
+	var permissions = cordova.plugins.permissions;
+
+	permissions.hasPermission(permissions.CAMERA, function(status) 
+		{
+		  if (status.hasPermission) 
+			{
+			// here you can savely start your own plugin because you already have CAMERA permission
+			}
+		  else 
+			{
+			// need to request camera permission
+			permissions.requestPermission(permissions.CAMERA, success, error);
+		
+			function error() 
+				{
+				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
+			  // camera permission not turned on
+				}
+		
+			function success(status) 
+				{
+				if (status.hasPermission) 
+					{
+					alert("CAMARA HABILITADA")
+				// user accepted, here you can start your own plugin
+					}
+				}
+			}
+		});
+/////////////comporbación de permisos////////////////
+
+	
 	
 	}
 </script>

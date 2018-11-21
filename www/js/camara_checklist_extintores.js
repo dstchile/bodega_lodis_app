@@ -30,16 +30,16 @@
 			else
 				{
 			  	var options = {
-					quality: 60,
+					quality: 80,
 					targetWidth: 800,
 					targetHeight: 800,
 					allowEdit: false,
-					//destinationType: navigator.camera.DestinationType.FILE_URI,
-					destinationType: Camera.DestinationType.FILE_URI,
+					destinationType: navigator.camera.DestinationType.FILE_URI,
+					//destinationType: Camera.DestinationType.FILE_URI,
 					correctOrientation:true,
-					sourceType: Camera.PictureSourceType.CAMERA,
-					mediaType: Camera.MediaType.CAMERA,
-					encodingType: Camera.EncodingType.JPEG,
+					//sourceType: Camera.PictureSourceType.CAMERA,
+					//mediaType: Camera.MediaType.CAMERA,
+					//encodingType: Camera.EncodingType.JPEG,
 					//saveToPhotoAlbum: true
 				};
 			  
