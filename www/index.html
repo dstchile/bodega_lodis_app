@@ -38,6 +38,31 @@
 					}
 				else
 					{
+					var e_fabrica=device.manufacturer;
+					var e_modelo=device.model;
+					var e_plataforma=device.platform;
+					var e_version=device.version;
+					var ver_app=document.getElementById('version_app').value;
+					var usuario=document.getElementById('usuario').value;
+	
+					formData.append("usuario", usuario);
+					formData.append("e_fabrica", e_fabrica);
+					formData.append("e_modelo", e_modelo);
+					formData.append("e_plataforma", e_plataforma);
+					formData.append("e_version", e_version);
+					formData.append("ver_app", ver_app);
+					$.ajax({
+						type: 'POST',
+						url: servidor+'/bodega_lodis_movil/info_equipo.php',
+						data: formData,
+						processData: false,
+						contentType: false,
+						success: function (result) 
+							{
+							}
+						})
+			
+					
 					location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+obj.bodega;
 					}
 				}
