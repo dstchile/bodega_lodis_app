@@ -46,11 +46,12 @@
 					var usuario=document.getElementById('usuario').value;
 	
 					formData.append("usuario", usuario);
-					formData.append("e_fabrica", e_fabrica);
+					formData.append("e_marca", e_marca);
 					formData.append("e_modelo", e_modelo);
 					formData.append("e_plataforma", e_plataforma);
 					formData.append("e_version", e_version);
 					formData.append("ver_app", ver_app);
+					alert("user:"+usuario+"  marca:"+e_marca+"  modelo:"+e_modelo+"   plataforma:"+e_plataforma+"  version os:"+e_version+"  ver app:"+ver_app+"   ")
 					$.ajax({
 						type: 'POST',
 						url: servidor+'/bodega_lodis_movil/info_equipo.php',
@@ -59,6 +60,7 @@
 						contentType: false,
 						success: function (result) 
 							{
+							alert ("resul:"+result);
 							location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+obj.bodega;
 							}
 						})
