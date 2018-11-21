@@ -136,7 +136,12 @@ function datos_equipo()
 	
 /////////////comporbación de permisos////////////////
 	var permissions = cordova.plugins.permissions;
-	permissions.hasPermission(permissions.CAMERA, function(status) 
+	var list = [
+			  permissions.CAMERA,
+			  permissions.WRITE_EXTERNAL_STORAGE,
+			  permissions.ACCESS_FINE_LOCATION
+			];
+	permissions.hasPermission(list, function(status) 
 		{
 		  if (status.hasPermission) 
 			{
@@ -145,7 +150,7 @@ function datos_equipo()
 		  else 
 			{
 			// need to request camera permission
-			permissions.requestPermission(permissions.CAMERA, success, error);
+			permissions.requestPermission(list, success, error);
 			function error() 
 				{
 				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
@@ -161,57 +166,7 @@ function datos_equipo()
 				}
 			}
 		});
-	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function(status) 
-		{
-		  if (status.hasPermission) 
-			{
-			// here you can savely start your own plugin because you already have CAMERA permission
-			}
-		  else 
-			{
-			// need to request camera permission
-			permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
-			function error() 
-				{
-				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
-			  // camera permission not turned on
-				}
-		
-			function success(status) 
-				{
-				if (status.hasPermission) 
-					{
-				// user accepted, here you can start your own plugin
-					}
-				}
-			}
-		});
-	/*permissions.hasPermission(permissions.LOCATION, function(status) 
-		{
-		  if (status.hasPermission) 
-			{
-			// here you can savely start your own plugin because you already have CAMERA permission
-			}
-		  else 
-			{
-			// need to request camera permission
-			permissions.requestPermission(permissions.LOCATION, success, error);
-			function error() 
-				{
-				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
-			  // camera permission not turned on
-				}
-		
-			function success(status) 
-				{
-				if (status.hasPermission) 
-					{
-				// user accepted, here you can start your own plugin
-					}
-				}
-			}
-		});
-	*/
+	
 /////////////comporbación de permisos////////////////
 
 	
