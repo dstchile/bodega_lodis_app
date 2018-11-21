@@ -136,13 +136,7 @@ function datos_equipo()
 	
 /////////////comporbación de permisos////////////////
 	var permissions = cordova.plugins.permissions;
-	
-	var list = [
-				  permissions.CAMERA,
-				  permissions.STORAGE,
-				  permissions.LOCATION
-				];
-	permissions.hasPermission(list, function(status) 
+	permissions.hasPermission(permissions.CAMERA, function(status) 
 		{
 		  if (status.hasPermission) 
 			{
@@ -151,7 +145,57 @@ function datos_equipo()
 		  else 
 			{
 			// need to request camera permission
-			permissions.requestPermission(list, success, error);
+			permissions.requestPermission(permissions.CAMERA, success, error);
+			function error() 
+				{
+				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
+			  // camera permission not turned on
+				}
+		
+			function success(status) 
+				{
+				if (status.hasPermission) 
+					{
+				// user accepted, here you can start your own plugin
+					}
+				}
+			}
+		});
+	permissions.hasPermission(permissions.STORAGE, function(status) 
+		{
+		  if (status.hasPermission) 
+			{
+			// here you can savely start your own plugin because you already have CAMERA permission
+			}
+		  else 
+			{
+			// need to request camera permission
+			permissions.requestPermission(permissions.STORAGE, success, error);
+			function error() 
+				{
+				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
+			  // camera permission not turned on
+				}
+		
+			function success(status) 
+				{
+				if (status.hasPermission) 
+					{
+				// user accepted, here you can start your own plugin
+					}
+				}
+			}
+		});
+	permissions.hasPermission(permissions.LOCATION, function(status) 
+		{
+		  if (status.hasPermission) 
+			{
+			// here you can savely start your own plugin because you already have CAMERA permission
+			}
+		  else 
+			{
+			// need to request camera permission
+			permissions.requestPermission(permissions.LOCATION, success, error);
 			function error() 
 				{
 				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
