@@ -30,7 +30,7 @@
 			else
 				{
 			  	var options = {
-					quality: 80,
+					quality: 60,
 					targetWidth: 800,
 					targetHeight: 800,
 					allowEdit: false,
