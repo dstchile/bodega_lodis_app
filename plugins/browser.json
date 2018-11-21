@@ -21,6 +21,12 @@
         },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "cl.dstchile.lodisapp"
+        },
+        "cordova-plugin-background-mode": {
+            "PACKAGE_NAME": "cl.dstchile.lodisapp"
+        },
+        "com.wezka.nativecamera": {
+            "PACKAGE_NAME": "cl.dstchile.lodisapp"
         }
     },
     "dependent_plugins": {

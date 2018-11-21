@@ -274,6 +274,45 @@ module.exports = [
         "clobbers": [
             "window.FileTransfer"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-background-mode/www/background-mode.js",
+        "id": "cordova-plugin-background-mode.BackgroundMode",
+        "pluginId": "cordova-plugin-background-mode",
+        "clobbers": [
+            "cordova.plugins.backgroundMode",
+            "plugin.backgroundMode"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-background-mode/src/browser/BackgroundModeProxy.js",
+        "id": "cordova-plugin-background-mode.BackgroundMode.Proxy",
+        "pluginId": "cordova-plugin-background-mode",
+        "runs": true
+    },
+    {
+        "file": "plugins/com.wezka.nativecamera/www/CameraConstants.js",
+        "id": "com.wezka.nativecamera.Camera",
+        "pluginId": "com.wezka.nativecamera",
+        "clobbers": [
+            "Camera"
+        ]
+    },
+    {
+        "file": "plugins/com.wezka.nativecamera/www/CameraPopoverOptions.js",
+        "id": "com.wezka.nativecamera.CameraPopoverOptions",
+        "pluginId": "com.wezka.nativecamera",
+        "clobbers": [
+            "CameraPopoverOptions"
+        ]
+    },
+    {
+        "file": "plugins/com.wezka.nativecamera/www/Camera.js",
+        "id": "com.wezka.nativecamera.camera",
+        "pluginId": "com.wezka.nativecamera",
+        "clobbers": [
+            "navigator.camera"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -285,7 +324,9 @@ module.exports.metadata =
     "cordova-plugin-file": "5.0.0",
     "cordova-plugin-file-transfer": "1.7.0",
     "cordova-plugin-compat": "1.2.0",
-    "cordova-plugin-geolocation": "2.4.1"
+    "cordova-plugin-geolocation": "2.4.1",
+    "cordova-plugin-background-mode": "0.7.2",
+    "com.wezka.nativecamera": "0.1.2"
 }
 // BOTTOM OF METADATA
 });

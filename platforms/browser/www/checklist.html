@@ -392,10 +392,20 @@ function carga_item()
 							tabla_html+='<td><input type="radio" name="test'+i+'" '+activacion2+' id="test'+i+'" value="NO"></td>';
 							tabla_html+='</tr>';
 							}
-						tabla_html+='<tr  width="5%">';
-						tabla_html+='<td><input type="checkbox" name="noaplica" '+activacion3+' id="noaplica" value="NO APLICA" onClick="estado_noaplica()" ></td>';
-						tabla_html+='<td colspan=2  align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A"><b>NO APLICA</b></font></td>';
-						tabla_html+='</tr>';
+						if (lugar=='COMPROBANTE')
+							{
+							tabla_html+='<tr  width="5%">';
+							tabla_html+='<td><input type="hidden" name="noaplica" '+activacion3+' id="noaplica" value="NO APLICA" onClick="estado_noaplica()" ></td>';
+							tabla_html+='<td colspan=2  align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A"><b>Debe cargar imagen</b></font></td>';
+							tabla_html+='</tr>';
+							}
+						else
+							{
+							tabla_html+='<tr  width="5%">';
+							tabla_html+='<td><input type="checkbox" name="noaplica" '+activacion3+' id="noaplica" value="NO APLICA" onClick="estado_noaplica()" ></td>';
+							tabla_html+='<td colspan=2  align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A"><b>NO APLICA</b></font></td>';
+							tabla_html+='</tr>';
+							}
 						tabla_html+='</table>';
 						$('#listado').append(tabla_html);
 						document.getElementById('cerrar').style.display='none';

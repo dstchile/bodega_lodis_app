@@ -59,11 +59,11 @@
 						contentType: false,
 						success: function (result) 
 							{
+							location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+obj.bodega;
 							}
 						})
 			
 					
-					location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+obj.bodega;
 					}
 				}
 			})
