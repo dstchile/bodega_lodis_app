@@ -29,8 +29,21 @@
 				}
 			else
 				{
-			  	navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail, { quality: 80,targetWidth: 800,targetHeight: 800, 
-                  allowEdit: false, destinationType: navigator.camera.DestinationType.FILE_URI,correctOrientation:true});
+			  	var options = {
+					quality: 80,
+					targetWidth: 800,
+					targetHeight: 800,
+					allowEdit: false,
+					destinationType: navigator.camera.DestinationType.FILE_URI,
+					//destinationType: Camera.DestinationType.FILE_URI,
+					correctOrientation:true,
+					sourceType: Camera.PictureSourceType.CAMERA,
+					mediaType: Camera.MediaType.CAMERA,
+					encodingType: Camera.EncodingType.JPEG,
+					//saveToPhotoAlbum: true
+				};
+			  
+				navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail, options);
 				}
 		  },
 		  onPhotoDataSuccess: function(imageData) 
