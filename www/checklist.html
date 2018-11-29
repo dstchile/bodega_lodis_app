@@ -44,26 +44,30 @@ function onDeviceReady()
 	//document.getElementById('e_plataforma').value=device.platform;
 	//document.getElementById('e_version').value=device.version;
 	////////insertamos la imagen a la tabla
-	GPSLocation.getCurrentPosition(onSuccess, onError,{maximumAge: 0,timeout:20000});
-	//navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy: true,maximumAge: 0,timeout:20000});
+	navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy: true,maximumAge: 0,timeout:10000});
     function onSuccess(position) 
 		{
-        
-		var element = document.getElementById('geolocation');
+        var element = document.getElementById('geolocation');
         element.value = 'GPS OK';
-		//element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-                            'Longitude: '          + position.coords.longitude             + '<br />' +
-                            'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
-                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                            'Heading: '            + position.coords.heading               + '<br />' +
-                            'Speed: '              + position.coords.speed                 + '<br />' +
-                            'Timestamp: '          +                                   position.timestamp          + '<br />';
-    	document.getElementById('latitud').value=position.coords.latitude;
+		document.getElementById('latitud').value=position.coords.latitude;
 		document.getElementById('longitud').value=position.coords.longitude;
-		
 		}
 	function onError(error) 
+		{
+        var element = document.getElementById('geolocation');
+        element.value="Fail NETWORK try now with GPS"
+		//element.value = error.message;
+		GPSLocation.getCurrentPosition(onSuccess2, onError2,{maximumAge: 0,timeout:20000});
+		 //alert('code: '+ error.code+'\n'+'message: ' + error.message + '\n');
+    	}
+	function onSuccess2(position) 
+		{
+        var element = document.getElementById('geolocation');
+        element.value = 'GPS OK';
+		document.getElementById('latitud').value=position.coords.latitude;
+		document.getElementById('longitud').value=position.coords.longitude;
+		}
+	function onError2(error) 
 		{
         var element = document.getElementById('geolocation');
         element.value = error.message;
