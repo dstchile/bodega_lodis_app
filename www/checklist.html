@@ -344,6 +344,7 @@ function carga_item()
 					var test=new Array();
 					$('#listado').empty().append();
 					var tabla_html='';
+					onPause();
 					if (lugar=='COMENTARIO')
 						{
 						////////////////comentario
@@ -372,7 +373,6 @@ function carga_item()
 						document.getElementById('oculto').style.visibility='hidden';
 						document.getElementById('cerrar').style.display='';
 						document.getElementById('procesar').style.display='none';
-						onPause();
 						}
 					else if(lugar!='') 
 						{
