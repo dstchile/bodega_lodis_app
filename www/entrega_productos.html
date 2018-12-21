@@ -236,6 +236,7 @@ function carga_productos()
 					{
 					autorizacion="NO";
 					}
+				document.getElementById('minimo_consumo').value=obj.minimo_consumo;
 				var tabla_html='';
 				/*tabla_html+='<table width="100%">';
 				tabla_html+='<tr>';
@@ -353,7 +354,8 @@ function procesar()
 			i++;
 			}
 		//console.log("Total:"+tot_foll+" ---auto:"+autorizacion+"---")
-		if (tot_foll>=1)
+		var minimo=document.getElementById('minimo_consumo').value;
+		if (tot_foll>=minimo)
 			{
 				autorizacion="NO";
 			}
@@ -465,6 +467,7 @@ function procesar()
         
   </div>
 </div>
+<input name="minimo_consumo" id="minimo_consumo" type="hidden" value="" />
 <div id="progreso" class="progreso">Espere un momento</div>  
 </body>
 </html>
