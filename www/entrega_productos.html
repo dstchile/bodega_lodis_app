@@ -359,9 +359,16 @@ function procesar()
 			{
 				autorizacion="NO";
 			}
-		else if(autorizacion!="SI")
+		else if(autorizacion!="SI"&&tot_foll==0)
 			{
 			alert("Debe solicitar autorizacion para no entregar folletaria")
+				console.log("Debe solicitar autorizacion para no entregar folletaria")
+			carga_productos();
+			return 0;	
+			}
+		else if(autorizacion!="SI"&&tot_foll>=1)
+			{
+			alert("Debe ingresar un minimo de "+minimo+" unidades para folletaria")
 				console.log("Debe solicitar autorizacion para no entregar folletaria")
 			carga_productos();
 			return 0;	
