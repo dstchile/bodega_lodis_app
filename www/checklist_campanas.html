@@ -455,6 +455,8 @@ function guarda_tarea()
 			}
 		else
 			{
+			onPause();//enviando las imagenes;
+					
 			var formData = new FormData();
 			var dato='GUARDA_TAREA';
 			formData.append("dato", dato);
