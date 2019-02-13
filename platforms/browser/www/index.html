@@ -38,11 +38,11 @@
 					}
 				else
 					{
-					var e_fabrica=device.manufacturer;
+					var e_marca=device.manufacturer;
 					var e_modelo=device.model;
 					var e_plataforma=device.platform;
 					var e_version=device.version;
-					var ver_app=document.getElementById('version_app').value;
+					var ver_app=document.getElementById('version_app').innerHTML;
 					var usuario=document.getElementById('usuario').value;
 	
 					var formData = new FormData();
@@ -52,7 +52,6 @@
 					formData.append("e_plataforma", e_plataforma);
 					formData.append("e_version", e_version);
 					formData.append("ver_app", ver_app);
-					alert("user:"+usuario+"  marca:"+e_marca+"  modelo:"+e_modelo+"   plataforma:"+e_plataforma+"  version os:"+e_version+"  ver app:"+ver_app+"   ")
 					$.ajax({
 						type: 'POST',
 						url: servidor+'/bodega_lodis_movil/info_equipo.php',
@@ -61,7 +60,6 @@
 						contentType: false,
 						success: function (result) 
 							{
-							alert ("resul:"+result);
 							location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+obj.bodega;
 							}
 						})
@@ -135,6 +133,87 @@ function datos_equipo()
 	document.getElementById('version_app').innerHTML = versionapp;
 				
 	});
+	
+/////////////comporbación de permisos////////////////
+	var permissions = cordova.plugins.permissions;
+	permissions.hasPermission(permissions.CAMERA, function(status) 
+		{
+		  if (status.hasPermission) 
+			{
+			// here you can savely start your own plugin because you already have CAMERA permission
+			}
+		  else 
+			{
+			// need to request camera permission
+			permissions.requestPermission(permissions.CAMERA, success, error);
+			function error() 
+				{
+				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
+			  // camera permission not turned on
+				}
+		
+			function success(status) 
+				{
+				if (status.hasPermission) 
+					{
+				// user accepted, here you can start your own plugin
+					}
+				}
+			}
+		});
+	permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function(status) 
+		{
+		  if (status.hasPermission) 
+			{
+			// here you can savely start your own plugin because you already have CAMERA permission
+			}
+		  else 
+			{
+			// need to request camera permission
+			permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
+			function error() 
+				{
+				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
+			  // camera permission not turned on
+				}
+		
+			function success(status) 
+				{
+				if (status.hasPermission) 
+					{
+				// user accepted, here you can start your own plugin
+					}
+				}
+			}
+		});
+	permissions.hasPermission(permissions.ACCESS_FINE_LOCATION, function(status) 
+		{
+		  if (status.hasPermission) 
+			{
+			// here you can savely start your own plugin because you already have CAMERA permission
+			}
+		  else 
+			{
+			// need to request camera permission
+			permissions.requestPermission(permissions.ACCESS_FINE_LOCATION, success, error);
+			function error() 
+				{
+				alert("Hubo un error , intente habilitar el permiso manualmente en las configuraciones del teléfono")
+			  // camera permission not turned on
+				}
+		
+			function success(status) 
+				{
+				if (status.hasPermission) 
+					{
+				// user accepted, here you can start your own plugin
+					}
+				}
+			}
+		});	
+	
+/////////////comporbación de permisos////////////////
+
 	
 	
 	}

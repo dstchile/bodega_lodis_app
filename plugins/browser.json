@@ -27,6 +27,12 @@
         },
         "com.wezka.nativecamera": {
             "PACKAGE_NAME": "cl.dstchile.lodisapp"
+        },
+        "cordova-plugin-gpslocation": {
+            "PACKAGE_NAME": "cl.dstchile.lodisapp"
+        },
+        "cordova-plugin-android-permissions": {
+            "PACKAGE_NAME": "cl.dstchile.lodisapp"
         }
     },
     "dependent_plugins": {

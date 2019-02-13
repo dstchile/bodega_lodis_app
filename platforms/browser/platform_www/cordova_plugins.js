@@ -313,6 +313,14 @@ module.exports = [
         "clobbers": [
             "navigator.camera"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-android-permissions/www/permissions-dummy.js",
+        "id": "cordova-plugin-android-permissions.Permissions",
+        "pluginId": "cordova-plugin-android-permissions",
+        "clobbers": [
+            "cordova.plugins.permissions"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -326,7 +334,9 @@ module.exports.metadata =
     "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-geolocation": "2.4.1",
     "cordova-plugin-background-mode": "0.7.2",
-    "com.wezka.nativecamera": "0.1.2"
+    "com.wezka.nativecamera": "0.1.2",
+    "cordova-plugin-gpslocation": "1.0.0",
+    "cordova-plugin-android-permissions": "1.0.0"
 }
 // BOTTOM OF METADATA
 });
