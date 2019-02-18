@@ -260,7 +260,7 @@ function procesar()
 				alert("debe especificar marca y modelo en posicion "+z);
 				return 0;	
 				}
-			if((tests[i]==false)&&((cuotas_iniciales[i]=='')||(cuotas_arriendo[i]=='')||(precios_venta[i]=='')))
+			if((tests[i]==false)&&(marcas[i]!='NO-APLICA')&&((cuotas_iniciales[i]=='')||(cuotas_arriendo[i]=='')||(precios_venta[i]=='')))
 				{
 				alert("debe especificar Cuota inicial, cuota arriendo y precio venta en posicion "+z);
 				return 0;	
