@@ -238,6 +238,7 @@ function procesar()
 		var tests={};
 		var marcas={};
 		var modelos={};
+		var motivos_cambio={};
 		var cuotas_iniciales={};
 		var cuotas_arriendo={};
 		var precios_venta={};
@@ -248,6 +249,7 @@ function procesar()
 			console.log("valor:"+tests[i]+"---");
 			marcas[i]=document.getElementById('marca_cambio'+i).value;
 			modelos[i]=document.getElementById('modelo_cambio'+i).value;
+			motivos_cambio[i]=document.getElementById('motivo_cambio'+i).value;
 			cuotas_iniciales[i]=document.getElementById('cuota_inicial_cambio'+i).value;
 			cuotas_arriendo[i]=document.getElementById('cuota_arriendo_cambio'+i).value;
 			precios_venta[i]=document.getElementById('precio_venta_cambio'+i).value;
@@ -258,9 +260,14 @@ function procesar()
 				alert("debe especificar marca y modelo en posicion "+z);
 				return 0;	
 				}
-			if((cuotas_iniciales[i]=='')||(cuotas_arriendo[i]=='')||(precios_venta[i]==''))
+			if((tests[i]==false)&&((cuotas_iniciales[i]=='')||(cuotas_arriendo[i]=='')||(precios_venta[i]=='')))
 				{
 				alert("debe especificar Cuota inicial, cuota arriendo y precio venta en posicion "+z);
+				return 0;	
+				}
+			if((tests[i]==false)&&(motivos_cambio[i]==''))
+				{
+				alert("debe especificar un motivo de cambio en posicion "+z);
 				return 0;	
 				}
 			
@@ -279,6 +286,7 @@ function procesar()
 		var cuotas_iniciales=JSON.stringify(cuotas_iniciales);
 		var cuotas_arriendo=JSON.stringify(cuotas_arriendo);
 		var precios_venta=JSON.stringify(precios_venta);
+		var motivos_cambio=JSON.stringify(motivos_cambio);
 		var formData = new FormData();
 		var dato='PROCESAR_DUMMIES';
 		formData.append("dato", dato);
@@ -293,6 +301,7 @@ function procesar()
 		formData.append("cuotas_iniciales", cuotas_iniciales);
 		formData.append("cuotas_arriendo", cuotas_arriendo);
 		formData.append("precios_venta", precios_venta);
+		formData.append("motivos_cambio", motivos_cambio);
 		//formData.append("nofactible", nofactible);
 		formData.append("comentario", comentario);
 		formData.append("usuario", nombre_usuario);
@@ -392,7 +401,7 @@ function carga_dummies()
 							tabla_html+='<option value="'+obj.marcas_listado[x]+'">'+obj.marcas_listado[x]+'</option>';
 							}
 						tabla_html+='</select>';
-						tabla_html+='<select name="modelo_cambio'+i+'" id="modelo_cambio'+i+'" >';  
+						tabla_html+='<select name="modelo_cambio'+i+'" id="modelo_cambio'+i+'" onchange="list_precios_cambio('+i+')" >';  
 						if (obj.modelos_cambio[i]!='')
 							{
 							tabla_html+='<option value="'+obj.modelos_cambio[i]+'">'+obj.modelos_cambio[i]+'</option>';
@@ -407,14 +416,40 @@ function carga_dummies()
 							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Inicial:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_inicial_cambio'+i+'" id="cuota_inicial_cambio'+i+'" value="'+obj.cuota_inicial_cambio[i]+'"  onfocus="this.select()"/></div></div>'; 
 							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Arriendo:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_arriendo_cambio'+i+'" id="cuota_arriendo_cambio'+i+'" value="'+obj.cuota_arriendo_cambio[i]+'" onfocus="this.select()" /></div></div>';  
 							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Precio Venta:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="precio_venta_cambio'+i+'" id="precio_venta_cambio'+i+'" value="'+obj.precio_venta_cambio[i]+'" onfocus="this.select()" /></div></div>';  
-							tabla_html+='<div><div style=" display:inline-block; width:100%; text-align:left;color:#F00; font-weight:bold;">Nota:Si la tienda no tiene Tier para el modelo seleccionado debe llenar los campos con un 1</div></div>';  
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Motivo cambio:</div><div style="display:inline-block; width:50%">';  
+							tabla_html+='<select name="motivo_cambio'+i+'" id="motivo_cambio'+i+'" >';  
+							if (obj.motivos_cambio[i]!='')
+								{
+								tabla_html+='<option value="'+obj.motivos_cambio[i]+'">'+obj.motivos_cambio[i]+'</option>';
+								}
+							else
+								{
+								tabla_html+='<option value=""></option>';
+								}
+							tabla_html+='<option value="FALTA DUMMIE">FALTA DUMMIE</option>';
+							tabla_html+='<option value="FALTA TIER">FALTA TIER</option>';
+							tabla_html+='</select>';
+							tabla_html+='</div></div>';  
 							}
 						else
 							{
 							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Inicial:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_inicial_cambio'+i+'" id="cuota_inicial_cambio'+i+'" value="'+obj.cuota_inicial[i]+'"  onfocus="this.select()"/></div></div>'; 
 							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Cuota Arriendo:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="cuota_arriendo_cambio'+i+'" id="cuota_arriendo_cambio'+i+'" value="'+obj.cuota_arriendo[i]+'" onfocus="this.select()" /></div></div>';  
 							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Precio Venta:</div><div style="display:inline-block; width:50%"><input type="number" style=" display:block; box-sizing: border-box; text-align:right;" name="precio_venta_cambio'+i+'" id="precio_venta_cambio'+i+'" value="'+obj.precio_venta[i]+'" onfocus="this.select()" /></div></div>';  
-							tabla_html+='<div><div style=" display:inline-block; width:100%; text-align:left;color:#F00; font-weight:bold;">Nota:Si la tienda no tiene Tier para el modelo seleccionado debe  llenar los campos con un 1</div></div>';  
+							tabla_html+='<div><div style=" display:inline-block; width:50%; text-align:left;">Motivo cambio:</div><div style="display:inline-block; width:50%">';  
+							tabla_html+='<select name="motivo_cambio'+i+'" id="motivo_cambio'+i+'" >';  
+							if (obj.motivos_cambio[i]!='')
+								{
+								tabla_html+='<option value="'+obj.motivos_cambio[i]+'">'+obj.motivos_cambio[i]+'</option>';
+								}
+							else
+								{
+								tabla_html+='<option value=""></option>';
+								}
+							tabla_html+='<option value="FALTA DUMMIE">FALTA DUMMIE</option>';
+							tabla_html+='<option value="FALTA TIER">FALTA TIER</option>';
+							tabla_html+='</select>';
+							tabla_html+='</div></div>';  
 							}
 							
 						tabla_html+='</div>';
@@ -478,6 +513,42 @@ function list_modelos_cambio(valor)
 				$('#modelo_cambio'+valor).selectmenu('refresh')
 				}
 			
+			}
+		});
+
+	}
+function list_precios_cambio(valor)
+	{
+	var marca=document.getElementById('marca_cambio'+valor).value;
+	var modelo=document.getElementById('modelo_cambio'+valor).value;
+	var formData = new FormData();
+	var dato='LISTA_PRECIOS_CAMBIO';
+	formData.append("dato", dato);
+	formData.append("marca", marca);
+	formData.append("modelo", modelo);
+	$.ajax({
+		type: 'POST',
+		url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+		data: formData,
+		processData: false,
+		contentType: false,
+		success: function (result) 
+			{
+			console.log(result);
+			var obj = JSON.parse(result);
+			
+			if (obj.cuota_inicial!=null)
+				{
+				document.getElementById('cuota_inicial_cambio'+valor).value=obj.cuota_inicial;
+				document.getElementById('cuota_arriendo_cambio'+valor).value=obj.cuota_arriendo;
+				document.getElementById('precio_venta_cambio'+valor).value=obj.precio_venta;
+				}
+			else
+				{
+				document.getElementById('cuota_inicial_cambio'+valor).value='';
+				document.getElementById('cuota_arriendo_cambio'+valor).value='';
+				document.getElementById('precio_venta_cambio'+valor).value='';
+				}
 			}
 		});
 
