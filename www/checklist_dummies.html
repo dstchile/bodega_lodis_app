@@ -426,7 +426,14 @@ function carga_dummies()
 								{
 								tabla_html+='<option value=""></option>';
 								}
-							tabla_html+='<option value="FALTA DUMMIE">FALTA DUMMIE</option>';
+							if(/ACC/.test(ver_lay))
+								{
+								tabla_html+='<option value="FALTA ACC">FALTA ACC</option>';
+								}
+							else
+								{
+								tabla_html+='<option value="FALTA DUMMIE">FALTA DUMMIE</option>';
+								}
 							tabla_html+='<option value="FALTA TIER">FALTA TIER</option>';
 							tabla_html+='</select>';
 							tabla_html+='</div></div>';  
@@ -446,7 +453,15 @@ function carga_dummies()
 								{
 								tabla_html+='<option value=""></option>';
 								}
-							tabla_html+='<option value="FALTA DUMMIE">FALTA DUMMIE</option>';
+							var ver_lay=document.getElementById('layout').value;
+							if(/ACC/.test(ver_lay))
+								{
+								tabla_html+='<option value="FALTA ACC">FALTA ACC</option>';
+								}
+							else
+								{
+								tabla_html+='<option value="FALTA DUMMIE">FALTA DUMMIE</option>';
+								}
 							tabla_html+='<option value="FALTA TIER">FALTA TIER</option>';
 							tabla_html+='</select>';
 							tabla_html+='</div></div>';  
