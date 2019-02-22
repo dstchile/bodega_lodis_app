@@ -500,9 +500,17 @@ function list_modelos_cambio(valor)
 			
 			if (obj.modelos_cambio!=null)
 				{
-				document.getElementById('cuota_inicial_cambio'+valor).value='';
-				document.getElementById('cuota_arriendo_cambio'+valor).value='';
-				document.getElementById('precio_venta_cambio'+valor).value='';
+				var ver_lay=document.getElementById('layout').value;
+				if(/ACC/.test(ver_lay))
+					{
+					}
+				else
+					{
+					document.getElementById('cuota_inicial_cambio'+valor).value='';
+					document.getElementById('cuota_arriendo_cambio'+valor).value='';
+					document.getElementById('precio_venta_cambio'+valor).value='';
+					}
+				console.log("layout:"+ver_lay+"---")
 				$('#modelo_cambio'+valor).empty().append();
 				$('#modelo_cambio'+valor).append('<option value=""></option>');
 				for (i=0;i<obj.modelos_cambio.length;i++)
@@ -545,9 +553,16 @@ function list_precios_cambio(valor)
 				}
 			else
 				{
-				document.getElementById('cuota_inicial_cambio'+valor).value='';
-				document.getElementById('cuota_arriendo_cambio'+valor).value='';
-				document.getElementById('precio_venta_cambio'+valor).value='';
+				var ver_lay=document.getElementById('layout').value;
+				if(/ACC/.test(ver_lay))
+					{
+					}
+				else
+					{
+					document.getElementById('cuota_inicial_cambio'+valor).value='';
+					document.getElementById('cuota_arriendo_cambio'+valor).value='';
+					document.getElementById('precio_venta_cambio'+valor).value='';
+					}
 				}
 			}
 		});
