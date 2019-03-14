@@ -349,7 +349,11 @@ function carga_item()
 						{
 						////////////////comentario
 						var i=0;
+						document.getElementById('mostrar_man').style.display='';
 						tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
+						tabla_html+='<tr bgcolor="#DA291C" id="comentario_man" style="display:none;" >'; 
+						tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">Indique brevemente en el comentario lo que se requiere para mantención?';
+						tabla_html+='</font></div></td></tr>';
 						tabla_html+='<tr bgcolor="#DA291C">'; 
 						tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">COMENTARIO</font></div></td>';
 						tabla_html+='</tr>';
@@ -460,6 +464,7 @@ function carga_item()
 	}
 function check_procesos()
 	{
+		
 		var region=document.getElementById('region').value;
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
@@ -570,12 +575,14 @@ function siguiente()
 	}
 function cerrar_checklist()
 	{
+		var reporte_man=document.getElementById('requiere_man').value;
 		var latitud=document.getElementById('latitud').value;
 		var longitud=document.getElementById('longitud').value;
 		var region=document.getElementById('region').value;
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
 		var lugar=document.getElementById('lugar').value;
+		if (reporte_man=='' && lugar=='COMENTARIO'){alert("Debe indicar si la tienda requiere o no mantención"); return 0 ;}
 		var i=0;
 		var tests=[];
 		var items=[];
@@ -587,6 +594,8 @@ function cerrar_checklist()
 			id_items[i]=document.getElementById('id_item'+i).value;
 			console.log("valor:"+tests[i]+"---");
 			console.log("id valor:"+id_items[i]+"---");
+			if (reporte_man=='SI' && tests[i]==''){alert("Debe ingresar un comentario para REQUIERE MANTENCION SI"); return 0 ;}
+		
 			i++;
 			}
 		var formData = new FormData();
@@ -602,6 +611,7 @@ function cerrar_checklist()
 		formData.append("usuario", nombre_usuario);
 		formData.append("latitud", latitud);
 		formData.append("longitud", longitud);
+		formData.append("reporte_man", reporte_man);
 		$.ajax({
 			type: 'POST',
 			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
@@ -642,7 +652,19 @@ function estado_noaplica()
 			document.getElementById('procesar').style.display='none';
 		}
 	}
-
+function sel_man(valor)
+	{
+		console.log("valor select:"+valor+"----")
+	if (valor=='SI')
+		{
+			document.getElementById('comentario_man').style.display='';
+		}
+	if (valor=='NO')
+		{
+			document.getElementById('comentario_man').style.display='none';
+		}
+	
+	}
 </script>
 </head>
 
@@ -676,6 +698,14 @@ function estado_noaplica()
         <label for="lugar" class="select">Sección:</label>
         <select name="lugar" id="lugar" onchange="carga_item()">
         </select>
+        <div id="mostrar_man" style="display:none;">
+        <label for="requiere_man" class="select">Tienda requiere mantención?</label>
+        <select name="requiere_man" id="requiere_man" onchange="sel_man(this.value)">
+          <option value=""></option>
+          <option value="NO">NO</option>
+          <option value="SI">SI</option>
+        </select>
+        </div>
         <input type="hidden" name="latitud" id="latitud" />
         <input type="hidden" name="longitud" id="longitud" />
         <div id="equipos" style="width:100%; " align="center"></div>
