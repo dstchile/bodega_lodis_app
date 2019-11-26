@@ -41,6 +41,10 @@ function carga_checklist()
 		{
 		location.href="checklist.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
 		}
+function carga_tienda_cerrada()
+		{
+		location.href="tienda_cerrada.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
+		}
 function carga_campanas()
 		{
 		location.href="checklist_campanas.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
@@ -65,9 +69,11 @@ function carga_extintores()
 		
 		var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
 		crear_tablas(db);
+		console.log ("procesando la base si no existe")
 		}
 	function crear_tablas(db)
 		{
+		console.log ("creando la base si no existe")
 		db.transaction(populateDB, errorCB, successCB);
 		function populateDB(tx) 
 			{
@@ -102,6 +108,7 @@ function carga_extintores()
       <a href="#" onclick="carga_tareas()" rel="external" data-role="button">TAREAS</a>
       <a href="#" onclick="carga_extintores()" rel="external" data-role="button">EXTINTORES</a>
       <a href="#" onclick="carga_checklist()" rel="external" data-role="button">CHECKLIST</a>
+      <a href="#" onclick="carga_tienda_cerrada()" rel="external" data-role="button">TIENDA CERRADA</a>
       <a href="#" onclick="carga_comercio()" rel="external" data-role="button">COMERCIO</a>
       <a href="#" rel="external"  onClick="navigator.app.exitApp();" data-role="button">Salir</a>
 	        

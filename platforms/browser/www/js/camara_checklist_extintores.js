@@ -118,7 +118,7 @@
 					{
 					if(err.code!=0 && err.code!=undefined)
 						{
-							alert("Error processing SQL 2: "+err.code);
+							alert("Error processing SQL 3: "+err.code);
 						}
 					}
 				function successCB2() 

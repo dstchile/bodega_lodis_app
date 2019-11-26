@@ -1,0 +1,432 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin título</title>
+<style>
+.borde_imagen {
+background-color: #F5F5F5;
+border: 5px solid #FFFFFF;
+box-shadow: 0 0 22px #111111;
+margin-top: 10px;
+margin-bottom: 10px;
+margin-right: 10px;
+margin-left: 10px;
+//width:50%;
+}
+.Table  
+	{  
+		display: table;  
+	}  
+.Title  
+	{  
+		display: table-caption;  
+		text-align: center;  
+		font-weight: bold;  
+		font-size: larger;  
+	}    
+.Heading  
+	{  
+		display: table-row;  
+		font-weight: bold; 
+		text-align: center;  
+	}  
+.Row  
+	{  
+		display: table-row;  
+	}  
+.Cell  
+	{  
+		display: table-cell;  
+		border: solid;  
+		border-width: thin;  
+		padding-left: 5px;  
+		padding-right: 5px;  
+	}  
+</style>
+<link href="jquery-mobile/jquery.mobile.theme-1.0.min.css" rel="stylesheet" type="text/css" />
+<link href="jquery-mobile/jquery.mobile.structure-1.0.min.css" rel="stylesheet" type="text/css" />
+<script src="jquery-mobile/jquery-1.6.4.min.js" type="text/javascript"></script>
+<script src="jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/conexion.js"></script>
+<script type="text/javascript" src="js/descarga.js"></script>
+<script>
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() 
+	{
+    		
+	//document.getElementById('e_fabrica').value=device.manufacturer;
+	//document.getElementById('e_modelo').value=device.model;
+	//document.getElementById('e_plataforma').value=device.platform;
+	//document.getElementById('e_version').value=device.version;
+	////////insertamos la imagen a la tabla
+	navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy: true,maximumAge: 0,timeout:10000});
+    function onSuccess(position) 
+		{
+        var element = document.getElementById('geolocation');
+        element.value = 'GPS OK';
+		document.getElementById('latitud').value=position.coords.latitude;
+		document.getElementById('longitud').value=position.coords.longitude;
+		}
+	function onError(error) 
+		{
+        var element = document.getElementById('geolocation');
+        element.value="Fail NETWORK try now with GPS"
+		//element.value = error.message;
+		GPSLocation.getCurrentPosition(onSuccess2, onError2,{maximumAge: 0,timeout:20000});
+		 //alert('code: '+ error.code+'\n'+'message: ' + error.message + '\n');
+    	}
+	function onSuccess2(position) 
+		{
+        var element = document.getElementById('geolocation');
+        element.value = 'GPS OK';
+		document.getElementById('latitud').value=position.coords.latitude;
+		document.getElementById('longitud').value=position.coords.longitude;
+		}
+	function onError2(error) 
+		{
+        var element = document.getElementById('geolocation');
+        element.value = error.message;
+		 //alert('code: '+ error.code+'\n'+'message: ' + error.message + '\n');
+    	}
+	}	
+document.addEventListener("backbutton", presskey, false);
+function presskey()
+	{
+	location.href="menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
+	document.removeEventListener("backbutton", presskey, false);
+	}
+
+
+function getParameterByName(name) 
+	{
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+var usuario = getParameterByName('usuario');
+var password = getParameterByName('password');
+var nombre_usuario = getParameterByName('nombre_usuario');
+var bodega = getParameterByName('bodega');
+
+console.log("usuario:"+usuario+" --");
+console.log("password:"+password+" --");
+console.log("nombre:"+nombre_usuario+" --");
+
+$(document).ready(function() 
+	{
+		
+		var dato="REGIONES";
+		var formData = new FormData();
+		formData.append("dato", dato);
+		formData.append("usuario", nombre_usuario);
+		$.ajax({
+			type: 'POST',
+			url: servidor+'/bodega_lodis_movil/checklist_tareas_guarda_dato_app2.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				console.log(result);
+				var obj = JSON.parse(result);
+				
+				if (obj.regiones!=null)
+					{
+					var regionx = getParameterByName('region');
+					$('#region').empty().append();
+					$('#region').append('<option value="'+regionx+'">'+regionx+'</option>');
+					for (i=0;i<obj.regiones.length;i++)
+						{
+						$('#region').append('<option value="'+obj.regiones[i]+'">'+obj.regiones[i]+'</option>');
+						}
+					
+					$('#region').selectmenu('refresh')
+					
+					/////recibimos valor tipolocal externo/////
+					var tipo_localx = getParameterByName('tipo_local');
+					if (tipo_localx!='')
+						{
+						$('#tipo_local').empty().append();
+						$('#tipo_local').append('<option value="'+tipo_localx+'">'+tipo_localx+'</option>');
+						$('#tipo_local').append('<option value="KIOSCO">KIOSCO</option>');
+						$('#tipo_local').append('<option value="TIENDA">TIENDA</option>');
+						$('#tipo_local').selectmenu('refresh')
+						carga_punto();
+						}
+					/////recibimos valor tipolocal externo/////
+					
+					}
+				
+				}
+			});
+		
+	})
+
+function carga_punto()
+	{
+		var region=document.getElementById('region').value;
+		var tipo_local=document.getElementById('tipo_local').value;
+		var formData = new FormData();
+		var dato='PUNTOS';
+		formData.append("dato", dato);
+		formData.append("region", region);
+		formData.append("tipo_local", tipo_local);
+		formData.append("usuario", nombre_usuario);
+		$.ajax({
+			type: 'POST',
+			url: servidor+'/bodega_lodis_movil/checklist_tareas_guarda_dato_app2.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				console.log(result);
+				var obj = JSON.parse(result);
+				
+				if (obj.puntos!=null)
+					{
+					var id_puntox = getParameterByName('id_punto');
+					var puntox = getParameterByName('punto');
+					$('#punto').empty().append();
+					$('#punto').append('<option value="'+id_puntox+'">'+puntox+'</option>');
+					for (i=0;i<obj.puntos.length;i++)
+						{
+						$('#punto').append('<option value="'+obj.id_puntos[i]+'">'+obj.puntos[i]+'</option>');
+						}
+					
+					$('#punto').selectmenu('refresh')
+					
+					if(puntox!=''){carga_tareas();}
+						
+					}
+				
+				}
+			});
+
+	}
+function procesar_cierre()
+	{
+		onPause();
+		var region=document.getElementById('region').value;
+		var tipo_local=document.getElementById('tipo_local').value;
+		var id_punto=document.getElementById('punto').value;
+		var ele=document.getElementById('punto');
+		var punto=document.getElementById('punto').options[ele.selectedIndex].text;
+		var comentario=document.getElementById('comentario').value;
+		var latitud=document.getElementById('latitud').value;
+		var longitud=document.getElementById('longitud').value;
+		
+		
+		var dato='PROCESAR_TIENDA_CERRADA';
+		var formData = new FormData();
+		formData.append("dato", dato);
+		formData.append("region", region);
+		formData.append("tipo_local", tipo_local);
+		formData.append("id_punto", id_punto);
+		formData.append("punto", punto);
+		formData.append("comentario", comentario);
+		formData.append("usuario", nombre_usuario);
+		formData.append("latitud", latitud);
+		formData.append("longitud", longitud);
+		$.ajax({
+			type: 'POST',
+			url: servidor+'/bodega_lodis_movil/checklist_tienda_cerrada_guarda_dato_app2.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				//alert(result);
+				console.log(result);
+				var obj = JSON.parse(result);
+				if (obj.resultado=='PROCESADO')
+					{
+					alert (obj.respuesta);	
+					location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
+					}
+				if (obj.resultado=='')
+					{
+					alert (obj.respuesta);	
+					}
+				}
+			});
+
+	}
+
+function carga_comentario()
+	{
+		var tipo_local=document.getElementById('tipo_local').value;
+		var id_punto=document.getElementById('punto').value;
+		////////////////////////////////////////////////////////////////////////
+		
+		var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
+		db.transaction(queryDB,errorCB);
+		function queryDB(tx)
+			{
+			var f = new Date();
+			var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
+			var h = new Date();
+			var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
+			
+			console.log("datos:"+tipo_local+"-----"+id_punto+"-----");
+			///id="'+id_programa+'"'
+			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and fecha_base="'+fechabase+'" and area="TIENDA_CERRADA" ',[],querySuccess,errorCB);
+			console.log( "Leyendo datos guardados." );
+			}
+		function errorCB(err) 
+			{
+			if(err.code!=0 && err.code!=undefined)
+				{
+					alert("Error processing SQL 2: "+err.code);
+				}
+			}
+		function querySuccess(tx,result)
+			{
+			console.log( "Insert ok" );
+			$.each(result.rows,function(index)
+				{
+				var row = result.rows.item(index);
+				var id_imagen=row['id'];
+				var ruta=row['ruta'];
+				//alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---");
+				var photo = document.getElementById('photo');
+	          	photo.src = ruta;
+				document.getElementById('id_imagen').value=id_imagen;
+				//lectura_tablas(ip,nombre_bd,usuariobd,passbd);
+				});
+			if (result.rows.length==0)
+				{
+				var photo = document.getElementById('photo');
+	          	photo.src = "img/fondo.jpg";
+				document.getElementById('id_imagen').value='';
+				}
+			}
+		
+		////////////////////////////////////////////////////////////////////////
+				
+		////////////buscamos si existe imagen en el servidor//////////////////
+		var f = new Date();
+		var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
+		var h = new Date();
+		var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
+		var ruta_url='https://www.sistemalodis.cl/fotos_checklist/'+tipo_local+'-'+id_punto+'-COMENTARIO-'+fechabase+'-foto1.jpg';
+		$.ajax({
+				url:ruta_url,
+				error: function()
+				{
+				},
+				success: function()
+				{
+				photo.src = ruta_url;
+				}
+			});
+		////////////buscamos si existe imagen en el servidor//////////////////
+		
+		var formData = new FormData();
+		var dato='COMENTARIO';
+		formData.append("dato", dato);
+		formData.append("tipo_local", tipo_local);
+		formData.append("id_punto",id_punto);
+		formData.append("usuario", nombre_usuario);
+		$.ajax({
+			type: 'POST',
+			url: servidor+'/bodega_lodis_movil/checklist_tienda_cerrada_guarda_dato_app2.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				console.log(result);
+				var obj = JSON.parse(result);
+				
+				if (obj.comentario!=null)
+					{
+					$('#listado').empty().append();
+					var tabla_html='';
+					////////////////comentario
+					tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
+					tabla_html+='<tr bgcolor="#DA291C">'; 
+					tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">COMENTARIO</font></div></td>';
+					tabla_html+='</tr>';
+					tabla_html+='<tr bgcolor="#FFFFFF">'; 
+					tabla_html+='<td><div align="center">'; 
+					if (obj.comentario!='')
+						{
+						tabla_html+='<textarea name="comentario" id="comentario" cols="35" rows="3">'+obj.comentario+'</textarea>';
+						}
+					else
+						{
+						tabla_html+='<textarea name="comentario" id="comentario" cols="35" rows="3"></textarea>';
+						}
+					tabla_html+='</div></td>';
+					tabla_html+='</tr>';
+					tabla_html+='</table>';
+					$('#listado').append(tabla_html);
+					$("#listado").trigger("create");
+					//document.getElementById('takePhoto').style.visibility='hidden';
+					//document.getElementById('cerrar').style.display='';
+					document.getElementById('takePhoto').style.display='';
+					document.getElementById('procesar').style.display='none';
+					document.getElementById('oculto').style.visibility='visible';
+					}
+				
+				}
+			});
+
+	}
+	
+
+</script>
+</head>
+
+<body>
+<div data-role="page" id="checklist">
+  <div data-role="header">
+    <h1>TIENDA CERRADA</h1>
+  </div>
+  <div data-role="content">
+       <label for="geolocation">GPS</label>
+        <input type="text" name="geolocation" id="geolocation" value="Buscando Geoposición" readonly="readonly"  />
+        <input type="hidden" name="latitud" id="latitud" />
+        <input type="hidden" name="longitud" id="longitud" />
+       
+       <fieldset class="ui-grid-a">
+            <div class="ui-block-a">
+            <label for="region" class="select">Región:</label>
+            <select name="region" id="region" onchange="carga_punto()">
+            </select>
+            </div>
+            <div class="ui-block-b">
+            <label for="tipo_local" class="select">Tipo Local:</label>
+            <select name="tipo_local" id="tipo_local" onchange="carga_punto()">
+            <option value=""></option>
+            <option value="KIOSCO">KIOSCO</option>
+            <option value="TIENDA">TIENDA</option>
+            </select>
+            </div>
+        </fieldset>
+        <label for="punto" class="select">Punto:</label>
+        <select name="punto" id="punto" onchange="carga_comentario()">
+        </select>
+        <div id="listado" style="width:100%; " align="center"></div>
+ 		<div id="oculto" style="visibility:hidden;">
+        <!-- sección para la imagen 1-->
+        <a href="#" data-role="button" id="takePhoto" style="display:none;">TOMAR FOTO A TIENDA</a>
+        <a href="#" data-role="button" id="procesar" onclick="procesar_cierre()" style="display:none;">GUARDAR</a>
+        <input type="hidden" name="id_imagen" id="id_imagen" />
+        <div style="text-align:center"><img id="photo" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/></div>
+        <!-- sección para la imagen 1-->
+        <script type="text/javascript" src="js/camara_checklist_tienda_cerrada.js"></script>
+        <script type="text/javascript">app.initialize();</script>
+		<!--<a href="#" data-role="button" id="procesar" onclick="procesar()">PROCESAR</a>-->
+        </div>
+        
+  </div>
+</div>
+
+	  
+</body>
+</html>
