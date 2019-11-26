@@ -39,7 +39,7 @@
 	<splash src="splash-land-xhdpi.png" platform="android" qualifier="land-xhdpi"/>
 	<preference name="SplashScreenDelay" value="4000"/>
 	<preference name="SplashMaintainAspectRatio" value="true"/>
-	<preference name="phonegap-version" value="cli-7.1.0"/>
+	<preference name="phonegap-version" value="cli-8.0.0"/>
 	
 	
 	
