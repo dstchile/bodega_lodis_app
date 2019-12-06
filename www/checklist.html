@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <title>Documento sin título</title>
 <style>
 .borde_imagen {
@@ -26,6 +27,43 @@
 	box-sizing:border-box;
 	z-index:999;
 }
+.contenedor_firma {
+	border: 2px solid #ccc;
+	width: 100%;
+	height: 200px;
+	overflow-y: scroll;
+	right: 0px;
+	position: relative;
+	border-radius:10px;
+	background-color: #ffffff;
+}
+#canvas_firma{
+	background-color:#FFF;
+}
+.progreso {
+	 width: 250px; 
+     height: 100px; 
+     line-height: 100px; /* <-- this is what you must define */
+	 vertical-align:middle;
+  	 border: 3px solid #FFF;
+     background: #300668;
+	 position:fixed;
+	 text-color:white;
+	 left:50%;
+	 margin-left:-125px;
+	 top:125px;
+	 text-align:center;
+	 font-size: 16px;
+	 font-style: normal;
+	 font-weight: normal;
+	 border-radius: 10px;
+	 color: #FFFFFF;
+	 z-index:100;
+  opacity: 0;
+  transition: opacity 2s linear;
+  visibility:hidden;
+	 
+}
 </style>
 <link href="jquery-mobile/jquery.mobile.theme-1.0.min.css" rel="stylesheet" type="text/css" />
 <link href="jquery-mobile/jquery.mobile.structure-1.0.min.css" rel="stylesheet" type="text/css" />
@@ -34,6 +72,7 @@
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/conexion.js"></script>
 <script type="text/javascript" src="js/descarga.js"></script>
+<script type="text/javascript" src="js/firma.js"></script>
 <script>
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() 
@@ -44,6 +83,8 @@ function onDeviceReady()
 	//document.getElementById('e_plataforma').value=device.platform;
 	//document.getElementById('e_version').value=device.version;
 	////////insertamos la imagen a la tabla
+	document.getElementById('geolocation').value='Buscando';
+        
 	navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy: true,maximumAge: 0,timeout:10000});
     function onSuccess(position) 
 		{
@@ -102,7 +143,9 @@ console.log("nombre:"+nombre_usuario+" --");
 
 $(document).ready(function() 
 	{
-		
+		console.log("cargando modulo de firma")				
+		startup();
+						
 		var dato="REGIONES";
 		var formData = new FormData();
 		formData.append("dato", dato);
@@ -235,6 +278,12 @@ function carga_lugares()
 	}
 function carga_item()
 	{
+		////ventana espere un momento////
+		document.getElementById('progreso').style.visibility = 'visible';
+		document.getElementById('progreso').style.opacity = 1;
+		document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+		///fin de la ventana/////
+		
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
 		var lugar=document.getElementById('lugar').value;
@@ -350,12 +399,14 @@ function carga_item()
 						////////////////comentario
 						var i=0;
 						document.getElementById('mostrar_man').style.display='';
+						document.getElementById('resumen_checklist').style.display='';
+						document.getElementById('datos_ejecutivo').style.display='';
 						tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
 						tabla_html+='<tr bgcolor="#DA291C" id="comentario_man" style="display:none;" >'; 
-						tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">Indique brevemente en el comentario lo que se requiere para mantención?';
+						tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">Indique brevemente en el comentario lo que se requiere para mantención!';
 						tabla_html+='</font></div></td></tr>';
 						tabla_html+='<tr bgcolor="#DA291C">'; 
-						tabla_html+='<td bgcolor="#DA291C"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">COMENTARIO</font></div></td>';
+						tabla_html+='<td bgcolor="#000000"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">COMENTARIO</font></div></td>';
 						tabla_html+='</tr>';
 						tabla_html+='<tr bgcolor="#FFFFFF">'; 
 						tabla_html+='<td><div align="center">'; 
@@ -373,6 +424,42 @@ function carga_item()
 						tabla_html+='</tr>';
 						tabla_html+='</table>';
 						$('#listado').append(tabla_html);
+					
+						//////////////////detalle general de checklist///////////////////////////
+						$('#resumen_checklist').empty().append();
+						var tabla_html2='';
+						tabla_html2+='<table border="1" width="100%" cellpadding="0" cellspacing="0">';
+						tabla_html2+='<tr bgcolor="#000000" width="5%">';
+						tabla_html2+='<td colspan=2><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">RESUMEN DE CHECKLIST</font></div></td>';
+						for (i=0;i<obj.secciones.length;i++)
+							{
+							tabla_html2+='<tr  width="90%">';
+							tabla_html2+='<td align="left"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A">'+obj.secciones[i]+'</font></td>';
+							if (obj.estado_secciones[i]=='OK')
+								{
+								tabla_html2+='<td align="center" bgcolor="#00FF00"><font face="Arial, Helvetica, sans-serif" size="2" color="#000000">'+obj.estado_secciones[i]+'</font></td>';
+								}
+							else if (obj.estado_secciones[i]=='FALLA')
+								{
+								tabla_html2+='<td align="center" bgcolor="#FF0000";><font face="Arial, Helvetica, sans-serif" size="2" color="#FFFFFF">'+obj.estado_secciones[i]+'</font></td>';
+								}
+							else
+								{
+								tabla_html2+='<td align="center"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A">'+obj.estado_secciones[i]+'</font></td>';
+								}
+							tabla_html2+='</tr>';
+							if (obj.contenedor_secciones[i]!='')
+								{
+								tabla_html2+='<tr  width="90%" bgcolor="#FFFFFF">';
+								tabla_html2+='<td align="left" colspan="2"><font face="Arial, Helvetica, sans-serif" size="2" color="#63666A">'+obj.contenedor_secciones[i]+'</font></td>';
+								tabla_html2+='</tr>';
+								}
+							}
+						tabla_html2+='</table>';
+						$('#resumen_checklist').append(tabla_html2);
+						//////////////////detalle general de checklist///////////////////////////
+					
+					
 						document.getElementById('takePhoto').style.visibility='hidden';
 						document.getElementById('oculto').style.visibility='hidden';
 						document.getElementById('cerrar').style.display='';
@@ -381,6 +468,8 @@ function carga_item()
 					else if(lugar!='') 
 						{
 						document.getElementById('mostrar_man').style.display='none';
+						document.getElementById('resumen_checklist').style.display='none';
+						document.getElementById('datos_ejecutivo').style.display='none';
 						var activacion3="";
 						tabla_html+='<table border="1" width="100%" cellpadding="0" cellspacing="0">';
 						tabla_html+='<tr bgcolor="#DA291C" width="5%">';
@@ -460,6 +549,12 @@ function carga_item()
 						}
 					}
 				
+				
+				///se oculta mendaje de espera
+				document.getElementById('progreso').style.visibility = 'hidden';
+				document.getElementById('progreso').style.opacity = 0;
+				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+				/////////////////////////////
 				}
 			});
 
@@ -577,6 +672,9 @@ function siguiente()
 	}
 function cerrar_checklist()
 	{
+		var rut_ejecutivo = document.getElementById('rut_ejecutivo').value;
+		var canvas = document.getElementById('canvas_firma');
+		var firma = canvas.toDataURL();
 		var reporte_man=document.getElementById('requiere_man').value;
 		var latitud=document.getElementById('latitud').value;
 		var longitud=document.getElementById('longitud').value;
@@ -602,6 +700,9 @@ function cerrar_checklist()
 			}
 		var formData = new FormData();
 		var dato='CERRARCHECK';
+		formData.append("ver_ope", "197");
+		formData.append("rut_ejecutivo", rut_ejecutivo);
+		formData.append("firma", firma);
 		formData.append("dato", dato);
 		formData.append("region", region);
 		formData.append("tipo_local", tipo_local);
@@ -667,17 +768,28 @@ function sel_man(valor)
 		}
 	
 	}
+function borrar_firma()
+	{
+		var canvas = document.getElementById("canvas_firma");
+		var contexto = canvas.getContext("2d");
+		contexto.clearRect(0, 0, canvas.width, canvas.height);
+	}
 </script>
 </head>
 
-<body>
+<body onLoad="startup()">
 <div data-role="page" id="checklist">
   <div data-role="header">
     <h1>CHECKLIST</h1>
   </div>
   <div data-role="content">
         <label for="geolocation">GPS</label>
-        <input type="text" name="geolocation" id="geolocation" value="Buscando Geoposición" readonly="readonly"  />
+        <div class="ui-grid-a">
+            <div class="ui-block-a" style="width:85%; "><input type="text" style="width:95%" name="geolocation" id="geolocation" value="Buscando Geoposición" readonly="readonly"  /></div>
+            <div class="ui-block-b" style="width:13%;text-align:center;">
+            <div style="display:inline-block"><a href="#" data-role="button" data-icon="refresh" data-mini="false" data-iconpos="notext" onclick="onDeviceReady()">Refresh</a></div>
+            </div>	   
+        </div>
         <fieldset class="ui-grid-a">
             <div class="ui-block-a">
             <label for="region" class="select">Región:</label>
@@ -690,6 +802,7 @@ function sel_man(valor)
             <option value=""></option>
             <option value="KIOSCO">KIOSCO</option>
             <option value="TIENDA">TIENDA</option>
+            <option value="TIENDA X">TIENDA X</option>
             </select>
             </div>
         </fieldset>
@@ -712,7 +825,17 @@ function sel_man(valor)
         <input type="hidden" name="longitud" id="longitud" />
         <div id="equipos" style="width:100%; " align="center"></div>
  		<div id="listado" style="width:100%; " align="center"></div>
- 		<a href="#" data-role="button" id="cerrar" onclick="cerrar_checklist()" style=" display:none;">CERRAR CHECKLIST</a>  
+ 		<div id="resumen_checklist" style="width:100%; " align="center"></div>
+ 		<div id="datos_ejecutivo" style="width:100%; display:none ">
+ 		<label for="rut_ejecutivo">Ingrese Rut:</label>
+		<input type="number" name="rut_ejecutivo" id="rut_ejecutivo" value=""  />
+		<label for="firma_ejecutivo">Ingrese Firma:</label>
+		<div class="contenedor_firma">
+        <canvas id="canvas_firma" width="auto" height="200"></canvas>
+        </div>
+            <a href="#" data-role="button" data-mini="true" data-inline="true" id="borrar" onclick="borrar_firma()">Borrar</a>  
+        </div>
+        <a href="#" data-role="button" id="cerrar" onclick="cerrar_checklist()" style=" display:none;">CERRAR CHECKLIST</a>  
 		<a href="#" data-role="button" id="procesar" onclick="siguiente()" style=" display:none;">GUARDAR</a>
         <div id="oculto" style=" visibility:hidden;">
         <!-- sección para la imagen 1-->
@@ -729,5 +852,6 @@ function sel_man(valor)
     <font color="white"><div style="position:absolute; top:25%; width:100%" id="com_flo"></div></font>
     <div style="position:absolute; bottom:10px; left:45%" align="center"><input type="button" style="background-color:#CCC; border:1px outset #999; border-radius:5px; font-weight:bold; padding:5px; margin:5px" onClick="comentario_flotantex.style.display='none'" value="Cerrar"></div>
 </div>
+<div id="progreso" class="progreso">Espere un momento</div>  
 </body>
 </html>

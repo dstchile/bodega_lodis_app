@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="cl.dstchile.lodisapp" version="1.9.6">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="cl.dstchile.lodisapp" version="1.9.7">
     <name>Lodis App</name>
     <description>
         Checklist-Campañas-Dummies-Inventarios

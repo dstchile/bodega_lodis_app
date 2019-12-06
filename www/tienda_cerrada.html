@@ -61,7 +61,8 @@ function onDeviceReady()
 	//document.getElementById('e_plataforma').value=device.platform;
 	//document.getElementById('e_version').value=device.version;
 	////////insertamos la imagen a la tabla
-	navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy: true,maximumAge: 0,timeout:10000});
+	document.getElementById('geolocation').value='Buscando';
+    navigator.geolocation.getCurrentPosition(onSuccess, onError,{enableHighAccuracy: true,maximumAge: 0,timeout:10000});
     function onSuccess(position) 
 		{
         var element = document.getElementById('geolocation');
@@ -389,7 +390,12 @@ function carga_comentario()
   </div>
   <div data-role="content">
        <label for="geolocation">GPS</label>
-        <input type="text" name="geolocation" id="geolocation" value="Buscando Geoposición" readonly="readonly"  />
+       <div class="ui-grid-a">
+            <div class="ui-block-a" style="width:85%; "><input type="text" style="width:95%" name="geolocation" id="geolocation" value="Buscando Geoposición" readonly="readonly"  /></div>
+            <div class="ui-block-b" style="width:13%;text-align:center;">
+            <div style="display:inline-block"><a href="#" data-role="button" data-icon="refresh" data-mini="false" data-iconpos="notext" onclick="onDeviceReady()">Refresh</a></div>
+            </div>	   
+        </div>
         <input type="hidden" name="latitud" id="latitud" />
         <input type="hidden" name="longitud" id="longitud" />
        
@@ -405,6 +411,7 @@ function carga_comentario()
             <option value=""></option>
             <option value="KIOSCO">KIOSCO</option>
             <option value="TIENDA">TIENDA</option>
+            <option value="TIENDA X">TIENDA X</option>
             </select>
             </div>
         </fieldset>
