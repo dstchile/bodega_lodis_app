@@ -145,7 +145,7 @@ $(document).ready(function()
 	{
 		console.log("cargando modulo de firma")				
 		startup();
-						
+		
 		var dato="REGIONES";
 		var formData = new FormData();
 		formData.append("dato", dato);
@@ -174,17 +174,16 @@ $(document).ready(function()
 					$('#region').selectmenu('refresh')
 					
 					/////recibimos valor tipolocal externo/////
-					var tipo_localx = getParameterByName('tipo_local');
-					if (tipo_localx!='')
-						{
+						var tipo_localx = getParameterByName('tipo_local');
 						$('#tipo_local').empty().append();
 						$('#tipo_local').append('<option value="'+tipo_localx+'">'+tipo_localx+'</option>');
-						$('#tipo_local').append('<option value="KIOSCO">KIOSCO</option>');
-						$('#tipo_local').append('<option value="TIENDA">TIENDA</option>');
+						for (i=0;i<obj.tipolocal.length;i++)
+							{
+							$('#tipo_local').append('<option value="'+obj.tipolocal[i]+'">'+obj.tipolocal[i]+'</option>');
+							}
 						$('#tipo_local').selectmenu('refresh')
 						carga_punto();
 						carga_lugares();
-						}
 					/////recibimos valor tipolocal externo/////
 					}
 				
@@ -620,6 +619,12 @@ function check_procesos()
 	}
 function siguiente()
 	{
+		////ventana espere un momento////
+		document.getElementById('progreso').style.visibility = 'visible';
+		document.getElementById('progreso').style.opacity = 1;
+		document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+		///fin de la ventana/////
+		
 		var region=document.getElementById('region').value;
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
@@ -659,6 +664,11 @@ function siguiente()
 			contentType: false,
 			success: function (result) 
 				{
+				///se oculta mendaje de espera
+				document.getElementById('progreso').style.visibility = 'hidden';
+				document.getElementById('progreso').style.opacity = 0;
+				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+				/////////////////////////////
 				console.log(result);
 				var obj = JSON.parse(result);
 				if (obj.proceso=='PROCESADO')
@@ -670,9 +680,50 @@ function siguiente()
 			});
 
 	}
-function cerrar_checklist()
+function busca_nombre()
 	{
 		var rut_ejecutivo = document.getElementById('rut_ejecutivo').value;
+		document.getElementById('nombre_ejecutivo').value='';
+		document.getElementById('nombre_ejecutivo').placeholder="Buscando nombre...";
+		var formData = new FormData();
+		var dato='BUSCA_NOMBRE';
+		formData.append("rut_ejecutivo", rut_ejecutivo);
+		formData.append("dato", dato);
+		$.ajax({
+			type: 'POST',
+			url: servidor+'/bodega_lodis_movil/checklist_checklist_guarda_dato_app2.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				console.log(result);
+				var obj = JSON.parse(result);
+				
+				var nombre_ejecutivo = document.getElementById('nombre_ejecutivo').value;
+		
+				if (nombre_ejecutivo==''&&obj.respuesta!='')
+					{
+					document.getElementById('nombre_ejecutivo').value=obj.respuesta;
+					}
+				else
+					{
+					document.getElementById('nombre_ejecutivo').placeholder="No encontrado, ingrese nombre";			
+					}
+				}
+			});
+
+	}
+function cerrar_checklist()
+	{
+		////ventana espere un momento////
+		document.getElementById('progreso').style.visibility = 'visible';
+		document.getElementById('progreso').style.opacity = 1;
+		document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+		///fin de la ventana/////
+		
+		var rut_ejecutivo = document.getElementById('rut_ejecutivo').value;
+		var nombre_ejecutivo = document.getElementById('nombre_ejecutivo').value;
 		var canvas = document.getElementById('canvas_firma');
 		var firma = canvas.toDataURL();
 		var reporte_man=document.getElementById('requiere_man').value;
@@ -701,6 +752,7 @@ function cerrar_checklist()
 		var formData = new FormData();
 		var dato='CERRARCHECK';
 		formData.append("ver_ope", "197");
+		formData.append("nombre_ejecutivo", nombre_ejecutivo);
 		formData.append("rut_ejecutivo", rut_ejecutivo);
 		formData.append("firma", firma);
 		formData.append("dato", dato);
@@ -723,6 +775,11 @@ function cerrar_checklist()
 			contentType: false,
 			success: function (result) 
 				{
+				///se oculta mendaje de espera
+				document.getElementById('progreso').style.visibility = 'hidden';
+				document.getElementById('progreso').style.opacity = 0;
+				document.getElementById('progreso').style.transition = 'visibility 1s, opacity 0.5s';
+				/////////////////////////////
 				console.log(result);
 				var obj = JSON.parse(result);
 				if (obj.resultado=='CERRADO')
@@ -828,7 +885,9 @@ function borrar_firma()
  		<div id="resumen_checklist" style="width:100%; " align="center"></div>
  		<div id="datos_ejecutivo" style="width:100%; display:none ">
  		<label for="rut_ejecutivo">Ingrese Rut:</label>
-		<input type="number" name="rut_ejecutivo" id="rut_ejecutivo" value=""  />
+		<input type="number" name="rut_ejecutivo" id="rut_ejecutivo" value="" onblur="busca_nombre()" placeholder="RUT sin puntos ni guión" onfocus="this.select()"  />
+		<label for="nombre_ejecutivo">Ingrese Nombre Aprobador:</label>
+		<input type="text" name="nombre_ejecutivo" id="nombre_ejecutivo" value=""  onfocus="this.select()" />
 		<label for="firma_ejecutivo">Ingrese Firma:</label>
 		<div class="contenedor_firma">
         <canvas id="canvas_firma" width="auto" height="200"></canvas>

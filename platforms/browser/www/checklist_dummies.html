@@ -118,16 +118,15 @@ $(document).ready(function()
 					$('#region').selectmenu('refresh')
 					
 					/////recibimos valor tipolocal externo/////
-					var tipo_localx = getParameterByName('tipo_local');
-					if (tipo_localx!='')
-						{
+						var tipo_localx = getParameterByName('tipo_local');
 						$('#tipo_local').empty().append();
 						$('#tipo_local').append('<option value="'+tipo_localx+'">'+tipo_localx+'</option>');
-						$('#tipo_local').append('<option value="KIOSCO">KIOSCO</option>');
-						$('#tipo_local').append('<option value="TIENDA">TIENDA</option>');
+						for (i=0;i<obj.tipolocal.length;i++)
+							{
+							$('#tipo_local').append('<option value="'+obj.tipolocal[i]+'">'+obj.tipolocal[i]+'</option>');
+							}
 						$('#tipo_local').selectmenu('refresh')
 						carga_punto();
-						}
 					/////recibimos valor tipolocal externo/////
 					
 					}
@@ -219,7 +218,13 @@ function carga_layout()
 					
 					$('#layout').selectmenu('refresh')
 					}
-				
+				console.log("cantida de dummies:"+obj.layouts.length)
+				if (obj.layouts.length==1&&obj.layouts[0]=='')
+					{
+					console.log("sin dummies asignados")
+					document.getElementById('oculto').style.visibility='visible';
+					alert("NO EXISTEN DUMMIES ASIGNADOS A ESTA TIENDA")
+					}
 				}
 			});
 
