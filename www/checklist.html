@@ -701,7 +701,12 @@ function busca_nombre()
 				var obj = JSON.parse(result);
 				
 				var nombre_ejecutivo = document.getElementById('nombre_ejecutivo').value;
-		
+				
+				if (obj.error=='RUT')
+					{
+					alert("RUT "+rut_ejecutivo+" no válido");	
+					document.getElementById('rut_ejecutivo').value="";;
+					}
 				if (nombre_ejecutivo==''&&obj.respuesta!='')
 					{
 					document.getElementById('nombre_ejecutivo').value=obj.respuesta;
@@ -831,6 +836,7 @@ function borrar_firma()
 		var contexto = canvas.getContext("2d");
 		contexto.clearRect(0, 0, canvas.width, canvas.height);
 	}
+
 </script>
 </head>
 
@@ -847,7 +853,7 @@ function borrar_firma()
             <div style="display:inline-block"><a href="#" data-role="button" data-icon="refresh" data-mini="false" data-iconpos="notext" onclick="onDeviceReady()">Refresh</a></div>
             </div>	   
         </div>
-        <fieldset class="ui-grid-a">
+    	<fieldset class="ui-grid-a">
             <div class="ui-block-a">
             <label for="region" class="select">Región:</label>
             <select name="region" id="region" onchange="carga_punto()">
@@ -885,8 +891,8 @@ function borrar_firma()
  		<div id="resumen_checklist" style="width:100%; " align="center"></div>
  		<div id="datos_ejecutivo" style="width:100%; display:none ">
  		<label for="rut_ejecutivo">Ingrese Rut:</label>
-		<input type="number" name="rut_ejecutivo" id="rut_ejecutivo" value="" onblur="busca_nombre()" placeholder="RUT sin puntos ni guión" onfocus="this.select()"  />
-		<label for="nombre_ejecutivo">Ingrese Nombre Aprobador:</label>
+        <input type="text" name="rut_ejecutivo" id="rut_ejecutivo" value="" onblur="busca_nombre()" placeholder="RUT sin puntos ni guión" onfocus="this.select()" />
+   		<label for="nombre_ejecutivo">Ingrese Nombre Aprobador:</label>
 		<input type="text" name="nombre_ejecutivo" id="nombre_ejecutivo" value=""  onfocus="this.select()" />
 		<label for="firma_ejecutivo">Ingrese Firma:</label>
 		<div class="contenedor_firma">
