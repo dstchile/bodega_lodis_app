@@ -37,7 +37,7 @@ function onPause()
 				var area=row['area'];
 				
 				var ruta=row['ruta'];
-				//alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---tipo:"+tipo_local);
+				alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---tipo:"+tipo_local);
 				
 				var image = new Image();
 			 	image.src = ruta;
@@ -93,6 +93,7 @@ function onPause()
 								function successCB2() 
 									{
 									console.log( "UPDATE ok" );
+									alert("updaet ok");
 									}
 								/////////////////////////////////////
 								

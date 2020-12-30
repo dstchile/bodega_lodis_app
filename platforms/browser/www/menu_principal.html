@@ -61,6 +61,10 @@ function carga_extintores()
 		{
 		location.href="checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
 		}
+function carga_levantamientos()
+		{
+		location.href="checklist_levantamientos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega+"";
+		}
 
 	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady()
@@ -107,6 +111,7 @@ function carga_extintores()
       <a href="#" onclick="carga_entrega()" rel="external" data-role="button">ENTREGA DE PRODUCTOS</a>
       <a href="#" onclick="carga_tareas()" rel="external" data-role="button">TAREAS</a>
       <a href="#" onclick="carga_extintores()" rel="external" data-role="button">EXTINTORES</a>
+      <a href="#" onclick="carga_levantamientos()" rel="external" data-role="button">LEVANTAMIENTOS</a>
       <a href="#" onclick="carga_checklist()" rel="external" data-role="button">CHECKLIST</a>
       <a href="#" onclick="carga_tienda_cerrada()" rel="external" data-role="button">TIENDA CERRADA</a>
       <a href="#" onclick="carga_comercio()" rel="external" data-role="button">COMERCIO</a>

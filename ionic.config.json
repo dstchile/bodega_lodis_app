@@ -1,0 +1,7 @@
+{
+  "name": "App_lodis",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "custom"
+}
