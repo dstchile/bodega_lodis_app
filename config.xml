@@ -30,6 +30,7 @@
 	<icon src="icon-48-mdpi.png" density="mdpi" width="48" height="48"/>
 	<icon src="icon-72-hdpi.png" density="hdpi" width="72" height="72"/>
 	<icon src="icon-96-xhdpi.png" density="xhdpi" width="96" height="96"/>
+	<preference name="android-targetSdkVersion" value="29" />
 	</platform>
 	
 	<splash src="splash.png"/>
