@@ -421,6 +421,11 @@ function procesar()
 					alert (obj.respuesta);	
 					location.href = "checklist_extintores.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
 					}
+				if (obj.resultado=='SIGUE LEVANTAMIENTO')
+					{
+					alert (obj.respuesta);	
+					location.href = "checklist_levantamientos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
+					}
 				if (obj.resultado=='SIGUE CHECKLIST')
 					{
 					alert (obj.respuesta);	

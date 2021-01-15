@@ -106,7 +106,21 @@ function onDeviceReady()
 	//document.getElementById('e_plataforma').value=device.platform;
 	//document.getElementById('e_version').value=device.version;
 	////////insertamos la imagen a la tabla
-	
+	var photo = document.getElementById('photo');
+	tmpDir = new File(ruta);
+	exists = tmpDir.exists();
+	if (exists){
+	alert("existe");
+	}
+	ruta="file:///storage/emulate/0/Android/data/com.adobe.phonegap.app/cache/1609346143521.jpg";
+	//ruta="file:///Android/data/com.adobe.phonegap.app/cache/1609346143521.jpg";
+	tmpDir = new File(ruta);
+	exists = tmpDir.exists();
+	if (exists){
+	alert("existe");
+	}
+	photo.src = ruta;
+				
 	}	
 document.addEventListener("backbutton", presskey, false);
 function presskey()
@@ -141,7 +155,7 @@ $(document).ready(function()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -183,6 +197,7 @@ $(document).ready(function()
 
 function carga_punto()
 	{
+		console.log("cargando puntos");
 		var region=document.getElementById('region').value;
 		var tipo_local=document.getElementById('tipo_local').value;
 		var formData = new FormData();
@@ -193,7 +208,7 @@ function carga_punto()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -215,7 +230,7 @@ function carga_punto()
 					
 					$('#punto').selectmenu('refresh')
 					
-					if(puntox!=''){carga_extintores();}
+					if(puntox!=''){carga_levantamientos();}
 						
 					}
 				
@@ -223,7 +238,7 @@ function carga_punto()
 			});
 
 	}
-function carga_extintores()
+function carga_levantamientos()
 	{
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
@@ -235,7 +250,7 @@ function carga_extintores()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -250,20 +265,19 @@ function carga_extintores()
 					tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
 					tabla_html+='<tr bgcolor="#DA291C">'; 
 					tabla_html+='<td bgcolor="#DA291C" width="5%"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF"></font></div></td>';
-					tabla_html+='<td bgcolor="#DA291C" width="65%"><div align="center" class="tamano_letra"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">TIPO</font></div></td>';
-					tabla_html+='<td bgcolor="#DA291C" width="20%"><div align="center" class="tamano_letra"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">VENCE EN</font></div></td>';
+					tabla_html+='<td bgcolor="#DA291C" width="65%"><div align="center" class="tamano_letra"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">OBSERVACIONES</font></div></td>';
 					tabla_html+='<td bgcolor="#DA291C" width="10%"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF"></font></div></td>';
 					tabla_html+='</tr>';
-					for (i=0;i<obj.extintores.length;i++)
+					for (i=0;i<obj.observaciones.length;i++)
 						{
+						console.log("id imagen:"+obj.id_ima1[i]+" --"+obj.id_ima2[i]);
 						tabla_html+='<tr bgcolor="#FFFFFF">'; 
 						tabla_html+='<td><div align="center">'; 
-						tabla_html+='<a href="#" onclick="borrar_imagen('+obj.id_extintores[i]+')" data-role="button" data-icon="delete" data-iconpos="notext" data-mini="true" data-theme="b">Delete</a>';
+						tabla_html+='<a href="#" onclick="borrar_imagen('+obj.id_lev[i]+')" data-role="button" data-icon="delete" data-iconpos="notext" data-mini="true" data-theme="b">Delete</a>';
 						tabla_html+='</div></td>';
-						tabla_html+='<td><div align="left" class="tamano_letra">'+obj.extintores[i]+'</div></td>'; 
-						tabla_html+='<td><div align="center" class="tamano_letra">'+obj.fecha_caducidades[i]+'</div></td>'; 
+						tabla_html+='<td><div align="left" class="tamano_letra">'+obj.observaciones[i]+'</div></td>'; 
 						tabla_html+='<td><div align="center">'; 
-						tabla_html+='<a href="#"  onclick="ver_imagen('+obj.id_extintores[i]+')" style="z-index:1"><img src="img/icono-img50.png" width="30" height="30" alt="VER" /></a>';
+						tabla_html+='<a href="#"  onclick="ver_imagen(\''+obj.id_ima1[i]+'\',\''+obj.id_ima2[i]+'\')" style="z-index:1"><img src="img/icono-img50.png" width="30" height="30" alt="VER" /></a>';
 						tabla_html+='</div></td>';
 						tabla_html+='</tr>';
 						}
@@ -286,14 +300,14 @@ function carga_extintores()
 			});
 
 	}
-function borrar_imagen(id_extintor)
+function borrar_imagen(id_registro)
 	{
 		document.getElementById('seccion').style.display='block';
 		document.getElementById('marco2').style.opacity=1;
 		document.getElementById('marco2').style.transition='opacity 0.5s linear';
 		document.getElementById('marco2').style.visibility='visible';
 		document.getElementById('ventana2').style.visibility='visible';
-		document.getElementById('id_extintormemo').value=id_extintor;
+		document.getElementById('id_registromemo').value=id_registro;
 	}
 function cancela_borrar()
 	{
@@ -302,21 +316,21 @@ function cancela_borrar()
 		document.getElementById('marco2').style.visibility='hidden';
 		document.getElementById('seccion').style.display='none';
 		document.getElementById('ventana2').style.visibility='hidden';
-		document.getElementById('id_extintormemo').value='';
+		document.getElementById('id_registromemo').value='';
 	}
 function acepta_borrar()
 	{
-	var id_extintor=document.getElementById('id_extintormemo').value;
+	var id_registro=document.getElementById('id_registromemo').value;
 		
 		
-		var dato='BORRAR_EXTINTOR';
+		var dato='BORRAR_REGISTRO';
 		var formData = new FormData();
 		formData.append("dato", dato);
-		formData.append("id_extintor", id_extintor);
+		formData.append("id_registro", id_registro);
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -332,17 +346,17 @@ function acepta_borrar()
 					document.getElementById('marco2').style.visibility='hidden';
 					document.getElementById('seccion').style.display='none';
 					document.getElementById('ventana2').style.visibility='hidden';
-					document.getElementById('id_extintormemo').value='';
+					document.getElementById('id_registromemo').value='';
 				
-					carga_extintores();
+					carga_levantamientos();
 					}
 				}
 			});
 
 	}
-function ver_imagen(id_extintor,extintor)
+function ver_imagen(fech1,fech2)
 	{
-		//alert(id_extintor);
+		console.log(fech1+" "+fech2);
 		var photo = document.getElementById('photo');
 		photo.src = "img/fondo.jpg";
 		document.getElementById('id_imagen').value='';
@@ -370,11 +384,14 @@ function ver_imagen(id_extintor,extintor)
 			
 			console.log("datos:"+tipo_local+"-----"+id_punto+"-----");
 			///id="'+id_programa+'"'
-			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and id_campana="'+id_extintor+'" and fecha_base="'+fechabase+'" and area="EXTINTOR" ',[],querySuccess,errorCB);
+			alert('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and fecha_base="'+fech1+'" and hora_base="'+fech2+'" and area="LEVANTAMIENTO" ');
+			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and fecha_base="'+fech1+'" and hora_base="'+fech2+'" and area="LEVANTAMIENTO" ',[],querySuccess,errorCB);
 			console.log( "Leyendo datos guardados." );
 			}
 		function errorCB(err) 
 			{
+			console.log( "error" );
+			check_servidor(fech1,fech2);
 			if(err.code!=0 && err.code!=undefined)
 				{
 					alert("Error processing SQL 2: "+err.code);
@@ -388,31 +405,46 @@ function ver_imagen(id_extintor,extintor)
 				var row = result.rows.item(index);
 				var id_imagen=row['id'];
 				var ruta=row['ruta'];
-				//alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---");
+				alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---");
 				var photo = document.getElementById('photo');
-	          	photo.src = ruta;
+	          	
+				tmpDir = new File(ruta);
+				exists = tmpDir.exists();
+				if (exists){
+				alert("existe");
+				}
+				//ruta="file:///storage/emulate/0/Android/data/com.adobe.phonegap.app/cache/1609346143521.jpg";
+				ruta="file:///Android/data/com.adobe.phonegap.app/cache/1609346143521.jpg";
+				tmpDir = new File(ruta);
+				exists = tmpDir.exists();
+				if (exists){
+				alert("existe");
+				}
+				photo.src = ruta;
 				document.getElementById('id_imagen').value=id_imagen;
 				//lectura_tablas(ip,nombre_bd,usuariobd,passbd);
 				});
 			if (result.rows.length==0)
 				{
+				alert("sin registro");
 				var photo = document.getElementById('photo');
 	          	photo.src = "img/fondo.jpg";
 				document.getElementById('id_imagen').value='';
-				check_servidor();
+				check_servidor(fech1,fech2);
 				}
 			}
 		
 		////////////////////////////////////////////////////////////////////////
 				
 		////////////buscamos si existe imagen en el servidor//////////////////
-		function check_servidor()
+		function check_servidor(fech1,fech2)
 			{
 		var f = new Date();
 		var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
 		var h = new Date();
 		var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
-		var ruta_url=servidor1+'/fotos_extintores/'+id_punto+'-'+id_extintor+'.jpg';
+		alert(servidor1+'/fotos_levantamientos/'+id_punto+'-'+fech1+'-T-'+fech2+'.jpg');
+		var ruta_url=servidor1+'/fotos_levantamientos/'+id_punto+'-'+fech1+'-T-'+fech2+'.jpg';
 		$.ajax({
 				url:ruta_url,
 				error: function()
@@ -444,74 +476,81 @@ function procesar()
 		var id_punto=document.getElementById('punto').value;
 		var ele=document.getElementById('punto');
 		var punto=document.getElementById('punto').options[ele.selectedIndex].text;
-		var tipo_extintor=document.getElementById('tipo_extintor').value;
-		var mes_vence=document.getElementById('mes_vence').value;
-		var ano_vence=document.getElementById('ano_vence').value;
+		var observaciones=document.getElementById('observaciones').value;
+		var re_imagen=document.getElementById('re_imagen').value;
 		
-		
-		var dato='PROCESAR_EXTINTOR';
-		var formData = new FormData();
-		formData.append("dato", dato);
-		formData.append("region", region);
-		formData.append("tipo_local", tipo_local);
-		formData.append("id_punto", id_punto);
-		formData.append("punto", punto);
-		formData.append("tipo_extintor", tipo_extintor);
-		formData.append("mes_vence", mes_vence);
-		formData.append("ano_vence", ano_vence);
-		formData.append("usuario", nombre_usuario);
-		$.ajax({
-			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (result) 
-				{
-				//alert(result);
-				console.log(result);
-				var obj = JSON.parse(result);
-				if (obj.resultado=='PROCESADO')
+		if (observaciones=='')
+			{
+			alert("Debe ingresar una observacion");
+			}
+		else if(observaciones.length>=550)
+			{
+			alert("A superado el maximo de 550 caracteres permitidos, debe reducir el comentario");
+			}
+		else
+			{
+			var dato='PROCESAR_REGISTRO';
+			var formData = new FormData();
+			formData.append("dato", dato);
+			formData.append("region", region);
+			formData.append("tipo_local", tipo_local);
+			formData.append("id_punto", id_punto);
+			formData.append("punto", punto);
+			formData.append("observaciones", observaciones);
+			formData.append("re_imagen", re_imagen);
+			formData.append("usuario", nombre_usuario);
+			$.ajax({
+				type: 'POST',
+				url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (result) 
 					{
-					/////////////////////////////////////
-					var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
-					db.transaction(populateDB2, errorCB2, successCB2);
-					function populateDB2(tx) 
+					//alert(result);
+					console.log(result);
+					var obj = JSON.parse(result);
+					if (obj.resultado=='PROCESADO')
 						{
-						var f = new Date();
-						var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
-						var h = new Date();
-						var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
-								
-						
-						//alert ("update:"+obj.id_extintor+"---");
-						tx.executeSql("UPDATE checklist_imagen_cola set id_campana='"+obj.id_extintor+"' where id_campana='NA' and area='EXTINTOR'");
-						console.log( "Leyendo datos guardados." );
-						}
-					function errorCB2(err) 
-						{
-						if(err.code!=0 && err.code!=undefined)
+						/////////////////////////////////////
+						var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
+						db.transaction(populateDB2, errorCB2, successCB2);
+						function populateDB2(tx) 
 							{
-								alert("Error processing SQL 2: "+err.code);
+							var f = new Date();
+							var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
+							var h = new Date();
+							var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
+									
+							
+							//alert ("update:"+obj.id_registro+"---");
+							tx.executeSql("UPDATE checklist_imagen_cola set id_campana='"+obj.id_registro+"' where id_campana='NA' and area='LEVANTAMIENTO'");
+							console.log( "Leyendo datos guardados." );
 							}
+						function errorCB2(err) 
+							{
+							if(err.code!=0 && err.code!=undefined)
+								{
+									alert("Error processing SQL 2: "+err.code);
+								}
+							}
+						function successCB2() 
+							{
+							console.log( "Insert ok" );
+							//alert("proko ");
+							document.getElementById('oculto1').style.display='';
+							document.getElementById('listado').style.display='';
+							document.getElementById('oculto2').style.display='none';
+							carga_levantamientos();
+							}
+						/////////////////////////////////////
+						
+						alert (obj.respuesta);	
+						//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
 						}
-					function successCB2() 
-						{
-						console.log( "Insert ok" );
-						//alert("proko ");
-						document.getElementById('oculto1').style.display='';
-						document.getElementById('listado').style.display='';
-						document.getElementById('oculto2').style.display='none';
-						carga_extintores();
-						}
-					/////////////////////////////////////
-					
-					alert (obj.respuesta);	
-					//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
 					}
-				}
-			});
-
+				});
+			}
 	}
 function procesar1()
 	{
@@ -527,7 +566,7 @@ function procesar1()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -537,11 +576,6 @@ function procesar1()
 				console.log(result);
 				var obj = JSON.parse(result);
 				
-				if (obj.resultado=='SIGUE LEVANTAMIENTO')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist_levantamientos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
 				if (obj.resultado=='SIGUE CHECKLIST')
 					{
 					alert (obj.respuesta);	
@@ -565,7 +599,7 @@ function procesar2()
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
+			url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
 			data: formData,
 			processData: false,
 			contentType: false,
@@ -575,11 +609,6 @@ function procesar2()
 				console.log(result);
 				var obj = JSON.parse(result);
 				
-				if (obj.resultado=='SIGUE LEVANTAMIENTO')
-					{
-					alert (obj.respuesta);	
-					location.href = "checklist_levantamientos.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&region="+region+"&tipo_local="+tipo_local+"&id_punto="+id_punto+"&punto="+punto+"&bodega="+bodega;
-					}
 				if (obj.resultado=='SIGUE CHECKLIST')
 					{
 					alert (obj.respuesta);	
@@ -594,71 +623,39 @@ function procesar2()
 
 	}
 
-function nuevo_extintor()
+function nuevo_registro()
 	{
 	document.getElementById('oculto1').style.display='none';
 	document.getElementById('listado').style.display='none';
 	document.getElementById('oculto2').style.display='';
 	
-	var formData = new FormData();
-		var dato='NUEVO_EXTINTOR';
-		formData.append("dato", dato);
-		formData.append("usuario", nombre_usuario);
-		$.ajax({
-			type: 'POST',
-			url: servidor+'/bodega_lodis_movil/checklist_extintores_guarda_dato_app2.php',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (result) 
-				{
-				console.log(result);
-				var obj = JSON.parse(result);
-				
-				if (obj.tipos!=null)
-					{
-					$('#tipo_extintor').empty().append();
-					$('#tipo_extintor').append('<option value=""></option>');
-					for (i=0;i<obj.tipos.length;i++)
-						{
-						$('#tipo_extintor').append('<option value="'+obj.tipos[i]+'">'+obj.tipos[i]+'</option>');
-						}
-					$('#tipo_extintor').selectmenu('refresh')
-					}
-				if (obj.anos!=null)
-					{
-					$('#ano_vence').empty().append();
-					$('#ano_vence').append('<option value=""></option>');
-					for (i=0;i<obj.anos.length;i++)
-						{
-						$('#ano_vence').append('<option value="'+obj.anos[i]+'">'+obj.anos[i]+'</option>');
-						}
-					$('#ano_vence').selectmenu('refresh')
-					}
-					//document.getElementById('takePhoto').style.visibility='hidden';
-					//document.getElementById('cerrar').style.display='';
-					document.getElementById('procesar').style.display='none';
-					
-				
-				}
-			});
-
-	
 	}
-function cancelar_extintor()
+function cancelar_registro()
 	{
 	document.getElementById('oculto1').style.display='';
 	document.getElementById('listado').style.display='';
 	document.getElementById('oculto2').style.display='none';
 	}
-
+function archivo(valor)
+	{
+		alert(valor);
+		var photo = document.getElementById('photo');
+		var ruta="file:///storage/emulate/0/Android/data/com.adobe.phonegap.app/cache/1609346143521.jpg";
+		//var ruta="C:/storage/emulate/0/Android/data/com.adobe.phonegap.app/cache/1609346143521.jpg";
+	
+		photo.src = ruta;
+	}
+	
 </script>
 </head>
 
 <body>
+<span id="sprytextfield1">
+<input type="text" name="text1" id="text1" />
+<span class="textfieldRequiredMsg">Se necesita un valor.</span></span>
 <div data-role="page" id="checklist">
   <div data-role="header">
-    <h1>EXTINTORES</h1>
+    <h1>PRUEBASs</h1>
   </div>
   <div data-role="content">
         <fieldset class="ui-grid-a">
@@ -679,42 +676,32 @@ function cancelar_extintor()
         </fieldset>
         
         <label for="punto" class="select">Punto:</label>
-        <select name="punto" id="punto" onchange="carga_extintores()">
+        <select name="punto" id="punto" onchange="carga_levantamientos()">
         </select>
         <input type="hidden" name="id_imagen" id="id_imagen" />
+        <input type="hidden" name="re_imagen" id="re_imagen" />
         <div id="listado" style="width:100%; " align="center"></div>
  		<div id="oculto1" style="display:none;">
-        <a href="#" data-role="button" id="nuevo" onclick="nuevo_extintor()" >Nuevo Extintor</a>
-    	<a href="#" data-role="button" id="procesar1" onclick="procesar1()" style="display:none;">No aplica Check Extintores</a>
-        <a href="#" data-role="button" id="procesar2" onclick="procesar2()" style="display:none;">Cerrar Check Extintores</a>
+        <a href="#" data-role="button" id="takePhoto" >Nuevo Registro</a>
+        <!--<a href="#" data-role="button" id="nuevo" onclick="nuevo_registro()" >Nuevo Registro</a>-->
+    	<a href="#" data-role="button" id="procesar1" onclick="procesar1()" style="display:none;">No aplica Levantamiento</a>
+        <a href="#" data-role="button" id="procesar2" onclick="procesar2()" style="display:none;">Cerrar Levantamiento</a>
+        <a href="#" data-role="button" id="subir" onclick="onPause()" >subir imagenes</a>
         </div>
-        <div id="oculto2" style="display:none;">
-        <label for="tipo_extintor" class="select">TIPO DE EXTINTOR:</label>
-        <select name="tipo_extintor" id="tipo_extintor">
-        </select>
-        <label for="mes_vence" class="select">VENCE EN:</label>
-        <select name="mes_vence" id="mes_vence">
-          <option value=""></option>
-          <option value="ENERO">ENERO</option>
-          <option value="FEBRERO">FEBRERO</option>
-          <option value="MARZO">MARZO</option>
-          <option value="ABRIL">ABRIL</option>
-          <option value="MAYO">MAYO</option>
-          <option value="JUNIO">JUNIO</option>
-          <option value="JULIO">JULIO</option>
-          <option value="AGOSTO">AGOSTO</option>
-          <option value="SEPTIEMBRE">SEPTIEMBRE</option>
-          <option value="OCTUBRE">OCTUBRE</option>
-          <option value="NOVIEMBRE">NOVIEMBRE</option>
-          <option value="DICIEMBRE">DICIEMBRE</option>
-        </select>
-        <select name="ano_vence" id="ano_vence">
-        </select>
+        <div id="oculto2">
+        <input type="hidden" name="id_imagen" id="id_imagen" />
+        <div style="text-align:center"><img id="photo" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/>
+          <form id="form1" name="form1" enctype="multipart/form-data" method="post" action="">
+            <input type="file" name="fileField" id="fileField" onchange="archivo(this.value)" />
+          </form>
+        </div>
+        <label for="observaciones" class="select">OBSERVACIONES:</label>
+        <textarea name="observaciones" id="observaciones" cols="" rows=""></textarea>
         <fieldset class="ui-grid-a">
-        <div class="ui-block-a"><a href="#" data-role="button" data-theme="c" id="takePhoto">TOMAR FOTO</a></div>
-        <div class="ui-block-b"><a href="#" data-role="button" data-theme="b" id="cancelar" onclick="cancelar_extintor()" >CANCELAR</a></div>
+        <div class="ui-block-a"><a href="#" data-role="button" data-theme="c" onclick="procesar()" >GUARDAR</a></div>
+        <div class="ui-block-b"><a href="#" data-role="button" data-theme="b" id="cancelar" onclick="cancelar_registro()" >CANCELAR</a></div>
         </fieldset>
-        <script type="text/javascript" src="js/camara_checklist_extintores.js"></script>
+        <script type="text/javascript" src="js/camara_checklist_levantamientos.js"></script>
         <script type="text/javascript">app.initialize();</script>
 	   </div>
   </div>
@@ -729,17 +716,20 @@ function cancelar_extintor()
         </div>
         <div id="marco2" align="center" style="position:absolute; top:30%; width:100%; height:80%; ">
             <div id="ventana2" class="ventana">
-                Se borrará el registro del extintor ¿está seguro?
-                <fieldset class="ui-grid-a">
+                Se borrará el registro <label></label>¿está seguro?
+              <fieldset class="ui-grid-a">
                 <div class="ui-block-a"><button type="button" data-theme="c" onclick="cancela_borrar()">No</button></div>
                 <div class="ui-block-b"><button type="button" data-theme="b" onclick="acepta_borrar()">Si</button></div>	   
                 </fieldset>
-                <input type="hidden" name="id_extintormemo" id="id_extintormemo" />
+                <input type="hidden" name="id_registromemo" id="id_registromemo" />
                 <div style=" position:absolute; bottom:10px; width:100%;">
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
+</script>
 </body>
 </html>

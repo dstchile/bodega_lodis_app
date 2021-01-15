@@ -183,7 +183,6 @@ $(document).ready(function()
 
 function carga_punto()
 	{
-		console.log("cargando puntos");
 		var region=document.getElementById('region').value;
 		var tipo_local=document.getElementById('tipo_local').value;
 		var formData = new FormData();
@@ -226,6 +225,7 @@ function carga_punto()
 	}
 function carga_levantamientos()
 	{
+		
 		var tipo_local=document.getElementById('tipo_local').value;
 		var id_punto=document.getElementById('punto').value;
 		var formData = new FormData();
@@ -242,6 +242,7 @@ function carga_levantamientos()
 			contentType: false,
 			success: function (result) 
 				{
+				
 				console.log(result);
 				var obj = JSON.parse(result);
 				
@@ -251,19 +252,18 @@ function carga_levantamientos()
 					tabla_html+='<table border="0" align="center" bgcolor="#CCCCCC" width="100%">';
 					tabla_html+='<tr bgcolor="#DA291C">'; 
 					tabla_html+='<td bgcolor="#DA291C" width="5%"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF"></font></div></td>';
-					tabla_html+='<td bgcolor="#DA291C" width="65%"><div align="center" class="tamano_letra"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">OBSERVACIONES</font></div></td>';
+					tabla_html+='<td bgcolor="#DA291C" width="65%"><div align="center" class="tamano_letra"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF">TIPO</font></div></td>';
 					tabla_html+='<td bgcolor="#DA291C" width="10%"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#FFFFFF"></font></div></td>';
 					tabla_html+='</tr>';
 					for (i=0;i<obj.observaciones.length;i++)
 						{
-						console.log("id imagen:"+obj.id_ima1[i]+" --"+obj.id_ima2[i]);
 						tabla_html+='<tr bgcolor="#FFFFFF">'; 
 						tabla_html+='<td><div align="center">'; 
 						tabla_html+='<a href="#" onclick="borrar_imagen('+obj.id_lev[i]+')" data-role="button" data-icon="delete" data-iconpos="notext" data-mini="true" data-theme="b">Delete</a>';
 						tabla_html+='</div></td>';
 						tabla_html+='<td><div align="left" class="tamano_letra">'+obj.observaciones[i]+'</div></td>'; 
 						tabla_html+='<td><div align="center">'; 
-						tabla_html+='<a href="#"  onclick="ver_imagen(\''+obj.id_ima1[i]+'\',\''+obj.id_ima2[i]+'\')" style="z-index:1"><img src="img/icono-img50.png" width="30" height="30" alt="VER" /></a>';
+						tabla_html+='<a href="#"  onclick="ver_imagen('+obj.id_lev[i]+')" style="z-index:1"><img src="img/icono-img50.png" width="30" height="30" alt="VER" /></a>';
 						tabla_html+='</div></td>';
 						tabla_html+='</tr>';
 						}
@@ -286,14 +286,14 @@ function carga_levantamientos()
 			});
 
 	}
-function borrar_imagen(id_registro)
+function borrar_imagen(id_lev)
 	{
 		document.getElementById('seccion').style.display='block';
 		document.getElementById('marco2').style.opacity=1;
 		document.getElementById('marco2').style.transition='opacity 0.5s linear';
 		document.getElementById('marco2').style.visibility='visible';
 		document.getElementById('ventana2').style.visibility='visible';
-		document.getElementById('id_registromemo').value=id_registro;
+		document.getElementById('id_levmemo').value=id_lev;
 	}
 function cancela_borrar()
 	{
@@ -302,17 +302,17 @@ function cancela_borrar()
 		document.getElementById('marco2').style.visibility='hidden';
 		document.getElementById('seccion').style.display='none';
 		document.getElementById('ventana2').style.visibility='hidden';
-		document.getElementById('id_registromemo').value='';
+		document.getElementById('id_levmemo').value='';
 	}
 function acepta_borrar()
 	{
-	var id_registro=document.getElementById('id_registromemo').value;
+	var id_lev=document.getElementById('id_levmemo').value;
 		
 		
 		var dato='BORRAR_REGISTRO';
 		var formData = new FormData();
 		formData.append("dato", dato);
-		formData.append("id_registro", id_registro);
+		formData.append("id_lev", id_lev);
 		formData.append("usuario", nombre_usuario);
 		$.ajax({
 			type: 'POST',
@@ -332,7 +332,7 @@ function acepta_borrar()
 					document.getElementById('marco2').style.visibility='hidden';
 					document.getElementById('seccion').style.display='none';
 					document.getElementById('ventana2').style.visibility='hidden';
-					document.getElementById('id_registromemo').value='';
+					document.getElementById('id_levmemo').value='';
 				
 					carga_levantamientos();
 					}
@@ -340,9 +340,9 @@ function acepta_borrar()
 			});
 
 	}
-function ver_imagen(fech1,fech2)
+function ver_imagen(id_lev)
 	{
-		console.log(fech1+" "+fech2);
+		//alert(id_lev);
 		var photo = document.getElementById('photo');
 		photo.src = "img/fondo.jpg";
 		document.getElementById('id_imagen').value='';
@@ -370,18 +370,16 @@ function ver_imagen(fech1,fech2)
 			
 			console.log("datos:"+tipo_local+"-----"+id_punto+"-----");
 			///id="'+id_programa+'"'
-			alert('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and fecha_base="'+fech1+'" and hora_base="'+fech2+'" and area="LEVANTAMIENTO" ');
-			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and fecha_base="'+fech1+'" and hora_base="'+fech2+'" and area="LEVANTAMIENTO" ',[],querySuccess,errorCB);
+			tx.executeSql('SELECT * FROM checklist_imagen_cola where tipo="'+tipo_local+'" and id_punto="'+id_punto+'" and id_campana="'+id_lev+'" and fecha_base="'+fechabase+'" and area="LEVANTAMIENTO" ',[],querySuccess,errorCB);
 			console.log( "Leyendo datos guardados." );
 			}
 		function errorCB(err) 
 			{
-			console.log( "error" );
-			check_servidor(fech1,fech2);
 			if(err.code!=0 && err.code!=undefined)
 				{
 					alert("Error processing SQL 2: "+err.code);
 				}
+			check_servidor();
 			}
 		function querySuccess(tx,result)
 			{
@@ -391,33 +389,41 @@ function ver_imagen(fech1,fech2)
 				var row = result.rows.item(index);
 				var id_imagen=row['id'];
 				var ruta=row['ruta'];
-				alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---");
+				//alert ("lectura de ruta:"+ruta+"-id:"+id_imagen+"---");
 				var photo = document.getElementById('photo');
 	          	photo.src = ruta;
 				document.getElementById('id_imagen').value=id_imagen;
 				//lectura_tablas(ip,nombre_bd,usuariobd,passbd);
+				console.log(ruta);
+				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem)
+					{
+					fileSystem.root.getFile(ruta, { create: false }, fileExists, check_servidor);
+					}, getFSFail);
+				function fileExists(file)
+					{
+					}
+					
 				});
 			if (result.rows.length==0)
 				{
-				alert("sin registro");
 				var photo = document.getElementById('photo');
 	          	photo.src = "img/fondo.jpg";
 				document.getElementById('id_imagen').value='';
-				check_servidor(fech1,fech2);
+				check_servidor();
 				}
 			}
 		
 		////////////////////////////////////////////////////////////////////////
 				
 		////////////buscamos si existe imagen en el servidor//////////////////
-		function check_servidor(fech1,fech2)
+		function check_servidor()
 			{
 		var f = new Date();
 		var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
 		var h = new Date();
 		var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
-		alert(servidor1+'/fotos_levantamientos/'+id_punto+'-'+fech1+'-T-'+fech2+'.jpg');
-		var ruta_url=servidor1+'/fotos_levantamientos/'+id_punto+'-'+fech1+'-T-'+fech2+'.jpg';
+		console.log(servidor1+'/fotos_levantamientos/'+id_punto+'-'+id_lev+'.jpg');
+		var ruta_url=servidor1+'/fotos_levantamientos/'+id_punto+'-'+id_lev+'.jpg';
 		$.ajax({
 				url:ruta_url,
 				error: function()
@@ -449,28 +455,89 @@ function procesar()
 		var id_punto=document.getElementById('punto').value;
 		var ele=document.getElementById('punto');
 		var punto=document.getElementById('punto').options[ele.selectedIndex].text;
-		var observaciones=document.getElementById('observaciones').value;
-		var re_imagen=document.getElementById('re_imagen').value;
 		
-		if (observaciones=='')
+		var dato='PROCESAR_REGISTRO';
+		var formData = new FormData();
+		formData.append("dato", dato);
+		formData.append("region", region);
+		formData.append("tipo_local", tipo_local);
+		formData.append("id_punto", id_punto);
+		formData.append("punto", punto);
+		formData.append("usuario", nombre_usuario);
+		$.ajax({
+			type: 'POST',
+			url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (result) 
+				{
+				//alert(result);
+				console.log(result);
+				var obj = JSON.parse(result);
+				if (obj.resultado=='PROCESADO')
+					{
+					/////////////////////////////////////
+					var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
+					db.transaction(populateDB2, errorCB2, successCB2);
+					function populateDB2(tx) 
+						{
+						var f = new Date();
+						var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
+						var h = new Date();
+						var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
+								
+						
+						//alert ("update:"+obj.id_lev+"---");
+						tx.executeSql("UPDATE checklist_imagen_cola set id_campana='"+obj.id_lev+"' where id_campana='NA' and area='LEVANTAMIENTO'");
+						console.log( "Leyendo datos guardados." );
+						}
+					function errorCB2(err) 
+						{
+						if(err.code!=0 && err.code!=undefined)
+							{
+								alert("Error processing SQL 2: "+err.code);
+							}
+						}
+					function successCB2() 
+						{
+						console.log( "Insert ok" );
+						//alert("proko ");
+						document.getElementById('id_imagen').value=obj.id_lev;
+						}
+					/////////////////////////////////////
+					
+					//alert (obj.respuesta);	
+					//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
+					}
+				}
+			});
+
+	}
+function guardar_registro()
+	{
+		var region=document.getElementById('region').value;
+		var tipo_local=document.getElementById('tipo_local').value;
+		var id_punto=document.getElementById('punto').value;
+		var ele=document.getElementById('punto');
+		var punto=document.getElementById('punto').options[ele.selectedIndex].text;
+		var observacion=document.getElementById('observacion').value;
+		var id_imagen=document.getElementById('id_imagen').value;
+		if (observacion=='')
 			{
-			alert("Debe ingresar una observacion");
-			}
-		else if(observaciones.length>=550)
-			{
-			alert("A superado el maximo de 550 caracteres permitidos, debe reducir el comentario");
+			alert("Debe ingresar una observación");
 			}
 		else
 			{
-			var dato='PROCESAR_REGISTRO';
+			var dato='GUARDAR_REGISTRO';
 			var formData = new FormData();
 			formData.append("dato", dato);
 			formData.append("region", region);
 			formData.append("tipo_local", tipo_local);
 			formData.append("id_punto", id_punto);
 			formData.append("punto", punto);
-			formData.append("observaciones", observaciones);
-			formData.append("re_imagen", re_imagen);
+			formData.append("observacion", observacion);
+			formData.append("id_imagen", id_imagen);
 			formData.append("usuario", nombre_usuario);
 			$.ajax({
 				type: 'POST',
@@ -485,39 +552,11 @@ function procesar()
 					var obj = JSON.parse(result);
 					if (obj.resultado=='PROCESADO')
 						{
-						/////////////////////////////////////
-						var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
-						db.transaction(populateDB2, errorCB2, successCB2);
-						function populateDB2(tx) 
-							{
-							var f = new Date();
-							var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
-							var h = new Date();
-							var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
-									
-							
-							//alert ("update:"+obj.id_registro+"---");
-							tx.executeSql("UPDATE checklist_imagen_cola set id_campana='"+obj.id_registro+"' where id_campana='NA' and area='LEVANTAMIENTO'");
-							console.log( "Leyendo datos guardados." );
-							}
-						function errorCB2(err) 
-							{
-							if(err.code!=0 && err.code!=undefined)
-								{
-									alert("Error processing SQL 2: "+err.code);
-								}
-							}
-						function successCB2() 
-							{
-							console.log( "Insert ok" );
-							//alert("proko ");
-							document.getElementById('oculto1').style.display='';
-							document.getElementById('listado').style.display='';
-							document.getElementById('oculto2').style.display='none';
-							carga_levantamientos();
-							}
-						/////////////////////////////////////
-						
+						//alert("proko ");
+						document.getElementById('oculto1').style.display='';
+						document.getElementById('listado').style.display='';
+						document.getElementById('oculto2').style.display='none';
+						carga_levantamientos();
 						alert (obj.respuesta);	
 						//location.href = "menu_principal.html?usuario="+usuario+"&password="+password+"&nombre_usuario="+nombre_usuario+"&bodega="+bodega;
 						}
@@ -601,10 +640,41 @@ function nuevo_registro()
 	document.getElementById('oculto1').style.display='none';
 	document.getElementById('listado').style.display='none';
 	document.getElementById('oculto2').style.display='';
-	
+	document.getElementById('observacion').value='';
+	app.takePhoto();
 	}
 function cancelar_registro()
 	{
+	var id_lev=document.getElementById('id_imagen').value;
+	var dato='BORRAR_REGISTRO';
+	var formData = new FormData();
+	formData.append("dato", dato);
+	formData.append("id_lev", id_lev);
+	formData.append("usuario", nombre_usuario);
+	$.ajax({
+		type: 'POST',
+		url: servidor+'/bodega_lodis_movil/checklist_levantamientos_guarda_dato_app2.php',
+		data: formData,
+		processData: false,
+		contentType: false,
+		success: function (result) 
+			{
+			//alert(result);
+			console.log(result);
+			var obj = JSON.parse(result);
+			if (obj.resultado=='PROCESADO')
+				{
+				document.getElementById('marco2').style.opacity=0;
+				document.getElementById('marco2').style.transition='opacity 0.5s linear';
+				document.getElementById('marco2').style.visibility='hidden';
+				document.getElementById('seccion').style.display='none';
+				document.getElementById('ventana2').style.visibility='hidden';
+				document.getElementById('id_levmemo').value='';
+			
+				carga_levantamientos();
+				}
+			}
+		});
 	document.getElementById('oculto1').style.display='';
 	document.getElementById('listado').style.display='';
 	document.getElementById('oculto2').style.display='none';
@@ -614,9 +684,6 @@ function cancelar_registro()
 </head>
 
 <body>
-<span id="sprytextfield1">
-<input type="text" name="text1" id="text1" />
-<span class="textfieldRequiredMsg">Se necesita un valor.</span></span>
 <div data-role="page" id="checklist">
   <div data-role="header">
     <h1>LEVANTAMIENTOS</h1>
@@ -643,22 +710,18 @@ function cancelar_registro()
         <select name="punto" id="punto" onchange="carga_levantamientos()">
         </select>
         <input type="hidden" name="id_imagen" id="id_imagen" />
-        <input type="hidden" name="re_imagen" id="re_imagen" />
         <div id="listado" style="width:100%; " align="center"></div>
  		<div id="oculto1" style="display:none;">
-        <a href="#" data-role="button" id="takePhoto" >Nuevo Registro</a>
-        <!--<a href="#" data-role="button" id="nuevo" onclick="nuevo_registro()" >Nuevo Registro</a>-->
+        <a href="#" data-role="button" id="nuevo" onclick="nuevo_registro()" >Nuevo Registro</a>
     	<a href="#" data-role="button" id="procesar1" onclick="procesar1()" style="display:none;">No aplica Levantamiento</a>
         <a href="#" data-role="button" id="procesar2" onclick="procesar2()" style="display:none;">Cerrar Levantamiento</a>
-        <a href="#" data-role="button" id="subir" onclick="onPause()" >subir imagenes</a>
         </div>
         <div id="oculto2" style="display:none;">
-        <input type="hidden" name="id_imagen" id="id_imagen" />
-        <div style="text-align:center"><img id="photo" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/></div>
-        <label for="observaciones" class="select">OBSERVACIONES:</label>
-        <textarea name="observaciones" id="observaciones" cols="" rows=""></textarea>
+        <div style="text-align:center"><img id="photo_pre" src="img/fondo.jpg" class="borde_imagen" width="200" height="auto"/></div>
+        <label for="observacion" class="select">OBSERVACION:</label>
+        <textarea name="observacion" id="observacion" rows="4"></textarea>
         <fieldset class="ui-grid-a">
-        <div class="ui-block-a"><a href="#" data-role="button" data-theme="c" onclick="procesar()" >GUARDAR</a></div>
+        <div class="ui-block-a"><a href="#" data-role="button" data-theme="c" id="guardar" onclick="guardar_registro()" >GUARDAR</a></div>
         <div class="ui-block-b"><a href="#" data-role="button" data-theme="b" id="cancelar" onclick="cancelar_registro()" >CANCELAR</a></div>
         </fieldset>
         <script type="text/javascript" src="js/camara_checklist_levantamientos.js"></script>
@@ -676,20 +739,17 @@ function cancelar_registro()
         </div>
         <div id="marco2" align="center" style="position:absolute; top:30%; width:100%; height:80%; ">
             <div id="ventana2" class="ventana">
-                Se borrará el registro <label></label>¿está seguro?
-              <fieldset class="ui-grid-a">
+                Se borrará el registro del extintor ¿está seguro?
+                <fieldset class="ui-grid-a">
                 <div class="ui-block-a"><button type="button" data-theme="c" onclick="cancela_borrar()">No</button></div>
                 <div class="ui-block-b"><button type="button" data-theme="b" onclick="acepta_borrar()">Si</button></div>	   
                 </fieldset>
-                <input type="hidden" name="id_registromemo" id="id_registromemo" />
+                <input type="hidden" name="id_levmemo" id="id_levmemo" />
                 <div style=" position:absolute; bottom:10px; width:100%;">
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
-</script>
 </body>
 </html>

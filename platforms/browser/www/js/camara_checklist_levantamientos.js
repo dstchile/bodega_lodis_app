@@ -25,11 +25,7 @@
 					//encodingType: Camera.EncodingType.JPEG,
 					//saveToPhotoAlbum: true
 				};
-				document.getElementById('oculto1').style.display='none';
-				document.getElementById('listado').style.display='none';
-				document.getElementById('oculto2').style.display='';
-			
-		    
+			  
 				navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail, options);
 		  },
 		  onPhotoDataSuccess: function(imageData) 
@@ -39,6 +35,8 @@
 			//photo.src = "data:image/jpeg;base64," + imageData;
           	photo.src = imageData;
 
+			var photo_pre = document.getElementById('photo_pre');
+			photo_pre.src = imageData;
 			//alert(imageData);
 			/////////////////////////////////////
 			var db = window.openDatabase("lodis", "1.0", "lodis DB", 900000); //will create database Dummy_DB or open it
@@ -80,13 +78,13 @@
 					var fechabase= f.getFullYear()+"-"+('0'+ (f.getMonth()+1)).slice(-2)+"-"+('0'+ f.getDate()).slice(-2);
 					var h = new Date();
 					var horabase= ('0'+ f.getHours()).slice(-2)+"-"+('0'+ f.getMinutes()).slice(-2)+"-"+('0'+ f.getSeconds()).slice(-2);
-					document.getElementById('re_imagen').value=fechabase+"-T-"+horabase;		
+							
 					
 					var tipo_local=document.getElementById('tipo_local').value;
 					var id_punto=document.getElementById('punto').value;
 					//alert ("probando lugar:"+id_tarea+"----");
 					
-					var id_imagen=document.getElementById('id_imagen').value;
+					//var id_imagen=document.getElementById('id_imagen').value;
 					if(id_imagen!='')
 						{
 						//alert ("update");
@@ -96,7 +94,6 @@
 						{
 						//alert ("insert");
 						console.log("datos:"+tipo_local+"-----"+id_punto+"-------");
-						alert("INSERT INTO checklist_imagen_cola(tipo,id_punto,punto,lugar,fecha_base,hora_base,ruta,id_campana,id_producto,estado,area) VALUES ('"+tipo_local+"','"+id_punto+"','','','"+fechabase+"','"+horabase+"','"+imageData+"','NA','','PENDIENTE','LEVANTAMIENTO')");
 						tx.executeSql("INSERT INTO checklist_imagen_cola(tipo,id_punto,punto,lugar,fecha_base,hora_base,ruta,id_campana,id_producto,estado,area) VALUES ('"+tipo_local+"','"+id_punto+"','','','"+fechabase+"','"+horabase+"','"+imageData+"','NA','','PENDIENTE','LEVANTAMIENTO')");
 						}
 					console.log( "Leyendo datos guardados." );
@@ -111,8 +108,8 @@
 				function successCB2() 
 					{
 					console.log( "Insert ok" );
-					alert("proko ");
-					//procesar();
+					//alert("proko ");
+					procesar();
 					}
 				}
 			/////////////////////////////////////
