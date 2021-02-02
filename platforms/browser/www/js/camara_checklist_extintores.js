@@ -31,8 +31,8 @@
 				{
 			  	var options = {
 					quality: 80,
-					targetWidth: 800,
-					targetHeight: 800,
+					targetWidth: 1280,
+					targetHeight: 720,
 					allowEdit: false,
 					destinationType: navigator.camera.DestinationType.FILE_URI,
 					//destinationType: Camera.DestinationType.FILE_URI,
