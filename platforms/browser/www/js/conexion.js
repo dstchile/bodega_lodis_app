@@ -7,7 +7,7 @@
 
 
 
-var servidor='https://www.sistemalodis.cl';
-var servidor1='https://www.sistemalodis.cl';
-//var servidor='https://carozzi.lodis.cl';
-//var servidor1='https://carozzi.lodis.cl';
+//var servidor='https://www.sistemalodis.cl';
+//var servidor1='https://www.sistemalodis.cl';
+var servidor='https://carozzi.lodis.cl';
+var servidor1='https://carozzi.lodis.cl';
