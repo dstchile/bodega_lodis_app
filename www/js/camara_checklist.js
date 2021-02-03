@@ -16,14 +16,14 @@
 					quality: 80,
 					targetWidth: 1280,
 					targetHeight: 720,
-					allowEdit: false,
+					//allowEdit: false,
 					destinationType: navigator.camera.DestinationType.FILE_URI,
 					//destinationType: Camera.DestinationType.FILE_URI,
 					correctOrientation:true,
 					//sourceType: Camera.PictureSourceType.CAMERA,
 					//mediaType: Camera.MediaType.CAMERA,
 					//encodingType: Camera.EncodingType.JPEG,
-					saveToPhotoAlbum: false
+					//saveToPhotoAlbum: true
 				};
 			  navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail,options);
           },
