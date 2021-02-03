@@ -10,8 +10,7 @@
               var takePhoto = document.getElementById('takePhoto');
               takePhoto.addEventListener('click', app.takePhoto, false);
           },
-
-          takePhoto: function(){
+ 		  takePhoto: function(){
                var options = {
 					quality: 80,
 					targetWidth: 1280,
@@ -19,7 +18,7 @@
 					allowEdit: false,
 					destinationType: navigator.camera.DestinationType.FILE_URI,
 					//destinationType: Camera.DestinationType.FILE_URI,
-					correctOrientation:true,
+					correctOrientation:true
 					//sourceType: Camera.PictureSourceType.CAMERA,
 					//mediaType: Camera.MediaType.CAMERA,
 					//encodingType: Camera.EncodingType.JPEG,

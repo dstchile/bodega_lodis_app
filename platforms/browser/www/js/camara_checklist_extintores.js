@@ -36,7 +36,7 @@
 					allowEdit: false,
 					destinationType: navigator.camera.DestinationType.FILE_URI,
 					//destinationType: Camera.DestinationType.FILE_URI,
-					correctOrientation:true,
+					correctOrientation:true
 					//sourceType: Camera.PictureSourceType.CAMERA,
 					//mediaType: Camera.MediaType.CAMERA,
 					//encodingType: Camera.EncodingType.JPEG,
