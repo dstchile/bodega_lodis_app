@@ -23,7 +23,7 @@
 					//sourceType: Camera.PictureSourceType.CAMERA,
 					//mediaType: Camera.MediaType.CAMERA,
 					//encodingType: Camera.EncodingType.JPEG,
-					//saveToPhotoAlbum: true
+					saveToPhotoAlbum: false
 				};
 			  navigator.camera.getPicture(app.onPhotoDataSuccess, app.onFail,options);
           },

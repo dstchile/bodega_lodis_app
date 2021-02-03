@@ -18,8 +18,7 @@
 	</plugin>
 	<plugin name="cordova-plugin-android-permissions" source="npm"/>
 	<plugin name="cordova-plugin-background-mode" source="npm"/>
-	<!--<plugin name="cordova-plugin-wezka-nativecamera" source="npm"/>-->
-	<plugin name="cordova-plugin-camera" source="npm"/>
+	<plugin name="cordova-plugin-wezka-nativecamera" source="npm"/>
 	<plugin name="cordova-plugin-device" source="npm"/>
 	<gap:plugin name="cordova-plugin-app-version" source="npm"/>
     <gap:plugin name="cordova-plugin-network-information" source="npm"/>
